@@ -63,6 +63,7 @@ public class GameStateController : MonoBehaviour
 
             case GameState.Hippocampus:
                 crystalBall.SetEnabled(false);
+                assistantController.PlayHippocampusIntro();
                 break;
         }
     }
