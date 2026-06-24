@@ -1,55 +1,96 @@
 using System.Collections;
-using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class GameStateController : MonoBehaviour
 {
     public enum GameState
     {
+        None,
         OfficeIntro,
         AwaitCrystalBall,
         TransitionToHippocampus,
         Hippocampus
     }
-    public GameState State;
 
-    [SerializeField] AssistantController assistantController;
-    [SerializeField] CrystalBall crystalBall;
-    [SerializeField] Transform player;
-    [SerializeField] Transform hippocampusSpawnPoint;
+    [Header("Current State")]
+    [SerializeField] private GameState state = GameState.None;
 
-    void Start()
+
+    [Header("References")]
+    [SerializeField] private AssistantController assistantController;
+    [SerializeField] private CrystalBall crystalBall;
+    [SerializeField] private ScreenFadeController screenFadeController;
+    [SerializeField] private Transform player;
+    [SerializeField] private Transform assistantRobot;
+    [SerializeField] private Transform assistantHippocampusSpawnPoint;
+    [SerializeField] private Transform hippocampusSpawnPoint;
+
+    public GameState State => state;
+
+    private void Start()
     {
-        State=GameState.OfficeIntro;
+        SetState(GameState.OfficeIntro);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetState(GameState newState)
     {
-        switch (State)
+        if (state == newState)
+            return;
+
+        ExitState(state);
+
+        state = newState;
+        Debug.Log("Game State changed to: " + state);
+
+        EnterState(state);
+    }
+
+    private void EnterState(GameState newState)
+    {
+        switch (newState)
         {
             case GameState.OfficeIntro:
                 assistantController.PlayIntro();
                 break;
+
             case GameState.AwaitCrystalBall:
                 crystalBall.SetEnabled(true);
                 break;
+
             case GameState.TransitionToHippocampus:
-                GoToHippocampus();
+                StartCoroutine(TransitionToHippocampusRoutine());
                 break;
+
             case GameState.Hippocampus:
+                crystalBall.SetEnabled(false);
                 break;
         }
+    }
 
-        void GoToHippocampus()
+    private void ExitState(GameState oldState)
+    {
+        switch (oldState)
         {
-
-            player.position = hippocampusSpawnPoint.position;
-            player.rotation = hippocampusSpawnPoint.rotation;
-
-            State=GameState.Hippocampus;
+            case GameState.AwaitCrystalBall:
+                crystalBall.SetEnabled(false);
+                break;
         }
     }
 
 
+    private IEnumerator TransitionToHippocampusRoutine()
+    {
+        yield return screenFadeController.FadeTo(1f, 1f);
+
+        yield return new WaitForSeconds(1);
+        player.position = hippocampusSpawnPoint.position;
+        player.rotation = hippocampusSpawnPoint.rotation;
+
+        assistantRobot.position = assistantHippocampusSpawnPoint.position;
+        assistantRobot.rotation = assistantHippocampusSpawnPoint.rotation;
+
+        yield return screenFadeController.FadeTo(0f, 1f);
+
+        SetState(GameState.Hippocampus);
+    }
 }

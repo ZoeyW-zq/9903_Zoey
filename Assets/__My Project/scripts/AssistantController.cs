@@ -26,6 +26,7 @@ public class AssistantController : MonoBehaviour
         yield return new WaitForSeconds(3);
 
         subtitleText.text = "Now place your hand on the crystal ball. We are ready to enter their subconscious.";
-        gameStateController.State= GameStateController.GameState.AwaitCrystalBall;
+        gameStateController.SetState(GameStateController.GameState.AwaitCrystalBall);
     }
+
 }

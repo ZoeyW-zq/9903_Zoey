@@ -2,56 +2,64 @@ using UnityEngine;
 
 public class CrystalBall : MonoBehaviour
 {
-    [SerializeField] float holdTime = 2f;
-    [SerializeField]  GameStateController gameStateController;
+    [Header("References")]
+    [SerializeField] private Transform crystalBallCenter;
+    [SerializeField] private Transform leftHandProxy;
+    [SerializeField] private Transform rightHandProxy;
+    [SerializeField] private GameStateController gameStateController;
 
+    [Header("Settings")]
+    [SerializeField] private float holdDistance = 0.2f;
+    [SerializeField] private float holdTime = 2f;
+    [SerializeField] private bool enabledForEntry = true;
 
-    [SerializeField] bool enabledForEntry;
-    [SerializeField] bool handInside;
-    [SerializeField] float timer;
+    [Header("Debug")]
+    [SerializeField] private bool handInRange;
+    [SerializeField] private float timer;
+    [SerializeField] private float leftDistance;
+    [SerializeField] private float rightDistance;
+    [SerializeField] private float minDistance;
 
-    public void SetEnabled(bool value)
+    private bool triggered;
+
+    private void Update()
     {
-        enabledForEntry = value;
-        //handInside = false;
-        timer = 0f;
-    }
+        if (!enabledForEntry || triggered)
+            return;
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (!enabledForEntry) return;
+        if (crystalBallCenter == null || leftHandProxy == null || rightHandProxy == null)
+            return;
 
-        if (other.CompareTag("PlayerHand"))
+        leftDistance = Vector3.Distance(leftHandProxy.position, crystalBallCenter.position);
+        rightDistance = Vector3.Distance(rightHandProxy.position, crystalBallCenter.position);
+
+        float minDistance = Mathf.Min(leftDistance, rightDistance);
+
+        handInRange = minDistance <= holdDistance;
+
+        if (handInRange)
         {
-            Debug.Log("Hand Enter");
-            handInside = true;
+            timer += Time.deltaTime;
+
+            if (timer >= holdTime)
+            {
+                triggered = true;
+                Debug.Log("Crystal Ball entry triggered.");
+
+                gameStateController.SetState(GameStateController.GameState.TransitionToHippocampus);
+            }
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (!enabledForEntry) return;
-
-        if (other.CompareTag("PlayerHand"))
+        else
         {
-            Debug.Log("Hand Exit");
-            handInside = false;
             timer = 0f;
         }
     }
 
-    private void Update()
+    public void SetEnabled(bool value)
     {
-        if (!enabledForEntry || !handInside) return;
-
-        timer += Time.unscaledDeltaTime;
-        Debug.Log($"Timer: {timer}");
-
-        if (timer >= holdTime)
-        {
-            enabledForEntry = false;
-            gameStateController.State = GameStateController.GameState.TransitionToHippocampus;
-        }
+        enabledForEntry = value;
+        timer = 0f;
+        handInRange = false;
+        triggered = false;
     }
-
 }
