@@ -9,7 +9,11 @@ public class GameStateController : MonoBehaviour
         OfficeIntro,
         AwaitCrystalBall,
         TransitionToHippocampus,
-        Hippocampus
+        Hippocampus,
+        AwaitMemoryPlacement,
+        GiantCrisis,
+        SwallowTransition,
+        MirrorChamber
     }
 
     [Header("Current State")]
@@ -24,6 +28,9 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private Transform assistantRobot;
     [SerializeField] private Transform assistantHippocampusSpawnPoint;
     [SerializeField] private Transform hippocampusSpawnPoint;
+    [SerializeField] private Transform assistantMirrorChamberSpawnPoint;
+    [SerializeField] private ClownController clownController;
+    [SerializeField] private SwallowController swallowController;
 
     public GameState State => state;
 
@@ -65,6 +72,26 @@ public class GameStateController : MonoBehaviour
                 crystalBall.SetEnabled(false);
                 assistantController.PlayHippocampusIntro();
                 break;
+            
+            case GameState.AwaitMemoryPlacement:
+                break;
+
+            case GameState.GiantCrisis:
+                clownController.StartCrisisSequence();
+                break;
+
+            case GameState.SwallowTransition:
+                swallowController.StartSwallowTransition();
+                break;
+
+            case GameState.MirrorChamber:
+                if (assistantRobot != null && assistantMirrorChamberSpawnPoint != null)
+                {
+                    assistantRobot.position = assistantMirrorChamberSpawnPoint.position;
+                    assistantRobot.rotation = assistantMirrorChamberSpawnPoint.rotation;
+                }
+                assistantController.PlayMirrorChamberIntro();
+                break;
         }
     }
 
@@ -81,6 +108,13 @@ public class GameStateController : MonoBehaviour
 
     private IEnumerator TransitionToHippocampusRoutine()
     {
+        if (screenFadeController == null || player == null || hippocampusSpawnPoint == null
+            || assistantRobot == null || assistantHippocampusSpawnPoint == null)
+        {
+            Debug.LogError("TransitionToHippocampus: missing required references.");
+            yield break;
+        }
+
         yield return screenFadeController.FadeTo(1f, 1f);
 
         yield return new WaitForSeconds(1);

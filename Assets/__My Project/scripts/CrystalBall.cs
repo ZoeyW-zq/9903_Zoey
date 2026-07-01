@@ -33,7 +33,7 @@ public class CrystalBall : MonoBehaviour
         leftDistance = Vector3.Distance(leftHandProxy.position, crystalBallCenter.position);
         rightDistance = Vector3.Distance(rightHandProxy.position, crystalBallCenter.position);
 
-        float minDistance = Mathf.Min(leftDistance, rightDistance);
+        minDistance = Mathf.Min(leftDistance, rightDistance);
 
         handInRange = minDistance <= holdDistance;
 
