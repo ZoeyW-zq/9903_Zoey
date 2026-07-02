@@ -18,10 +18,14 @@ public class SwallowController : MonoBehaviour
     [SerializeField] private AudioSource innerVoiceAudio;
 
     [Header("Timing")]
-    [SerializeField] private float fadeOutDuration = 0.8f;
-    [SerializeField] private float blackHoldDuration = 1f;
+    [SerializeField] private float fadeOutDuration = 1f;
+    [Tooltip("How long the screen stays fully black after the swallow dialogue starts.")]
+    [SerializeField] private float blackHoldDuration = 2f;
     [SerializeField] private float fadeInDuration = 0.8f;
     [SerializeField] private float fallDuration = 4f;
+
+    [Header("Transition Color")]
+    [SerializeField] private Color swallowFadeColor = Color.black;
 
     [Header("Motion")]
     [SerializeField] private float horizontalSwayAmount = 0.08f;
@@ -41,7 +45,13 @@ public class SwallowController : MonoBehaviour
     {
         transitionRunning = true;
 
+        if (screenFadeController != null)
+            screenFadeController.SetColor(swallowFadeColor);
+
         yield return screenFadeController.FadeTo(1f, fadeOutDuration);
+
+        if (assistantController != null)
+            assistantController.PlaySwallowTransition();
 
         if (swallowAudio != null)
             swallowAudio.Play();
@@ -52,7 +62,8 @@ public class SwallowController : MonoBehaviour
         if (innerVoiceAudio != null)
             innerVoiceAudio.Play();
 
-        yield return new WaitForSeconds(blackHoldDuration);
+        if (blackHoldDuration > 0f)
+            yield return new WaitForSeconds(blackHoldDuration);
 
         xrOrigin.position = pipeStartPoint.position;
         xrOrigin.rotation = pipeStartPoint.rotation;

@@ -32,6 +32,9 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private ClownController clownController;
     [SerializeField] private SwallowController swallowController;
 
+    [Header("Transition Colors")]
+    [SerializeField] private Color hippocampusFadeColor = Color.white;
+
     public GameState State => state;
 
     private void Start()
@@ -115,9 +118,9 @@ public class GameStateController : MonoBehaviour
             yield break;
         }
 
-        yield return screenFadeController.FadeTo(1f, 1f);
+        screenFadeController.SetColor(hippocampusFadeColor);
+        screenFadeController.SetAlpha(1f);
 
-        yield return new WaitForSeconds(1);
         player.position = hippocampusSpawnPoint.position;
         player.rotation = hippocampusSpawnPoint.rotation;
 

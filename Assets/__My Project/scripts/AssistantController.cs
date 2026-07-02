@@ -51,8 +51,7 @@ public class AssistantController : MonoBehaviour
 
     public void PlayIntro()
     {
-        if (animator != null)
-            animator.SetTrigger("Intro");
+        
 
         PlayDialogue(officeIntroLines, () =>
         {
