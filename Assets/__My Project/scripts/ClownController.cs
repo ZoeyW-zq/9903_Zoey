@@ -190,16 +190,18 @@ public class ClownController : MonoBehaviour
 
         yield return BlendRigWeight(1f, rigBlendInDuration);
 
+        gameStateController.SetState(GameStateController.GameState.SwallowTransition);
+
         // 15. 嘴部可能跟随头部动画移动，所以移动到嘴边时持续采样 mouthPoint，而不是只取一次坐标。
         yield return MoveHandToTarget(mouthPoint, moveToMouthDuration);
 
         // 16. 等可见手部真的靠近嘴边后，再进入吞咽转场；超时用于防止错误配置卡死流程。
-        yield return WaitForHandNear(mouthPoint, mouthArrivalDistance, mouthArrivalTimeout);
+        WaitForHandNear(mouthPoint, mouthArrivalDistance, mouthArrivalTimeout);
 
         // 17. 玩家脱离手部跟随，游戏状态进入 SwallowTransition，由 SwallowController 接管黑屏与传送。
         DetachPlayerFromHand();
 
-        gameStateController.SetState(GameStateController.GameState.SwallowTransition);
+        
     }
 
     private IEnumerator WaitForAudioToFinish(AudioSource audioSource)

@@ -18,10 +18,10 @@ public class SwallowController : MonoBehaviour
     [SerializeField] private AudioSource innerVoiceAudio;
 
     [Header("Timing")]
-    [SerializeField] private float fadeOutDuration = 1f;
+    [SerializeField] private float fadeOutDuration = 2f;
     [Tooltip("How long the screen stays fully black after the swallow dialogue starts.")]
     [SerializeField] private float blackHoldDuration = 2f;
-    [SerializeField] private float fadeInDuration = 0.8f;
+    [SerializeField] private float fadeInDuration = 0.5f;
     [SerializeField] private float fallDuration = 4f;
 
     [Header("Transition Color")]
