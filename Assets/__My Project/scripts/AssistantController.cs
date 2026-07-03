@@ -2,10 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 
-using System.Collections;
-using TMPro;
-using UnityEngine;
-
 public class AssistantController : MonoBehaviour
 {
     [System.Serializable]
@@ -16,12 +12,9 @@ public class AssistantController : MonoBehaviour
 
         public AudioClip audioClip;
 
-        public float fallbackDuration = 3f;
-
         public bool keepVisibleAfterLine;
     }
 
-    [SerializeField] private Animator animator;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private TMP_Text subtitleText;
     [SerializeField] private GameStateController gameStateController;
@@ -44,55 +37,79 @@ public class AssistantController : MonoBehaviour
     [Header("Swallow Transition")]
     [SerializeField] private DialogueLine[] swallowTransitionLines;
 
-    [Header("Mirror Chamber Intro")]
+    [Header("Dungeon Intro")]
     [SerializeField] private DialogueLine[] mirrorChamberIntroLines;
 
+    [Header("Break Glass")]
+    [SerializeField] private DialogueLine[] breakGlassLines;
+
+    [Header("Glass Broken Praise")]
+    [SerializeField] private DialogueLine[] glassBrokenPraiseLines;
+
+    [Header("Return To Office")]
+    [SerializeField] private DialogueLine[] returnToOfficeLines;
+
     private Coroutine dialogueRoutine;
+    private bool glassBrokenSequenceStarted;
+
+    private void Awake()
+    {
+        ConfigureAudioSource();
+        StopAudio();
+        ClearSubtitle();
+    }
 
     public void PlayIntro()
     {
-        
-
-        PlayDialogue(officeIntroLines, () =>
-        {
-            gameStateController.SetState(GameStateController.GameState.AwaitCrystalBall);
-        });
+        PlayStage(officeIntroLines, () => SetGameState(GameStateController.GameState.AwaitCrystalBall));
     }
 
     public void PlayHippocampusIntro()
     {
-        PlayDialogue(hippocampusIntroLines, null);
+        PlayStage(hippocampusIntroLines);
     }
 
     public void PlayMemoryRevealed()
     {
-        PlayDialogue(memoryRevealedLines, () =>
-        {
-            PlayMemoryPlacementHint();
-        });
+        PlayStage(memoryRevealedLines, PlayMemoryPlacementHint);
     }
 
     public void PlayMemoryPlacementHint()
     {
-        PlayDialogue(memoryPlacementHintLines, () =>
-        {
-            gameStateController.SetState(GameStateController.GameState.AwaitMemoryPlacement);
-        });
+        PlayStage(memoryPlacementHintLines, () => SetGameState(GameStateController.GameState.AwaitMemoryPlacement));
     }
 
     public void PlayNightmareWarning()
     {
-        PlayDialogue(nightmareWarningLines, null);
+        PlayStage(nightmareWarningLines);
     }
 
     public void PlaySwallowTransition()
     {
-        PlayDialogue(swallowTransitionLines, null);
+        PlayStage(swallowTransitionLines);
     }
 
     public void PlayMirrorChamberIntro()
     {
-        PlayDialogue(mirrorChamberIntroLines, null);
+        glassBrokenSequenceStarted = false;
+        PlayStage(mirrorChamberIntroLines, PlayBreakGlassPrompt);
+    }
+
+    public void PlayBreakGlassPrompt()
+    {
+        PlayStage(breakGlassLines);
+    }
+
+    public void PlayGlassBrokenReturnSequence()
+    {
+        if (glassBrokenSequenceStarted)
+            return;
+
+        glassBrokenSequenceStarted = true;
+        PlayStage(glassBrokenPraiseLines, () =>
+        {
+            PlayStage(returnToOfficeLines, () => SetGameState(GameStateController.GameState.BackToOffice));
+        });
     }
 
     public void ClearSubtitle()
@@ -101,60 +118,115 @@ public class AssistantController : MonoBehaviour
             subtitleText.text = "";
     }
 
-    private void PlayDialogue(DialogueLine[] lines, System.Action onComplete)
+    private void PlayStage(DialogueLine[] lines, System.Action onComplete = null)
+    {
+        StopActiveDialogue();
+
+        if (lines == null || lines.Length == 0)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        dialogueRoutine = StartCoroutine(RunStage(lines, onComplete));
+    }
+
+    private void StopActiveDialogue()
     {
         if (dialogueRoutine != null)
             StopCoroutine(dialogueRoutine);
 
-        dialogueRoutine = StartCoroutine(RunDialogue(lines, onComplete));
+        dialogueRoutine = null;
+        StopAudio();
+        ClearSubtitle();
     }
 
-    private IEnumerator RunDialogue(DialogueLine[] lines, System.Action onComplete)
+    private void ConfigureAudioSource()
     {
-        if (lines == null || lines.Length == 0)
+        if (audioSource == null)
+            return;
+
+        audioSource.playOnAwake = false;
+        audioSource.loop = false;
+    }
+
+    private void StopAudio()
+    {
+        if (audioSource == null)
+            return;
+
+        audioSource.Stop();
+        audioSource.clip = null;
+    }
+
+    private void SetSubtitle(string text)
+    {
+        if (subtitleText != null)
+            subtitleText.text = text;
+    }
+
+    private void SetGameState(GameStateController.GameState state)
+    {
+        if (gameStateController != null)
+            gameStateController.SetState(state);
+    }
+
+    private bool TryPlayAudio(DialogueLine line)
+    {
+        if (audioSource == null)
         {
-            dialogueRoutine = null;
-            onComplete?.Invoke();
-            yield break;
+            Debug.LogWarning("Assistant dialogue has no AudioSource assigned.", this);
+            return false;
         }
 
+        if (line.audioClip == null)
+        {
+            Debug.LogWarning("Assistant dialogue line has no audio clip assigned.", this);
+            return false;
+        }
+
+        ConfigureAudioSource();
+        audioSource.Stop();
+        audioSource.clip = line.audioClip;
+        audioSource.Play();
+
+        return true;
+    }
+
+    private float GetLineDuration(DialogueLine line)
+    {
+        if (line == null || line.audioClip == null)
+            return 0f;
+
+        float pitch = audioSource != null ? Mathf.Abs(audioSource.pitch) : 1f;
+        if (pitch <= 0f)
+            pitch = 1f;
+
+        return line.audioClip.length / pitch;
+    }
+
+    private IEnumerator RunStage(DialogueLine[] lines, System.Action onComplete)
+    {
         for (int i = 0; i < lines.Length; i++)
         {
             DialogueLine line = lines[i];
 
-            if (subtitleText != null)
-                subtitleText.text = line.text;
+            if (line == null)
+                continue;
 
-            if (audioSource != null && line.audioClip != null)
-            {
-                audioSource.Stop();
-                audioSource.clip = line.audioClip;
-                audioSource.Play();
+            SetSubtitle(line.text);
 
-                yield return new WaitForSeconds(line.audioClip.length);
-            }
-            else
+            if (TryPlayAudio(line))
             {
-                yield return new WaitForSeconds(line.fallbackDuration);
+                yield return new WaitForSeconds(GetLineDuration(line));
+                StopAudio();
             }
 
-            bool isLastLine = i == lines.Length - 1;
-
-            if (!line.keepVisibleAfterLine && !isLastLine)
-            {
-                if (subtitleText != null)
-                    subtitleText.text = "";
-            }
+            if (!line.keepVisibleAfterLine)
+                ClearSubtitle();
         }
 
-        DialogueLine lastLine = lines[lines.Length - 1];
-
-        if (!lastLine.keepVisibleAfterLine)
-        {
-            if (subtitleText != null)
-                subtitleText.text = "";
-        }
-
+        StopAudio();
         dialogueRoutine = null;
         onComplete?.Invoke();
     }

@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-07-02
+Last updated: 2026-07-03
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -27,7 +27,8 @@ Important scripts:
 
 - `GameStateController.cs`
   - Owns the main game state machine.
-  - Starts the office intro, crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, and Mirror Chamber intro.
+  - Starts the office intro, crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, Mirror Chamber intro, and Back To Office return.
+  - Also owns coarse scene-root activation for performance on headset builds.
 
 - `CrystalBall.cs`
   - Detects when the player's hand stays near the crystal ball.
@@ -42,6 +43,7 @@ Important scripts:
 - `AssistantController.cs`
   - Controls assistant dialogue lines and stages.
   - Has Nightmare warning dialogue and Swallow Transition dialogue.
+  - Has Mirror Chamber intro, Break Glass prompt, Glass Broken Praise, and Return To Office dialogue stages for the final glass sequence.
   - Assistant dialogue should remain independent from the clown crisis coroutine timing.
 
 - `ClownController.cs`
@@ -52,7 +54,10 @@ Important scripts:
   - Handles the black screen fade, black hold time, assistant swallow dialogue, teleport to pipe/fall start, fade back in, controlled fall, and transition into Mirror Chamber.
 
 - `MemoryContentDisplay.cs`
-  - Related to memory content UI/display.
+  - Memory content no longer displays text or images.
+  - It now only plays the currently attached `VideoPlayer` when any memory content show method is triggered.
+  - The old public methods are kept so existing UnityEvent bindings in the scene do not break.
+  - It prepares a `RawImage` and runtime `RenderTexture` if the scene does not provide a visible video output surface.
 
 Main scene:
 
@@ -90,6 +95,36 @@ Current high-level state order in `GameStateController`:
 8. `MirrorChamber`
    - Assistant moved to mirror chamber spawn point.
    - Assistant plays Mirror Chamber intro.
+
+9. `BackToOffice`
+   - Intended to be triggered after the Tall Stylized Breakable Glass in the Chamber is broken.
+   - Fades the screen to black over 1 second.
+   - Activates `OfficeRoot`.
+   - Moves player and assistant robot to manually assigned office return spawn transforms while the screen is black.
+   - Fades the screen back to transparent over 1 second.
+
+## Scene Root Activation
+
+To reduce headset runtime cost, the main scene is organized into three coarse root GameObjects:
+
+- `OfficeRoot`
+  - Contains first-stage office construction, objects, and building/environment content.
+
+- `HippoRoot`
+  - Contains Hippocampus-related scene content and the Nightmare/Giant Crisis content that still happens before the dungeon/fall transition.
+
+- `DungeonRoot`
+  - Contains the scene content used after the player enters the dungeon/fall sequence, including later dungeon and Mirror Chamber content.
+
+`GameStateController` has Inspector references for these three roots and activates only one root at a time:
+
+- `OfficeIntro` and `AwaitCrystalBall` activate `OfficeRoot`.
+- `TransitionToHippocampus`, `Hippocampus`, `AwaitMemoryPlacement`, and `GiantCrisis` activate `HippoRoot`.
+- `SwallowTransition` currently does not switch roots directly. This lets the black fade / swallow hand-to-mouth overlap begin while the previous root remains active.
+- `MirrorChamber` activates `DungeonRoot`.
+- `BackToOffice` activates `OfficeRoot` after the screen has faded to black.
+
+Persistent gameplay objects such as the XR Origin/player, `GameStateController`, screen fade, assistant robot, and global event/input objects should stay outside these three roots so they remain active throughout the experience.
 
 ## Crystal Ball Transition
 
@@ -170,17 +205,20 @@ Current `ClownController.CrisisRoutine()` intent:
 
 15. Blend right arm Rig weight back to 1.
 
-16. Move hand IK target toward `mouthPoint`.
+16. Set game state to `SwallowTransition`.
+   - This now happens before the hand finishes moving to `mouthPoint`.
+   - `SwallowController` begins its black fade while the clown hand can still continue the mouth movement.
+   - `GameStateController` does not switch to `DungeonRoot` in `SwallowTransition`; the root switch happens later when `SwallowController` sets the state to `MirrorChamber`.
+
+17. Move hand IK target toward `mouthPoint`.
    - `mouthPoint` may be attached to an animated head/mouth bone, so movement samples the target transform continuously.
 
-17. Wait until visible hand reference reaches mouth.
+18. Wait until visible hand reference reaches mouth.
    - Uses `handTipReference` if assigned, otherwise `grabAnchor`, otherwise `handIKTarget`.
    - `mouthArrivalTimeout` still exists as a safety timeout.
-   - If the desired final behavior is "must always reach mouth before transition", this timeout can also be removed later.
+   - Current code calls `WaitForHandNear(...)` but does not `yield return` it, so this check does not currently block the sequence.
 
-18. Detach player from hand following.
-
-19. Set game state to `SwallowTransition`.
+19. Detach player from hand following.
 
 ## Swallow Transition
 
@@ -191,7 +229,9 @@ Target behavior:
 - Once fully black, stay black for a configurable hold time.
 - During the full-black hold, assistant enters Swallow Transition dialogue and can output text/audio.
 - Then player is transferred to the pipe/fall start point.
-- Fade returns to transparent and controlled fall begins.
+- `SwallowController` switches the game state to `MirrorChamber` while the screen is still black.
+- `MirrorChamber` activates `DungeonRoot`, moves the assistant to the Mirror Chamber spawn point, and starts Mirror Chamber intro.
+- Fade returns to transparent and controlled fall begins after the state has already switched to `MirrorChamber`.
 
 Current implementation:
 
@@ -202,6 +242,7 @@ Current implementation:
   - `swallowFadeColor`
 - `swallowFadeColor` is black.
 - Assistant `PlaySwallowTransition()` is called during the black hold period.
+- `GameStateController.SetState(MirrorChamber)` is called after the player is teleported to `pipeStartPoint`, before the fade-in and before `ControlledFall()`.
 
 ## Important ClownController Parameters
 
@@ -248,7 +289,7 @@ Current major Inspector-facing fields:
   - Distance threshold for hand/mouth arrival.
 
 - `mouthArrivalTimeout`
-  - Safety timeout for hand-to-mouth arrival. Still present.
+  - Safety timeout for hand-to-mouth arrival. Still present, but the current `CrisisRoutine()` does not yield the wait coroutine, so this timeout is not currently part of the blocking flow.
 
 - `mouthTrackingCatchupSpeed`
   - Speed at which IK target keeps chasing the animated mouth while waiting for arrival.
@@ -282,16 +323,32 @@ Important IK note:
 - Roof and player share the same `grabAnchor` concept to keep the hand/roof/player relationship consistent.
 - Grab completion is determined by the grab reference reaching the player, not by `handIKTarget` alone.
 - Grab-to-player has no timeout now; the giant hand must reach the player before the sequence continues.
-- Mouth arrival still has a timeout for safety, but this may be removed later if strict arrival is desired.
+- Mouth arrival still has a timeout parameter, but the current code does not wait on `WaitForHandNear(...)`, so mouth arrival is not currently enforced before detaching the player.
 - Assistant dialogue is independent and should not block the clown crisis coroutine unless explicitly requested.
 - Footsteps and rumble are sequential: footsteps finish first, rumble starts afterward.
+- `SwallowTransition` starts before the hand-to-mouth movement is complete, allowing the fade to black to overlap with the final mouth movement for a smoother visual transition.
+- Memory content display is video-only now; it should play its assigned/current `VideoPlayer` instead of controlling text or image UI.
+- A `VideoPlayer` under a world-space Canvas still needs a visible output surface. `MemoryContentDisplay` now creates/uses a `RawImage` plus a runtime `RenderTexture` so video can render on the Canvas.
+- Breaking the final Chamber glass should eventually call `GameStateController.SetState(GameState.BackToOffice)`. The return spawn transforms are exposed on `GameStateController` for manual scene assignment.
+- Current final Chamber glass flow:
+  - `MirrorChamber` plays the assistant Mirror Chamber intro.
+  - After the intro completes, `AssistantController` plays the Break Glass prompt.
+  - The scene instance named `Tall Stylized Breakable Glass` has `notifyGameStateControllerOnShatter` enabled.
+  - The same scene instance also has `shatterOnAllowedContact` enabled, so any collider on its allowed contact/impact mask can force shatter on contact instead of needing to satisfy the normal impact-speed thresholds.
+  - When `StylizedBreakableGlass.Shatter()` runs, it invokes `GameStateController.HandleFinalChamberGlassShattered()`.
+  - The controller asks the assistant to play the Glass Broken Praise line(s), then the Return To Office line(s).
+  - Only after those lines finish does the assistant call `GameStateController.SetState(GameState.BackToOffice)`.
+  - `BackToOffice` now runs a black screen transition before moving the player and assistant back to the office.
+  - `StylizedBreakableGlass` also exposes `onShattered` for optional UnityEvent bindings.
+  - `StylizedBreakableGlass` exposes `ForceShatter()` for explicit script or UnityEvent driven shatter without requiring a minimum impact speed.
 
 ## Known Risks / Things to Check in Unity
 
 - If `footstepsAudio` is looping, the crisis coroutine will wait forever before rumble/animation starts.
 - If `handIKTarget` or `playerHead` is missing, the grab stage now stops and logs an error instead of continuing.
 - If `grabAnchor` is placed poorly on the hand skeleton, the player/roof may appear offset even if script logic is correct.
-- If the visible hand does not reach mouth before `mouthArrivalTimeout`, the flow may continue with a warning.
+- Because `WaitForHandNear(...)` is currently called without `yield return`, it does not actually wait or produce the timeout warning in the current flow.
+- During `SwallowTransition`, the player may still be following `grabAnchor` until `ClownController` finishes its hand-to-mouth movement and calls `DetachPlayerFromHand()`. If this conflicts with `SwallowController` moving the XR Origin, tune the timing or move the detach point.
 - If the roof seems to rotate unnaturally, keep `alignRoofRotationToGrabAnchor` off.
 - If the roof seems not to align with the hand enough, tune `roofAttachDuration` and the local position of `grabAnchor`.
 - If Rig weight appears not to change, verify that the Inspector is showing the outer `Rig` component weight, not only the `TwoBoneIKConstraint` weight.

@@ -51,6 +51,8 @@ public class ClownController : MonoBehaviour
     [SerializeField] private AudioSource footstepsAudio;
     // 环境震动或低频压迫感音效。
     [SerializeField] private AudioSource rumbleAudio;
+    [SerializeField] private AudioSource groanAudio;
+    [SerializeField] private AudioSource postGroanAudio;
 
     [Header("时间参数")]
     // 开始接管手臂时，将 Rig 权重混合到 1 所需的时间。
@@ -98,6 +100,7 @@ public class ClownController : MonoBehaviour
     private bool playerFollowingGrabAnchor;
     // 玩家被抓住瞬间与 grabAnchor 的位置偏移。后续跟随时保持这个偏移，避免玩家被吸到手掌中心。
     private Vector3 playerGrabOffset;
+    private Coroutine grabAudioRoutine;
 
     private void LateUpdate()
     {
@@ -178,6 +181,7 @@ public class ClownController : MonoBehaviour
 
         // 12. 玩家开始跟随 grabAnchor；随后暂时关闭 Rig，让小丑原始动画继续演一段。
         AttachPlayerToHand();
+        PlayGrabAudioSequence();
 
         yield return BlendRigWeight(0f, rigBlendOutDuration);
 
@@ -212,6 +216,28 @@ public class ClownController : MonoBehaviour
 
         while (audioSource.isPlaying)
             yield return null;
+    }
+
+    private void PlayGrabAudioSequence()
+    {
+        if (grabAudioRoutine != null)
+            StopCoroutine(grabAudioRoutine);
+
+        grabAudioRoutine = StartCoroutine(PlayGrabAudioSequenceRoutine());
+    }
+
+    private IEnumerator PlayGrabAudioSequenceRoutine()
+    {
+        if (groanAudio != null)
+        {
+            groanAudio.Play();
+            yield return WaitForAudioToFinish(groanAudio);
+        }
+
+        if (postGroanAudio != null)
+            postGroanAudio.Play();
+
+        grabAudioRoutine = null;
     }
 
     private IEnumerator MoveHandTo(Vector3 targetPosition, float duration)

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 7d601088fb36489a9c7492df8e468c41
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 366374
+  packageName: Stylized Cracking & Breakable Glass
+  packageVersion: 1.0
+  assetPath: Assets/Penelopis Games/Stylized Cracking & Breakable Glass/Scripts/StylizedBreakableGlass.cs
+  uploadId: 925796

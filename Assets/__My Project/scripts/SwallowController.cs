@@ -12,11 +12,6 @@ public class SwallowController : MonoBehaviour
     [SerializeField] private Transform pipeStartPoint;
     [SerializeField] private Transform stomachLandingPoint;
 
-    [Header("Audio")]
-    [SerializeField] private AudioSource swallowAudio;
-    [SerializeField] private AudioSource rumbleAudio;
-    [SerializeField] private AudioSource innerVoiceAudio;
-
     [Header("Timing")]
     [SerializeField] private float fadeOutDuration = 2f;
     [Tooltip("How long the screen stays fully black after the swallow dialogue starts.")]
@@ -48,19 +43,10 @@ public class SwallowController : MonoBehaviour
         if (screenFadeController != null)
             screenFadeController.SetColor(swallowFadeColor);
 
-        yield return screenFadeController.FadeTo(1f, fadeOutDuration);
-
         if (assistantController != null)
             assistantController.PlaySwallowTransition();
 
-        if (swallowAudio != null)
-            swallowAudio.Play();
-
-        if (rumbleAudio != null)
-            rumbleAudio.Play();
-
-        if (innerVoiceAudio != null)
-            innerVoiceAudio.Play();
+        yield return screenFadeController.FadeTo(1f, fadeOutDuration);
 
         if (blackHoldDuration > 0f)
             yield return new WaitForSeconds(blackHoldDuration);
@@ -68,13 +54,13 @@ public class SwallowController : MonoBehaviour
         xrOrigin.position = pipeStartPoint.position;
         xrOrigin.rotation = pipeStartPoint.rotation;
 
+        gameStateController.SetState(GameStateController.GameState.MirrorChamber);
+
         yield return screenFadeController.FadeTo(0f, fadeInDuration);
 
         yield return ControlledFall();
 
         transitionRunning = false;
-
-        gameStateController.SetState(GameStateController.GameState.MirrorChamber);
     }
 
     private IEnumerator ControlledFall()
