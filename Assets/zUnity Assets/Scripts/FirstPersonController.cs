@@ -71,8 +71,29 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
+		private bool movementInputEnabled = true;
 
 		private const float _threshold = 0.01f;
+
+		public bool MovementInputEnabled => movementInputEnabled;
+
+		public void SetMovementInputEnabled(bool enabled)
+		{
+			movementInputEnabled = enabled;
+
+			if (enabled)
+				return;
+
+			_speed = 0f;
+			_verticalVelocity = 0f;
+
+			if (_input == null)
+				return;
+
+			_input.move = Vector2.zero;
+			_input.jump = false;
+			_input.sprint = false;
+		}
 
 		private bool IsCurrentDeviceMouse
 		{
@@ -112,6 +133,12 @@ namespace StarterAssets
 
 		private void Update()
 		{
+			if (!movementInputEnabled)
+			{
+				SetMovementInputEnabled(false);
+				return;
+			}
+
 			JumpAndGravity();
 			GroundedCheck();
 			Move();

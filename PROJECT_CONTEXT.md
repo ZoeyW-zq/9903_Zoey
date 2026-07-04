@@ -30,12 +30,14 @@ Important scripts:
   - Starts the office intro, crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, Mirror Chamber intro, and Back To Office return.
   - Also owns coarse scene-root activation for performance on headset builds.
   - Controls Office, Hippocampus, and Nightmare Global Volume weights through state changes.
+  - Owns the shared player movement lock entry point used by the clown grab and swallow/fall flow.
   - Fades the assigned Hippocampus Particle System emission rate to 0 when Giant Crisis begins.
   - Plays the assigned heartbeat AudioSource just before the clown crisis sequence starts.
 
 - `CrystalBall.cs`
   - Detects when the player's hand stays near the crystal ball.
   - Drives the white screen fade before transitioning to Hippocampus.
+  - Sends configurable XR controller haptic feedback while the player's hand is held on/near the crystal ball.
   - If the player removes their hand before the hold time completes, the fade returns to transparent and the timer resets.
 
 - `ScreenFadeController.cs`
@@ -52,9 +54,15 @@ Important scripts:
 - `ClownController.cs`
   - Main controller for the Giant Clown / Nightmare crisis sequence.
   - Handles audio order, giant animation trigger, right-arm IK weight, roof grab/drop, player grab/follow, hand-to-mouth movement, and state transition into `SwallowTransition`.
+  - Exposes `ReleasePlayerControl()` so the swallow transition can stop hand-following once the screen is fully black.
 
 - `SwallowController.cs`
   - Handles the black screen fade, black hold time, assistant swallow dialogue, teleport to pipe/fall start, fade back in, controlled fall, and transition into Mirror Chamber.
+
+- `PlayerMovementLockController.cs`
+  - Shared movement-lock bridge for VR and WebGL.
+  - For VR, disables manually assigned movement/teleport `Behaviour` components while leaving turn providers unassigned so turning can remain available.
+  - For WebGL, calls `FirstPersonController.SetMovementInputEnabled(false)` so WASD/jump/sprint movement stops while mouse look remains active.
 
 - `MemoryContentDisplay.cs`
   - Memory content no longer displays text or images.
@@ -171,6 +179,7 @@ Target behavior:
 Current implementation:
 
 - `CrystalBall` drives white fade progress while the hand is in range.
+- While either hand is in range, `CrystalBall` sends repeated haptic impulses to the matching left/right XR controller using configurable amplitude, duration, and interval values.
 - `GameStateController.TransitionToHippocampusRoutine()` assumes the screen is already fully white, teleports player/assistant, then fades back to transparent.
 
 ## Nightmare / Giant Clown Sequence
@@ -217,12 +226,15 @@ Current `ClownController.CrisisRoutine()` intent:
 10. Reach toward player.
    - This stage no longer uses a grab-arrival timeout.
    - The hand must actually reach the player before continuing.
-   - The IK target moves toward `playerHead`, but completion is based on `grabAnchor` / grab reference distance to `playerHead`.
+   - When the reach begins, `ClownController` asks `GameStateController` to lock player movement input.
+   - The IK target samples `playerHead.position` every frame, so if the player moves during the grab attempt the hand keeps chasing the player's current position.
+   - Completion is based on `grabAnchor` / grab reference distance to `playerHead`.
    - This prevents the script from continuing just because `handIKTarget` reached the player while the visible hand/grab point has not.
 
 11. Attach player to hand.
    - Player is not parented to the hand.
-   - Instead, `LateUpdate()` moves `xrOrigin.position` to follow `grabAnchor.position + playerGrabOffset`.
+   - On the grab frame, the player's tracked head is immediately aligned to `grabAnchor`.
+   - During follow, `LateUpdate()` moves `xrOrigin.position` by the delta between `grabAnchor.position` and the current `playerHead.position`, so headset movement does not create a growing offset from the hand.
    - Player rotation is intentionally not inherited, because forced camera rotation is bad for VR comfort and player agency.
 
 12. Blend right arm Rig weight to 0.
@@ -274,7 +286,31 @@ Current implementation:
   - `swallowFadeColor`
 - `swallowFadeColor` is black.
 - Assistant `PlaySwallowTransition()` is called during the black hold period.
+- Once the screen is fully black, `SwallowController` asks `GameStateController` to release the clown's player-follow control before teleporting the XR Origin to `pipeStartPoint`.
 - `GameStateController.SetState(MirrorChamber)` is called after the player is teleported to `pipeStartPoint`, before the fade-in and before `ControlledFall()`.
+- At the end of `ControlledFall()`, `SwallowController` asks `GameStateController` to unlock player movement input.
+
+## Player Movement Locking
+
+`GameStateController` exposes a `PlayerMovementLockController` reference.
+
+- `ClownController.ReachTowardPlayer()` calls `GameStateController.SetPlayerMovementLocked(true)` once the grab reach starts.
+- `SwallowController.ControlledFall()` calls `GameStateController.SetPlayerMovementLocked(false)` after the player reaches the stomach landing point.
+- The lock controller caches each assigned component's previous state before locking and restores that cached state when unlocking.
+
+VR setup:
+
+- Add `PlayerMovementLockController` to a persistent object in the VR scene, such as the same object that hosts `GameStateController` or another always-active manager object.
+- Drag that component into `GameStateController.playerMovementLockController`.
+- In `PlayerMovementLockController.disableWhenMovementLocked`, drag movement and teleport components only, such as `DynamicMoveProvider`, `ContinuousMoveProvider`, teleport providers/interactors/rays, or other movement-only scripts.
+- Do not drag turn providers such as `SnapTurnProvider` or `ContinuousTurnProvider` if turning should remain enabled during the grab.
+
+WebGL setup:
+
+- Add `PlayerMovementLockController` to a persistent object in the WebGL scene.
+- Drag that component into `GameStateController.playerMovementLockController`.
+- In `PlayerMovementLockController.firstPersonControllers`, drag the WebGL player's `FirstPersonController`.
+- `FirstPersonController` now exposes `SetMovementInputEnabled(bool)`. When movement is locked it clears WASD movement, jump, sprint, speed, and vertical velocity, but still allows mouse look through `LateUpdate()`.
 
 ## Important ClownController Parameters
 
@@ -351,7 +387,7 @@ Important IK note:
 ## Current Design Decisions
 
 - The player's VR camera should not be forcibly rotated during grab/mouth movement.
-- Player follows the hand by position only, via `xrOrigin.position`.
+- Player follows the hand by position only, via `xrOrigin.position`; while grabbed, the tracked head is kept aligned to `grabAnchor` without parenting or forced rotation.
 - Roof and player share the same `grabAnchor` concept to keep the hand/roof/player relationship consistent.
 - Grab completion is determined by the grab reference reaching the player, not by `handIKTarget` alone.
 - Grab-to-player has no timeout now; the giant hand must reach the player before the sequence continues.
@@ -380,7 +416,7 @@ Important IK note:
 - If `handIKTarget` or `playerHead` is missing, the grab stage now stops and logs an error instead of continuing.
 - If `grabAnchor` is placed poorly on the hand skeleton, the player/roof may appear offset even if script logic is correct.
 - If `mouthPoint`, `handIKTarget`, `handTipReference`, or `grabAnchor` are poorly placed, the mouth arrival wait may last until `mouthArrivalTimeout` and then continue with a warning.
-- During `SwallowTransition`, the player may still be following `grabAnchor` until `ClownController` finishes its hand-to-mouth movement and calls `DetachPlayerFromHand()`. If this conflicts with `SwallowController` moving the XR Origin, tune the timing or move the detach point.
+- During `SwallowTransition`, `SwallowController` releases the clown's player-follow control once the screen is fully black and before moving the XR Origin to the pipe start point.
 - If the roof seems to rotate unnaturally, keep `alignRoofRotationToGrabAnchor` off.
 - If the roof seems not to align with the hand enough, tune `roofAttachDuration` and the local position of `grabAnchor`.
 - If Rig weight appears not to change, verify that the Inspector is showing the outer `Rig` component weight, not only the `TwoBoneIKConstraint` weight.

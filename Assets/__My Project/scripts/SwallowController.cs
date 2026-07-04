@@ -51,15 +51,21 @@ public class SwallowController : MonoBehaviour
 
         yield return screenFadeController.FadeTo(1f, fadeOutDuration);
 
-        // Teleport while fully faded out, then let the player fall into the next space.
-        xrOrigin.position = pipeStartPoint.position;
-        xrOrigin.rotation = pipeStartPoint.rotation;
+        //yield return new WaitForSeconds(0.5f);
+
+        if (gameStateController != null)
+            gameStateController.ReleaseClownPlayerControl();
+
 
         if (afterTeleportAudio != null)
             afterTeleportAudio.Play();
 
         if (blackHoldDuration > 0f)
             yield return new WaitForSeconds(blackHoldDuration);
+
+        // Teleport while fully faded out, then let the player fall into the next space.
+        xrOrigin.position = pipeStartPoint.position;
+        xrOrigin.rotation = pipeStartPoint.rotation;
 
         gameStateController.SetState(GameStateController.GameState.MirrorChamber);
 
@@ -103,5 +109,8 @@ public class SwallowController : MonoBehaviour
 
         xrOrigin.position = endPosition;
         xrOrigin.rotation = endRotation;
+
+        if (gameStateController != null)
+            gameStateController.SetPlayerMovementLocked(false);
     }
 }

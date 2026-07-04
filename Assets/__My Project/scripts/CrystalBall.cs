@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class CrystalBall : MonoBehaviour, ICrystalBallEntry
 {
@@ -17,7 +18,13 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
     [SerializeField] private Color entryFadeColor = Color.white;
     [SerializeField] private bool enabledForEntry = true;
 
+    [Header("Haptic Feedback")]
+    [SerializeField, Range(0f, 1f)] private float hapticAmplitude = 0.35f;
+    [SerializeField] private float hapticDuration = 0.08f;
+    [SerializeField] private float hapticInterval = 0.2f;
+
     private float timer;
+    private float hapticTimer;
     private bool triggered;
     private Coroutine fadeResetRoutine;
 
@@ -38,6 +45,7 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
 
         if (handInRange)
         {
+            UpdateHapticFeedback(leftDistance <= holdDistance, rightDistance <= holdDistance);
             StopFadeReset();
 
             SetEntryFadeColor();
@@ -62,6 +70,7 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
         }
         else
         {
+            ResetHapticFeedback();
             ResetHoldProgress();
         }
     }
@@ -70,6 +79,7 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
     {
         enabledForEntry = value;
         timer = 0f;
+        ResetHapticFeedback();
 
         if (value)
         {
@@ -86,6 +96,44 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
         {
             ResetFadeToTransparent();
         }
+    }
+
+    private void UpdateHapticFeedback(bool leftHandInRange, bool rightHandInRange)
+    {
+        if (!leftHandInRange && !rightHandInRange)
+        {
+            ResetHapticFeedback();
+            return;
+        }
+
+        hapticTimer -= Time.deltaTime;
+
+        if (hapticTimer > 0f)
+            return;
+
+        if (leftHandInRange)
+            SendHapticImpulse(XRNode.LeftHand);
+
+        if (rightHandInRange)
+            SendHapticImpulse(XRNode.RightHand);
+
+        hapticTimer = Mathf.Max(0.01f, hapticInterval);
+    }
+
+    private void SendHapticImpulse(XRNode handNode)
+    {
+        InputDevice device = InputDevices.GetDeviceAtXRNode(handNode);
+
+        if (!device.isValid)
+            return;
+
+        if (device.TryGetHapticCapabilities(out HapticCapabilities capabilities) && capabilities.supportsImpulse)
+            device.SendHapticImpulse(0u, hapticAmplitude, hapticDuration);
+    }
+
+    private void ResetHapticFeedback()
+    {
+        hapticTimer = 0f;
     }
 
     private void UpdateFadeProgress()

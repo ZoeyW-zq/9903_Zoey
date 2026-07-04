@@ -32,6 +32,7 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private Transform backToOfficeAssistantSpawnPoint;
     [SerializeField] private ClownController clownController;
     [SerializeField] private SwallowController swallowController;
+    [SerializeField] private PlayerMovementLockController playerMovementLockController;
 
     [Header("Scene Roots")]
     [SerializeField] private GameObject officeRoot;
@@ -102,6 +103,18 @@ public class GameStateController : MonoBehaviour
             assistantController.PlayGlassBrokenReturnSequence();
         else
             SetState(GameState.BackToOffice);
+    }
+
+    public void ReleaseClownPlayerControl()
+    {
+        if (clownController != null)
+            clownController.ReleasePlayerControl();
+    }
+
+    public void SetPlayerMovementLocked(bool locked)
+    {
+        if (playerMovementLockController != null)
+            playerMovementLockController.SetMovementLocked(locked);
     }
 
     private void EnterState(GameState newState)

@@ -72,8 +72,7 @@ public class ClownController : MonoBehaviour
         if (!playerFollowingGrabAnchor || xrOrigin == null || grabAnchor == null)
             return;
 
-        // Follow position only; parenting or rotating the XR Origin can make VR movement uncomfortable.
-        xrOrigin.position = grabAnchor.position + playerGrabOffset;
+        ApplyPlayerFollowPosition();
     }
 
     public void TriggerCrisis()
@@ -91,6 +90,11 @@ public class ClownController : MonoBehaviour
             StopCoroutine(crisisRoutine);
 
         crisisRoutine = StartCoroutine(CrisisRoutine());
+    }
+
+    public void ReleasePlayerControl()
+    {
+        DetachPlayerFromHand();
     }
 
     private IEnumerator CrisisRoutine()
@@ -267,6 +271,9 @@ public class ClownController : MonoBehaviour
             yield return null;
         }
 
+        if (gameStateController != null)
+            gameStateController.SetPlayerMovementLocked(true);
+
         Transform grabReference = GetGrabReference();
 
         while (Vector3.Distance(grabReference.position, playerHead.position) > grabDistance)
@@ -370,7 +377,6 @@ public class ClownController : MonoBehaviour
 
     private void AttachPlayerToHand()
     {
-        // Store an offset and follow manually instead of parenting the XR Origin to a rotating hand.
         if (xrOrigin == null)
             return;
 
@@ -379,12 +385,29 @@ public class ClownController : MonoBehaviour
             return;
 
         playerGrabOffset = xrOrigin.position - attachAnchor.position;
+
         playerFollowingGrabAnchor = true;
+        ApplyPlayerFollowPosition();
     }
 
     private void DetachPlayerFromHand()
     {
         playerFollowingGrabAnchor = false;
+    }
+
+    private void ApplyPlayerFollowPosition()
+    {
+        if (xrOrigin == null || grabAnchor == null)
+            return;
+
+        // Follow position only; parenting or rotating the XR Origin can make VR movement uncomfortable.
+        if (playerHead != null)
+        {
+            xrOrigin.position += grabAnchor.position - playerHead.position;
+            return;
+        }
+
+        xrOrigin.position = grabAnchor.position + playerGrabOffset;
     }
 
     private Transform GetGrabAnchor()
