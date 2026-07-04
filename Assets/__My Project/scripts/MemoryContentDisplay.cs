@@ -32,6 +32,7 @@ public class MemoryContentDisplay : MonoBehaviour
         Destroy(runtimeRenderTexture);
     }
 
+    
     public void ShowDiaryMemory()
     {
         ShowContent();
@@ -63,7 +64,7 @@ public class MemoryContentDisplay : MonoBehaviour
 
         if (videoPlayer == null)
         {
-            Debug.LogError($"{nameof(MemoryContentDisplay)}：没有找到 VideoPlayer。请在当前物体或子物体上挂载 VideoPlayer，或在 Inspector 中手动指定。", this);
+            Debug.LogError($"{nameof(MemoryContentDisplay)}: no VideoPlayer found. Assign one in the Inspector or place it on this object or a child.", this);
             return;
         }
 
@@ -101,6 +102,7 @@ public class MemoryContentDisplay : MonoBehaviour
 
         if (videoPlayer.targetTexture == null)
         {
+            // Create a runtime texture only when the scene has not assigned one already.
             int width = Mathf.Max(1, renderTextureSize.x);
             int height = Mathf.Max(1, renderTextureSize.y);
 

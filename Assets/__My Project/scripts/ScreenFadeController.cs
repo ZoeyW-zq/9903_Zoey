@@ -47,6 +47,7 @@ public class ScreenFadeController : MonoBehaviour
         if (fadeImage == null)
             return;
 
+        // Transition color changes should not reset the current fade amount.
         color.a = fadeImage.color.a;
         fadeImage.color = color;
     }

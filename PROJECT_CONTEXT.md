@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-07-03
+Last updated: 2026-07-04
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -29,6 +29,9 @@ Important scripts:
   - Owns the main game state machine.
   - Starts the office intro, crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, Mirror Chamber intro, and Back To Office return.
   - Also owns coarse scene-root activation for performance on headset builds.
+  - Controls Office, Hippocampus, and Nightmare Global Volume weights through state changes.
+  - Fades the assigned Hippocampus Particle System emission rate to 0 when Giant Crisis begins.
+  - Plays the assigned heartbeat AudioSource just before the clown crisis sequence starts.
 
 - `CrystalBall.cs`
   - Detects when the player's hand stays near the crystal ball.
@@ -96,7 +99,12 @@ Current high-level state order in `GameStateController`:
    - Assistant moved to mirror chamber spawn point.
    - Assistant plays Mirror Chamber intro.
 
-9. `BackToOffice`
+9. `BreakGlass`
+   - Triggered when the assistant begins the Glass Broken Praise lines.
+   - Keeps `DungeonRoot` active.
+   - Fades the Nightmare Global Volume weight to 0.
+
+10. `BackToOffice`
    - Intended to be triggered after the Tall Stylized Breakable Glass in the Chamber is broken.
    - Fades the screen to black over 1 second.
    - Activates `OfficeRoot`.
@@ -125,6 +133,31 @@ To reduce headset runtime cost, the main scene is organized into three coarse ro
 - `BackToOffice` activates `OfficeRoot` after the screen has faded to black.
 
 Persistent gameplay objects such as the XR Origin/player, `GameStateController`, screen fade, assistant robot, and global event/input objects should stay outside these three roots so they remain active throughout the experience.
+
+## Global Volume State Control
+
+`GameStateController` exposes Inspector references for the Office, Hippocampus, and Nightmare Global Volumes, plus a shared Global Volume fade duration.
+
+- On startup and when entering `OfficeIntro`, Office Global Volume is weight 1 while Hippocampus and Nightmare are weight 0.
+- During `TransitionToHippocampus`, once the screen is fully white, Office Global Volume is set to weight 0 and Hippocampus Global Volume is set to weight 1 before the fade back in.
+- Entering `GiantCrisis` first fades the Hippocampus Global Volume weight to 0, then activates the Nightmare Global Volume and fades its weight to 1.
+- The Giant Crisis sequence starts after the Nightmare Global Volume fade-in completes.
+- Entering `BreakGlass` fades the Nightmare Global Volume weight to 0.
+- During `BackToOffice`, once the screen is fully black, Office Global Volume is restored to weight 1 while Hippocampus and Nightmare are set to weight 0.
+
+## Crisis Particle State Control
+
+`GameStateController` exposes an optional Hippocampus Particle System reference and a particle fade duration.
+
+- Entering `Hippocampus` restores that particle system's cached emission rate and plays it if needed.
+- Entering `GiantCrisis` fades the particle system's Rate over Time from its current value to 0.
+- The fade stops new particle emission with `StopEmitting`, allowing existing particles to expire naturally instead of clearing instantly.
+
+## Crisis Audio State Control
+
+`GameStateController` exposes an optional heartbeat AudioSource.
+
+- Entering `GiantCrisis` plays the heartbeat after the Hippocampus and Nightmare Global Volume transition completes, immediately before `ClownController.StartCrisisSequence()`.
 
 ## Crystal Ball Transition
 
@@ -215,8 +248,7 @@ Current `ClownController.CrisisRoutine()` intent:
 
 18. Wait until visible hand reference reaches mouth.
    - Uses `handTipReference` if assigned, otherwise `grabAnchor`, otherwise `handIKTarget`.
-   - `mouthArrivalTimeout` still exists as a safety timeout.
-   - Current code calls `WaitForHandNear(...)` but does not `yield return` it, so this check does not currently block the sequence.
+   - `mouthArrivalTimeout` is a safety timeout so the sequence can continue with a warning if the hand never reaches the mouth.
 
 19. Detach player from hand following.
 
@@ -289,7 +321,7 @@ Current major Inspector-facing fields:
   - Distance threshold for hand/mouth arrival.
 
 - `mouthArrivalTimeout`
-  - Safety timeout for hand-to-mouth arrival. Still present, but the current `CrisisRoutine()` does not yield the wait coroutine, so this timeout is not currently part of the blocking flow.
+  - Safety timeout for hand-to-mouth arrival.
 
 - `mouthTrackingCatchupSpeed`
   - Speed at which IK target keeps chasing the animated mouth while waiting for arrival.
@@ -323,7 +355,7 @@ Important IK note:
 - Roof and player share the same `grabAnchor` concept to keep the hand/roof/player relationship consistent.
 - Grab completion is determined by the grab reference reaching the player, not by `handIKTarget` alone.
 - Grab-to-player has no timeout now; the giant hand must reach the player before the sequence continues.
-- Mouth arrival still has a timeout parameter, but the current code does not wait on `WaitForHandNear(...)`, so mouth arrival is not currently enforced before detaching the player.
+- Mouth arrival waits on `WaitForHandNear(...)`; if the hand never reaches the mouth, `mouthArrivalTimeout` lets the sequence continue with a warning instead of getting stuck forever.
 - Assistant dialogue is independent and should not block the clown crisis coroutine unless explicitly requested.
 - Footsteps and rumble are sequential: footsteps finish first, rumble starts afterward.
 - `SwallowTransition` starts before the hand-to-mouth movement is complete, allowing the fade to black to overlap with the final mouth movement for a smoother visual transition.
@@ -347,7 +379,7 @@ Important IK note:
 - If `footstepsAudio` is looping, the crisis coroutine will wait forever before rumble/animation starts.
 - If `handIKTarget` or `playerHead` is missing, the grab stage now stops and logs an error instead of continuing.
 - If `grabAnchor` is placed poorly on the hand skeleton, the player/roof may appear offset even if script logic is correct.
-- Because `WaitForHandNear(...)` is currently called without `yield return`, it does not actually wait or produce the timeout warning in the current flow.
+- If `mouthPoint`, `handIKTarget`, `handTipReference`, or `grabAnchor` are poorly placed, the mouth arrival wait may last until `mouthArrivalTimeout` and then continue with a warning.
 - During `SwallowTransition`, the player may still be following `grabAnchor` until `ClownController` finishes its hand-to-mouth movement and calls `DetachPlayerFromHand()`. If this conflicts with `SwallowController` moving the XR Origin, tune the timing or move the detach point.
 - If the roof seems to rotate unnaturally, keep `alignRoofRotationToGrabAnchor` off.
 - If the roof seems not to align with the hand enough, tune `roofAttachDuration` and the local position of `grabAnchor`.

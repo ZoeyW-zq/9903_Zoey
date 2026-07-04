@@ -12,6 +12,9 @@ public class SwallowController : MonoBehaviour
     [SerializeField] private Transform pipeStartPoint;
     [SerializeField] private Transform stomachLandingPoint;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource afterTeleportAudio;
+
     [Header("Timing")]
     [SerializeField] private float fadeOutDuration = 2f;
     [Tooltip("How long the screen stays fully black after the swallow dialogue starts.")]
@@ -48,11 +51,15 @@ public class SwallowController : MonoBehaviour
 
         yield return screenFadeController.FadeTo(1f, fadeOutDuration);
 
-        if (blackHoldDuration > 0f)
-            yield return new WaitForSeconds(blackHoldDuration);
-
+        // Teleport while fully faded out, then let the player fall into the next space.
         xrOrigin.position = pipeStartPoint.position;
         xrOrigin.rotation = pipeStartPoint.rotation;
+
+        if (afterTeleportAudio != null)
+            afterTeleportAudio.Play();
+
+        if (blackHoldDuration > 0f)
+            yield return new WaitForSeconds(blackHoldDuration);
 
         gameStateController.SetState(GameStateController.GameState.MirrorChamber);
 

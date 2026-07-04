@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class CrystalBall : MonoBehaviour
+public class CrystalBall : MonoBehaviour, ICrystalBallEntry
 {
     [Header("References")]
     [SerializeField] private Transform crystalBallCenter;
@@ -17,13 +17,7 @@ public class CrystalBall : MonoBehaviour
     [SerializeField] private Color entryFadeColor = Color.white;
     [SerializeField] private bool enabledForEntry = true;
 
-    [Header("Debug")]
-    [SerializeField] private bool handInRange;
-    [SerializeField] private float timer;
-    [SerializeField] private float leftDistance;
-    [SerializeField] private float rightDistance;
-    [SerializeField] private float minDistance;
-
+    private float timer;
     private bool triggered;
     private Coroutine fadeResetRoutine;
 
@@ -35,12 +29,12 @@ public class CrystalBall : MonoBehaviour
         if (crystalBallCenter == null || leftHandProxy == null || rightHandProxy == null)
             return;
 
-        leftDistance = Vector3.Distance(leftHandProxy.position, crystalBallCenter.position);
-        rightDistance = Vector3.Distance(rightHandProxy.position, crystalBallCenter.position);
+        float leftDistance = Vector3.Distance(leftHandProxy.position, crystalBallCenter.position);
+        float rightDistance = Vector3.Distance(rightHandProxy.position, crystalBallCenter.position);
 
-        minDistance = Mathf.Min(leftDistance, rightDistance);
+        float minDistance = Mathf.Min(leftDistance, rightDistance);
 
-        handInRange = minDistance <= holdDistance;
+        bool handInRange = minDistance <= holdDistance;
 
         if (handInRange)
         {
@@ -76,7 +70,6 @@ public class CrystalBall : MonoBehaviour
     {
         enabledForEntry = value;
         timer = 0f;
-        handInRange = false;
 
         if (value)
         {

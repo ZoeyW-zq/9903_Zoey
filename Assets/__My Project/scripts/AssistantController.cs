@@ -51,6 +51,8 @@ public class AssistantController : MonoBehaviour
 
     private Coroutine dialogueRoutine;
     private bool glassBrokenSequenceStarted;
+    // The water bottle grab event can fire repeatedly, but this reveal should only interrupt dialogue once.
+    private bool memoryRevealedPlayed;
 
     private void Awake()
     {
@@ -71,6 +73,10 @@ public class AssistantController : MonoBehaviour
 
     public void PlayMemoryRevealed()
     {
+        if (memoryRevealedPlayed)
+            return;
+
+        memoryRevealedPlayed = true;
         PlayStage(memoryRevealedLines, PlayMemoryPlacementHint);
     }
 
@@ -106,6 +112,7 @@ public class AssistantController : MonoBehaviour
             return;
 
         glassBrokenSequenceStarted = true;
+        SetGameState(GameStateController.GameState.BreakGlass);
         PlayStage(glassBrokenPraiseLines, () =>
         {
             PlayStage(returnToOfficeLines, () => SetGameState(GameStateController.GameState.BackToOffice));
@@ -207,6 +214,7 @@ public class AssistantController : MonoBehaviour
 
     private IEnumerator RunStage(DialogueLine[] lines, System.Action onComplete)
     {
+        // Dialogue timing follows the assigned audio clips so text and voice stay in sync from the Inspector.
         for (int i = 0; i < lines.Length; i++)
         {
             DialogueLine line = lines[i];
