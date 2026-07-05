@@ -69,6 +69,7 @@ Important scripts:
   - It now only plays the currently attached `VideoPlayer` when any memory content show method is triggered.
   - The old public methods are kept so existing UnityEvent bindings in the scene do not break.
   - It prepares a `RawImage` and runtime `RenderTexture` if the scene does not provide a visible video output surface.
+  - On WebGL runtime, it switches the `VideoPlayer` to URL mode and loads `Application.streamingAssetsPath + "/video.mp4"` by default, because WebGL does not support playing assigned `VideoClip` assets reliably.
 
 Main scene:
 
@@ -397,6 +398,7 @@ Important IK note:
 - `SwallowTransition` starts before the hand-to-mouth movement is complete, allowing the fade to black to overlap with the final mouth movement for a smoother visual transition.
 - Memory content display is video-only now; it should play its assigned/current `VideoPlayer` instead of controlling text or image UI.
 - A `VideoPlayer` under a world-space Canvas still needs a visible output surface. `MemoryContentDisplay` now creates/uses a `RawImage` plus a runtime `RenderTexture` so video can render on the Canvas.
+- WebGL video playback uses StreamingAssets URL loading. Keep the playable WebGL file at `Assets/StreamingAssets/video.mp4` unless `MemoryContentDisplay.webGLStreamingAssetsVideoFileName` is changed.
 - Breaking the final Chamber glass should eventually call `GameStateController.SetState(GameState.BackToOffice)`. The return spawn transforms are exposed on `GameStateController` for manual scene assignment.
 - Current final Chamber glass flow:
   - `MirrorChamber` plays the assistant Mirror Chamber intro.

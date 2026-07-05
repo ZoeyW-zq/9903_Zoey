@@ -9,6 +9,9 @@ public class MemoryContentDisplay : MonoBehaviour
     [SerializeField] private RawImage videoOutput;
     [SerializeField] private Vector2Int renderTextureSize = new Vector2Int(1920, 1080);
 
+    [Header("WebGL Video")]
+    [SerializeField] private string webGLStreamingAssetsVideoFileName = "video.mp4";
+
     private RenderTexture runtimeRenderTexture;
 
     private void Awake()
@@ -16,6 +19,7 @@ public class MemoryContentDisplay : MonoBehaviour
         if (videoPlayer == null)
             videoPlayer = GetComponentInChildren<VideoPlayer>(true);
 
+        ConfigureWebGLVideoSource();
         EnsureVideoOutput();
         Hide();
     }
@@ -69,8 +73,24 @@ public class MemoryContentDisplay : MonoBehaviour
         }
 
         EnsureVideoOutput();
+        ConfigureWebGLVideoSource();
         videoPlayer.Stop();
         videoPlayer.Play();
+    }
+
+    private void ConfigureWebGLVideoSource()
+    {
+        if (videoPlayer == null || Application.platform != RuntimePlatform.WebGLPlayer)
+            return;
+
+        if (string.IsNullOrWhiteSpace(webGLStreamingAssetsVideoFileName))
+            return;
+
+        string streamingAssetsPath = Application.streamingAssetsPath.TrimEnd('/');
+        string videoFileName = webGLStreamingAssetsVideoFileName.TrimStart('/');
+
+        videoPlayer.source = VideoSource.Url;
+        videoPlayer.url = $"{streamingAssetsPath}/{videoFileName}";
     }
 
     private void EnsureVideoOutput()
