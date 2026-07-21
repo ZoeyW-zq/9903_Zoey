@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-07-04
+Last updated: 2026-07-19
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -16,6 +16,525 @@ The current development focus is the Nightmare/Giant Clown sequence, especially:
 - Avoiding sudden jumps in VR player position or camera rotation.
 - Making screen fade transitions support the intended narrative timing.
 - Keeping assistant dialogue independent from physical/animation coroutine timing.
+
+## Planned Final Narrative Design (Not Yet Implemented)
+
+This section records the approved direction for the final assignment version. It is a design specification, not a description of the current Unity implementation. The technical sections later in this document still describe the currently implemented linear flow.
+
+### Core Theme and Rules
+
+- The player is a Memory Organizer who helps a client decide how much attention to give different memories.
+- The player cannot turn memories into long-term or short-term memories and cannot delete real experiences. Those processes occur naturally in the client's life.
+- Painful and pleasant memories continue to exist together. The problem occurs when painful memories collect, reinforce each other, and occupy too much attention.
+- The Giant Clown is the physical form of accumulated anxiety, pressure, shame, and self-criticism.
+- The player does not rewrite the past. They understand memories, respond to the client's current internal beliefs, and redistribute attention.
+- The final outcome is based only on where the player places the seven memories during the final Memory Room stage.
+- Failed dialogue choices in the Giant stage have immediate feedback but do not affect the final office report.
+
+### Client Profile
+
+The client is approximately 28 years old and works in an office. They are conscientious, sensitive, and inclined to please others. They find it difficult to refuse requests or ask for help, and they often connect personal worth to performance and other people's approval.
+
+The central internalized belief connecting the seven memories is:
+
+> Only when I perform perfectly, endure pressure, and avoid burdening other people am I worthy of recognition.
+
+The two positive recent memories establish an alternative perspective:
+
+> Some experiences deserve attention simply because they are beautiful or personally meaningful. Self-worth does not need to come from external approval.
+
+### Planned Full Game Flow
+
+#### Stage 1: Office
+
+1. The assistant greets the player and asks whether they are ready to begin work.
+2. Three options appear:
+   - Learn more about the Memory Organizer job.
+   - Explore the office before starting.
+   - Start work now.
+3. Choosing the job explanation plays the explanatory dialogue. The already-used option is then removed.
+4. Choosing office exploration makes the assistant wait. When the player returns, the available choices reflect what the player has already heard or explored instead of resetting blindly.
+5. Choosing to start causes the crystal ball to appear.
+6. The assistant asks the player to place a hand on the crystal ball.
+7. The existing white fade and teleport transition move the player and assistant to the Memory Room.
+
+Suggested state flags:
+
+- `HasHeardJobExplanation`
+- `HasExploredOffice`
+- `IsReadyToStart`
+
+The Office choices let the player control onboarding pace. The primary narrative agency occurs later through attention placement.
+
+#### Stage 2: Initial Memory Room Organization
+
+1. Three recent memory objects appear: the water bottle, sunset photograph, and sketchbook.
+2. The player may inspect them in any order.
+3. Picking up an object plays its memory clip.
+4. The player assigns attention by placing the object in one of three spatial categories:
+   - `Focus`: high current attention.
+   - `Context`: retained in active life context without dominating attention.
+   - `Background`: still present, but outside current attention.
+5. No visible score or mood value appears in the Memory Room.
+6. The game records each object's attention position.
+7. After all three objects are placed, the reorganization disturbs deeper painful memories that have collected in the client's subconscious.
+8. The Giant Clown crisis begins. The giant grabs and swallows the player and assistant.
+
+The crisis occurs on every path so the production needs only one main story spine. The player's initial choices may later affect crisis presentation, but the final report is calculated from the final seven-object placement.
+
+#### Stage 3: Giant Interior / Deep Memory Crisis
+
+1. The player arrives in the enclosed room inside the Giant Clown.
+2. Four mirrors represent amplified painful memories and repeatedly emit the client's negative internal statements.
+3. The player may approach the mirrors in any order.
+4. Approaching a mirror displays a `Start Conversation` button.
+5. Selecting it starts a two-round conversation with the client's current internal voice.
+6. The first round always contains three options:
+   - Two options that can develop the conversation.
+   - One plausible but harmful shortcut that reinforces avoidance, perfectionism, isolation, or self-criticism.
+7. Selecting the harmful shortcut immediately ends the conversation:
+   - The client speaks one more agitated line.
+   - The voice and nearby environment briefly intensify.
+   - The mirror returns to its idle state and displays `Start Conversation` again.
+8. Selecting either constructive first-round response enters a second round.
+9. Every second-round option is constructive. Any second-round choice successfully completes the memory, but the wording lets the player choose the perspective they prefer.
+10. On success, the client forms a more flexible interpretation. The mirror stops echoing and returns to the original memory object.
+11. After all four objects are restored, the painful memories no longer sustain the Giant Clown. The giant space dissolves.
+12. The player, assistant, and four restored objects return to the Memory Room.
+
+Dialogue failures have immediate local consequences only. They are not included in the final office report and do not permanently block progress.
+
+#### Stage 4: Final Attention Redistribution
+
+1. The three recent objects and four restored deep-memory objects are now present together.
+2. The player has enough context to reconsider all seven memories.
+3. The player places every object in `Focus`, `Context`, or `Background`.
+4. No real memory can be deleted.
+5. The player can revise the layout until confirming the final distribution.
+6. The confirmed positions are stored for the office report.
+7. The player and assistant return to the Office.
+
+#### Stage 5: Office Report and Ending
+
+1. The office computer announces that the session report is ready.
+2. The computer first shows the client's initial state.
+3. The player selects `View Updated Report`.
+4. The game chooses one of three professional report templates from the final attention distribution.
+5. The report inserts the names of highly attended memories where useful.
+6. The player selects `Play Client Message` to hear or read the client's personal feedback.
+7. The assistant states that the day's work is complete.
+8. The experience ends.
+
+The report uses qualitative language, not scores, stars, percentages, or explicit success/failure colors.
+
+## Planned Memory Set
+
+### Recent Surface Memory 1: Water Bottle
+
+- **Object:** A used insulated water bottle with a small medicine bag attached.
+- **Memory:** The client has a fever but remains alone in the office to finish a project. They drink water, take medicine, and continue editing after everyone else has left.
+- **Internal line:** "Just keep going. I can rest after I finish."
+- **Emotional quality:** Painful/current negative pattern.
+- **Meaning:** The client puts responsibility before physical needs and treats rest as irresponsibility.
+- **Deep links:** The old alarm clock and old phone.
+
+### Recent Surface Memory 2: Sunset Photograph
+
+- **Object:** An orange-red instant photograph or a printed phone photograph of a sunset.
+- **Memory:** While commuting home, the client stops checking work messages after noticing the sunset. They leave public transport one stop early, stand near a river or pedestrian bridge for several quiet minutes, and take the photograph.
+- **Internal line:** "The sky looks beautiful today."
+- **Emotional quality:** Purely pleasant.
+- **Meaning:** An experience can deserve attention without proving ability, producing value, or receiving approval.
+- **Deep link:** The old alarm clock. The memory counters the belief that stopping is wasted time.
+
+### Recent Surface Memory 3: Sketchbook
+
+- **Object:** A worn sketchbook with a pencil under the cover. The final page contains a recently completed and signed drawing.
+- **Memory:** The client once enjoyed drawing but stopped after beginning full-time work. One evening they return to the hobby and complete a picture. It is imperfect and never posted online, but they sign it and feel privately satisfied.
+- **Internal line:** "There are still things I could change, but I genuinely like it."
+- **Emotional quality:** Positive self-recognition.
+- **Meaning:** The client can value creativity, effort, and personal growth without external evaluation.
+- **Deep links:** The second-place medal and red correction pen.
+
+### Deep Memory 1: Second-Place Medal
+
+- **Object:** A worn silver medal with the client's childhood name engraved on the back.
+- **Memory:** As a child, the client excitedly shows their parents a second-place medal. The parents first ask who came first and why the client did not beat them.
+- **Repeated negative lines:**
+  - "There is nothing worth celebrating about second place."
+  - "If you had worked harder, you would not have lost."
+- **Internalized belief:** Only the highest achievement has value.
+- **Emotions:** Inferiority, perfectionism, fear of failure.
+- **Surface link:** The sketchbook demonstrates that imperfect work can still deserve personal recognition.
+
+### Deep Memory 2: Old Alarm Clock
+
+- **Object:** An old red alarm clock whose hands repeatedly jump back to 6:00 a.m.
+- **Memory:** While sick as a student, the client asks to stay home. Their parents, who are also under work and financial pressure, say that everyone is tired but responsibilities still need to be completed.
+- **Repeated negative lines:**
+  - "Other people can keep going. Why can't you?"
+  - "Stopping means you are irresponsible."
+- **Internalized belief:** Illness and exhaustion are not acceptable reasons to rest.
+- **Emotions:** Guilt, anxiety, discomfort with rest.
+- **Surface links:** The water bottle repeats this behavior; the sunset photograph shows that stopping can have value.
+
+### Deep Memory 3: Old Phone
+
+- **Object:** An old phone with a cracked screen showing an unsent request for help.
+- **Memory:** During a university group project, the overloaded client asks a teammate for help. The teammate responds, "Everyone is busy. Don't hold the group back." The client deletes the message and stays up alone to complete the work.
+- **Repeated negative lines:**
+  - "Do not burden other people."
+  - "Needing help means you are unreliable."
+- **Internalized belief:** Asking for help causes disappointment and proves incompetence.
+- **Emotions:** Shame, isolation, fear of becoming a burden.
+- **Surface link:** The client again works alone while sick in the water-bottle memory.
+
+### Deep Memory 4: Red Correction Pen
+
+- **Object:** A red pen carrying the logo of the client's former employer.
+- **Memory:** Early in the client's career, they make a data error in a report. A supervisor circles the error in front of colleagues and says, "If you make mistakes like this, I cannot trust you with more important work."
+- **Repeated negative lines:**
+  - "You are not capable."
+  - "You will make the same mistake again."
+- **Internalized belief:** One mistake proves total incompetence.
+- **Emotions:** Self-doubt, shame, fear of authority judgment.
+- **Surface link:** The sketchbook allows imperfect marks to remain without erasing the value of the whole work.
+
+### Memory Relationship Summary
+
+```text
+Second-place medal
+  -> I must be the best to have value
+  -> Sketchbook: imperfect work can still deserve self-recognition
+
+Old alarm clock
+  -> Rest is irresponsible
+  -> Water bottle: the client works while sick
+  -> Sunset photograph: stopping can be valuable in itself
+
+Old phone
+  -> Asking for help makes me a burden
+  -> Water bottle: the client continues alone while sick
+
+Red correction pen
+  -> One mistake proves I have no ability
+  -> Sketchbook: mistakes do not erase the value of the whole work
+```
+
+## Planned Deep-Memory Dialogue Scripts
+
+### Dialogue 1: Second-Place Medal
+
+**Initial internal voice:**
+
+> "I came second, but the first thing they asked was why I was not first. Maybe only first place is worth celebrating."
+
+**First-round choices:**
+
+1. "You wanted them to see your effort first. It makes sense that their reaction hurt."
+2. "Second place still reflects your effort. A rank cannot decide whether the experience has value."
+3. "Keep working harder. Next time, win first place and prove it to them." *(Harmful shortcut)*
+
+**Harmful response:**
+
+> "Right... as long as I am not first, I am still not good enough. I cannot stop."
+
+The dialogue closes, the voice intensifies, and `Start Conversation` returns.
+
+**If choice 1 was selected:**
+
+Client:
+
+> "But if I am satisfied with second place, does that mean I have no ambition?"
+
+Second-round success choices:
+
+- "Recognizing what you have achieved does not prevent you from continuing to grow."
+- "You can want to improve while still allowing yourself to be happy with what you did."
+
+**If choice 2 was selected:**
+
+Client:
+
+> "They looked so disappointed. It is hard to believe second place really had value."
+
+Second-round success choices:
+
+- "Their expectations belong to them. They cannot replace your judgment of your own value."
+- "Like your sketchbook, something can be imperfect and still deserve your signature."
+
+**Resolution line:**
+
+> "I can keep growing without waiting until I am first to recognize what I have already done."
+
+The mirror becomes the second-place medal.
+
+### Dialogue 2: Old Alarm Clock
+
+**Initial internal voice:**
+
+> "I only wanted to rest, but everyone was tired. Maybe stopping makes me selfish and irresponsible."
+
+**First-round choices:**
+
+1. "Your exhaustion and illness were real. They were not excuses."
+2. "Being responsible does not mean that you can never stop and rest."
+3. "Keep enduring it. You can rest after everything is finished." *(Harmful shortcut)*
+
+**Harmful response:**
+
+> "But the work never ends... does that mean I can never stop?"
+
+The dialogue closes, the clock accelerates, and `Start Conversation` returns.
+
+**If choice 1 was selected:**
+
+Client:
+
+> "But if I rest, the work may fall on someone else."
+
+Second-round success choices:
+
+- "You can communicate and request support instead of continuing alone until you cannot function."
+- "Caring for your body is also part of being able to meet future responsibilities."
+
+**If choice 2 was selected:**
+
+Client:
+
+> "Every time I stop, I feel guilty, as if I have done something wrong."
+
+Second-round success choices:
+
+- "That guilt comes from an old rule. It does not prove that you did something wrong."
+- "You once stopped to watch the sunset. Those few minutes did not harm anyone."
+
+**Resolution line:**
+
+> "Rest is not avoiding responsibility. I can care for myself and then decide what to do next."
+
+The mirror becomes the old alarm clock and its hands stop looping.
+
+### Dialogue 3: Old Phone
+
+**Initial internal voice:**
+
+> "I asked for help and they said I was holding everyone back. Maybe reliable people should solve everything alone."
+
+**First-round choices:**
+
+1. "That rejection made you feel ashamed. It makes sense that asking again became difficult."
+2. "One person's response cannot represent everyone or prove that asking for help means incompetence."
+3. "Never depend on anyone again. Doing everything alone is safest." *(Harmful shortcut)*
+
+**Harmful response:**
+
+> "Right. If I carry everything alone, no one can reject me. I cannot ask, no matter how exhausted I become."
+
+The dialogue closes, unsent messages multiply, and `Start Conversation` returns.
+
+**If choice 1 was selected:**
+
+Client:
+
+> "What if I ask again and I am rejected again?"
+
+Second-round success choices:
+
+- "You can choose people you trust. One refusal cannot decide whether you deserve support."
+- "Making a request gives another person a choice. It does not force your responsibility onto them."
+
+**If choice 2 was selected:**
+
+Client:
+
+> "Needing help still makes me feel unreliable."
+
+Second-round success choices:
+
+- "Being reliable does not mean doing everything alone. It includes knowing when collaboration is needed."
+- "When you worked alone while sick, continuing by yourself did not make you safer."
+
+**Resolution line:**
+
+> "I can try to ask. How another person responds should not decide whether I am allowed to need help."
+
+The mirror becomes the cracked old phone.
+
+### Dialogue 4: Red Correction Pen
+
+**Initial internal voice:**
+
+> "That mistake showed everyone that I was unprofessional. Maybe they will eventually discover that I am not capable."
+
+**First-round choices:**
+
+1. "Being criticized in front of everyone was humiliating and frightening. Your reaction makes sense."
+2. "One mistake means that the report needed correction. It does not mean that you have no ability."
+3. "Check more carefully next time and make sure you never make another mistake." *(Harmful shortcut)*
+
+**Harmful response:**
+
+> "Right. Everything must be perfect. If I make one more mistake, they will know I am unreliable."
+
+The dialogue closes, red marks spread, and `Start Conversation` returns.
+
+**If choice 1 was selected:**
+
+Client:
+
+> "Every time I submit something now, I still remember that red pen."
+
+Second-round success choices:
+
+- "The memory can remind you to check, but it does not have to decide the result in advance."
+- "You can take your work seriously while accepting that mistakes remain possible."
+
+**If choice 2 was selected:**
+
+Client:
+
+> "But what if the next mistake has real consequences?"
+
+Second-round success choices:
+
+- "Taking responsibility and correcting a consequence is different from denying your entire ability."
+- "Like the imperfect lines in your sketchbook, one error does not remove the value of the whole work."
+
+**Resolution line:**
+
+> "I can check carefully and correct mistakes without using perfect performance to prove my ability."
+
+The mirror becomes the red correction pen.
+
+## Planned Office Outcome Reports
+
+### Ending Calculation
+
+The final report reads only the seven confirmed Memory Room positions.
+
+Track three counts:
+
+- `NegativeFocusCount`: number of the five painful memories in `Focus`.
+- `NegativeBackgroundCount`: number of the five painful memories in `Background`.
+- `PositiveFocusCount`: number of the sunset photograph and sketchbook in `Focus`.
+
+Use this priority order:
+
+```text
+if NegativeBackgroundCount >= 4:
+    Avoidance ending
+else if NegativeFocusCount >= 2 or PositiveFocusCount == 0:
+    Pain-Dominated ending
+else:
+    Broadened-Attention ending
+```
+
+This maps every arrangement to one of three reports without authoring a separate branch for every combination.
+
+### Ending 1: Attention Remains Dominated by Pain
+
+**Meaning:** The client understands the sources of distress, but painful memories still occupy most active attention. The crisis has subsided temporarily and could reform.
+
+**Professional report:**
+
+```text
+SESSION OUTCOME REPORT
+
+Attention Pattern:
+Attention remains concentrated around distressing experiences.
+
+Primary Focus:
+Failure, external criticism and personal responsibility continue
+to occupy a significant part of the client's attention.
+
+Observed Effect:
+The client has gained a clearer understanding of these memories,
+but continues to revisit them repeatedly.
+
+Assessment:
+The crisis has temporarily subsided, but the current attention
+pattern may allow similar emotional distress to form again.
+
+Suggested Direction:
+Maintain awareness of these experiences while allowing restorative
+and self-affirming memories to occupy more attention.
+```
+
+The report may list the actual objects currently in `Focus`.
+
+**Client message:**
+
+> "I understand where those voices came from now, but I still keep returning to them. I know there are other memories, but they still feel far away."
+
+### Ending 2: Immediate Relief Through Avoidance
+
+**Meaning:** Most painful memories have been pushed out of active attention. The client feels immediate relief, but the painful experiences remain disconnected and may return when triggered.
+
+**Professional report:**
+
+```text
+SESSION OUTCOME REPORT
+
+Attention Pattern:
+Distressing memories have been moved almost entirely outside
+the client's active attention.
+
+Primary Focus:
+Restorative and self-affirming experiences now receive greater attention.
+
+Observed Effect:
+The client reports immediate relief and reduced emotional pressure.
+
+Assessment:
+The current state appears stable, but several painful experiences
+remain disconnected from the client's active understanding.
+They may return unexpectedly when triggered by similar situations.
+
+Suggested Direction:
+Allow difficult memories to remain visible without permitting
+them to dominate the client's attention.
+```
+
+**Client message:**
+
+> "I feel much lighter, as if I no longer have to think about those things. But when everything becomes quiet, it still feels like something is knocking from far away."
+
+### Ending 3: Broadened Attention
+
+**Meaning:** At least one positive memory receives active attention while painful memories remain available in context without dominating the client's view of the present.
+
+**Professional report:**
+
+```text
+SESSION OUTCOME REPORT
+
+Attention Pattern:
+Attention is distributed across restorative, self-affirming
+and difficult experiences.
+
+Primary Focus:
+The client is giving greater attention to meaningful and
+personally valuable experiences.
+
+Observed Effect:
+Painful memories remain accessible, but no longer dominate
+the client's interpretation of the present.
+
+Assessment:
+The client demonstrates a broader view of their personal history.
+Distressing experiences are acknowledged without being treated
+as a complete definition of the self.
+
+Suggested Direction:
+Continue giving attention to experiences that support curiosity,
+rest and self-directed achievement.
+```
+
+**Client message:**
+
+> "Those experiences have not disappeared, and remembering them still hurts. But I also remember the sunset and how I felt when I finished that drawing. It finally feels as though they can all exist at the same time."
+
 
 ## Important Files
 

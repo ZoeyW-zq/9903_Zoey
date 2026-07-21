@@ -7,7 +7,7 @@ public class GameStateController : MonoBehaviour
     public enum GameState
     {
         None,
-        OfficeIntro,
+        OfficeDialogue,
         AwaitCrystalBall,
         TransitionToHippocampus,
         Hippocampus,
@@ -21,6 +21,7 @@ public class GameStateController : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private AssistantController assistantController;
+    [SerializeField] private OfficeDialogueController officeDialogueController;
     [SerializeField] private MonoBehaviour crystalBall;
     [SerializeField] private ScreenFadeController screenFadeController;
     [SerializeField] private Transform player;
@@ -78,7 +79,7 @@ public class GameStateController : MonoBehaviour
 
     private void Start()
     {
-        SetState(GameState.OfficeIntro);
+        SetState(GameState.OfficeDialogue);
     }
 
     public void SetState(GameState newState)
@@ -121,10 +122,15 @@ public class GameStateController : MonoBehaviour
     {
         switch (newState)
         {
-            case GameState.OfficeIntro:
+            case GameState.OfficeDialogue:
                 SetActiveSceneRoot(SceneRoot.Office);
                 SwitchToOfficeVolume();
-                assistantController.PlayIntro();
+                SetCrystalBallEnabled(false);
+
+                if (officeDialogueController != null)
+                    officeDialogueController.BeginOfficeDialogue();
+                else
+                    Debug.LogWarning("GameStateController: OfficeDialogueController is not assigned.", this);
                 break;
 
             case GameState.AwaitCrystalBall:

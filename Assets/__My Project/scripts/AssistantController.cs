@@ -12,15 +12,15 @@ public class AssistantController : MonoBehaviour
 
         public AudioClip audioClip;
 
+        [Min(0f)]
+        public float fallbackSubtitleDuration = 2f;
+
         public bool keepVisibleAfterLine;
     }
 
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private TMP_Text subtitleText;
     [SerializeField] private GameStateController gameStateController;
-
-    [Header("Office Intro")]
-    [SerializeField] private DialogueLine[] officeIntroLines;
 
     [Header("Hippocampus Intro")]
     [SerializeField] private DialogueLine[] hippocampusIntroLines;
@@ -59,11 +59,6 @@ public class AssistantController : MonoBehaviour
         ConfigureAudioSource();
         StopAudio();
         ClearSubtitle();
-    }
-
-    public void PlayIntro()
-    {
-        PlayStage(officeIntroLines, () => SetGameState(GameStateController.GameState.AwaitCrystalBall));
     }
 
     public void PlayHippocampusIntro()
@@ -123,6 +118,11 @@ public class AssistantController : MonoBehaviour
     {
         if (subtitleText != null)
             subtitleText.text = "";
+    }
+
+    public void PlayDialogue(DialogueLine[] lines, System.Action onComplete = null)
+    {
+        PlayStage(lines, onComplete);
     }
 
     private void PlayStage(DialogueLine[] lines, System.Action onComplete = null)
@@ -200,16 +200,15 @@ public class AssistantController : MonoBehaviour
         return true;
     }
 
-    private float GetLineDuration(DialogueLine line)
+    public static float GetLineDuration(DialogueLine line, float pitch)
     {
-        if (line == null || line.audioClip == null)
+        if (line == null)
             return 0f;
 
-        float pitch = audioSource != null ? Mathf.Abs(audioSource.pitch) : 1f;
-        if (pitch <= 0f)
-            pitch = 1f;
+        if (line.audioClip == null)
+            return Mathf.Max(0f, line.fallbackSubtitleDuration);
 
-        return line.audioClip.length / pitch;
+        return line.audioClip.length / Mathf.Max(0.01f, Mathf.Abs(pitch));
     }
 
     private IEnumerator RunStage(DialogueLine[] lines, System.Action onComplete)
@@ -224,9 +223,17 @@ public class AssistantController : MonoBehaviour
 
             SetSubtitle(line.text);
 
-            if (TryPlayAudio(line))
+            bool hasAudio = line.audioClip != null && TryPlayAudio(line);
+            float pitch = audioSource != null ? audioSource.pitch : 1f;
+            float duration = GetLineDuration(line, pitch);
+
+            if (duration > 0f)
             {
-                yield return new WaitForSeconds(GetLineDuration(line));
+                yield return new WaitForSeconds(duration);
+            }
+
+            if (hasAudio)
+            {
                 StopAudio();
             }
 
