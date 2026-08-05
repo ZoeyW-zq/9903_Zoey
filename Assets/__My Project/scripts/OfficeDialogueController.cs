@@ -1,5 +1,4 @@
 using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,14 +8,9 @@ public class OfficeDialogueController : MonoBehaviour
     [SerializeField] private AssistantController assistantController;
     [SerializeField] private GameStateController gameStateController;
     [SerializeField] private GameObject choiceCanvas;
-    [SerializeField] private Button[] choiceButtons = new Button[3];
-    [SerializeField] private TMP_Text[] choiceLabels = new TMP_Text[3];
-
-    [Header("Option Labels")]
-    [SerializeField] private string jobExplanationLabel = "Learn about the Memory Organizer role";
-    [SerializeField] private string exploreOfficeLabel = "Explore the office";
-    [SerializeField] private string waitALittleLabel = "I want to wait a bit";
-    [SerializeField] private string startWorkLabel = "Start work now";
+    [SerializeField] private Button jobExplanationButton;
+    [SerializeField] private Button exploreOfficeButton;
+    [SerializeField] private Button startWorkButton;
 
     [Header("Dialogue")]
     [SerializeField] private AssistantController.DialogueLine[] greetingLines;
@@ -30,12 +24,22 @@ public class OfficeDialogueController : MonoBehaviour
     public bool HasExploredOffice { get; private set; }
     public bool IsReadyToStart { get; private set; }
     public bool IsJobExplanationAvailable => !isBusy && !isExploring && !IsReadyToStart
-        && !HasHeardJobExplanation && !HasExploredOffice;
+        && !HasHeardJobExplanation;
     public bool IsExploreOfficeAvailable => !isBusy && !isExploring && !IsReadyToStart;
     public bool IsStartWorkAvailable => !isBusy && !isExploring && !IsReadyToStart;
 
     private bool isBusy;
     private bool isExploring;
+
+    private void Awake()
+    {
+        if (jobExplanationButton != null)
+            jobExplanationButton.onClick.AddListener(SelectJobExplanation);
+        if (exploreOfficeButton != null)
+            exploreOfficeButton.onClick.AddListener(SelectExploreOffice);
+        if (startWorkButton != null)
+            startWorkButton.onClick.AddListener(SelectStartWork);
+    }
 
     public void BeginOfficeDialogue()
     {
@@ -44,7 +48,7 @@ public class OfficeDialogueController : MonoBehaviour
         IsReadyToStart = false;
         isExploring = false;
         isBusy = true;
-        HideChoices();
+        HideAllChoiceButtons();
         Play(greetingLines, FinishDialogue);
     }
 
@@ -83,14 +87,22 @@ public class OfficeDialogueController : MonoBehaviour
 
         IsReadyToStart = true;
         isBusy = true;
-        HideChoices();
-        Play(startWorkLines, StartCrystalBallEntry);
+        HideAllChoiceButtons();
+        Play(startWorkLines, OnStartWorkDialogueComplete);
+    }
+
+    private void OnStartWorkDialogueComplete()
+    {
+        if (gameStateController != null)
+            gameStateController.SetState(GameStateController.GameState.AwaitCrystalBall);
+
+        Play(crystalBallInstructionLines, null);
     }
 
     private void BeginDialogue(AssistantController.DialogueLine[] lines, Action onComplete)
     {
         isBusy = true;
-        HideChoices();
+        HideAllChoiceButtons();
         Play(lines, onComplete);
     }
 
@@ -103,18 +115,6 @@ public class OfficeDialogueController : MonoBehaviour
     private void FinishExplorationDeparture()
     {
         isBusy = false;
-    }
-
-    private void StartCrystalBallEntry()
-    {
-        if (gameStateController == null)
-        {
-            Debug.LogWarning("OfficeDialogueController: GameStateController is not assigned.", this);
-            return;
-        }
-
-        gameStateController.SetState(GameStateController.GameState.AwaitCrystalBall);
-        Play(crystalBallInstructionLines, null);
     }
 
     private void Play(AssistantController.DialogueLine[] lines, Action onComplete)
@@ -132,79 +132,33 @@ public class OfficeDialogueController : MonoBehaviour
     {
         if (IsReadyToStart)
         {
-            HideChoices();
+            HideAllChoiceButtons();
             return;
         }
 
-        Choice[] choices = BuildChoices();
+        bool choicesAvailable = !isBusy && !isExploring;
+
+        SetButtonVisible(jobExplanationButton, choicesAvailable && IsJobExplanationAvailable);
+        SetButtonVisible(exploreOfficeButton, choicesAvailable);
+        SetButtonVisible(startWorkButton, choicesAvailable);
 
         if (choiceCanvas != null)
-            choiceCanvas.SetActive(choices.Length > 0);
+            choiceCanvas.SetActive(choicesAvailable);
+    }
 
-        for (int i = 0; i < choiceButtons.Length; i++)
-        {
-            Button button = choiceButtons[i];
-            if (button == null)
-                continue;
-
-            bool visible = i < choices.Length;
+    private void SetButtonVisible(Button button, bool visible)
+    {
+        if (button != null)
             button.gameObject.SetActive(visible);
-            button.onClick.RemoveAllListeners();
-
-            if (!visible)
-                continue;
-
-            if (i < choiceLabels.Length && choiceLabels[i] != null)
-                choiceLabels[i].text = choices[i].label;
-
-            int choiceIndex = i;
-            button.onClick.AddListener(() => choices[choiceIndex].action());
-        }
     }
 
-    private Choice[] BuildChoices()
+    private void HideAllChoiceButtons()
     {
-        if (HasExploredOffice)
-        {
-            return new[]
-            {
-                new Choice(waitALittleLabel, SelectExploreOffice),
-                new Choice(startWorkLabel, SelectStartWork)
-            };
-        }
+        SetButtonVisible(jobExplanationButton, false);
+        SetButtonVisible(exploreOfficeButton, false);
+        SetButtonVisible(startWorkButton, false);
 
-        if (IsJobExplanationAvailable)
-        {
-            return new[]
-            {
-                new Choice(jobExplanationLabel, SelectJobExplanation),
-                new Choice(exploreOfficeLabel, SelectExploreOffice),
-                new Choice(startWorkLabel, SelectStartWork)
-            };
-        }
-
-        return new[]
-        {
-            new Choice(exploreOfficeLabel, SelectExploreOffice),
-            new Choice(startWorkLabel, SelectStartWork)
-        };
-    }
-
-    private void HideChoices()
-    {
         if (choiceCanvas != null)
             choiceCanvas.SetActive(false);
-    }
-
-    private readonly struct Choice
-    {
-        public readonly string label;
-        public readonly Action action;
-
-        public Choice(string label, Action action)
-        {
-            this.label = label;
-            this.action = action;
-        }
     }
 }

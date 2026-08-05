@@ -37,7 +37,7 @@ public class MemoryContentDisplay : MonoBehaviour
     }
 
     
-    public void ShowDiaryMemory()
+    public void ShowToyMemory()
     {
         ShowContent();
     }
@@ -47,7 +47,7 @@ public class MemoryContentDisplay : MonoBehaviour
         ShowContent();
     }
 
-    public void ShowSunsetToyMemory()
+    public void ShowSunsetMemory()
     {
         ShowContent();
     }

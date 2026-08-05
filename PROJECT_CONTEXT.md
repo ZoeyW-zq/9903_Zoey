@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-07-19
+Last updated: 2026-07-30
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -47,40 +47,67 @@ The two positive recent memories establish an alternative perspective:
 
 #### Stage 1: Office
 
-1. The assistant greets the player and asks whether they are ready to begin work.
-2. Three options appear:
+1. The computer is initially in a standby state and the crystal ball is not present.
+2. The assistant greets the player and asks whether they are ready to begin work.
+3. Three options appear:
    - Learn more about the Memory Organizer job.
    - Explore the office before starting.
    - Start work now.
-3. Choosing the job explanation plays the explanatory dialogue. The already-used option is then removed.
-4. Choosing office exploration makes the assistant wait. When the player returns, the available choices reflect what the player has already heard or explored instead of resetting blindly.
-5. Choosing to start causes the crystal ball to appear.
-6. The assistant asks the player to place a hand on the crystal ball.
-7. The existing white fade and teleport transition move the player and assistant to the Memory Room.
+4. Choosing the job explanation plays the explanatory dialogue. The assistant explains that a Memory Organizer can redistribute attention but cannot delete, alter, or recreate a client's memories. The already-used option is then removed.
+5. Choosing office exploration makes the assistant wait. When the player returns:
+   - All three choices appear if the player has not heard the job explanation.
+   - Only office exploration and starting work appear if the explanation has already been heard.
+6. The player may repeat office exploration any number of times.
+7. Choosing to start causes the crystal ball to appear.
+8. The office computer then loads the assigned client's information:
+   - Client name and case ID.
+   - `Session 01 / Initial Memory Organization` and first-visit status.
+   - `Sleeping / Connection Available` and the current sleep phase, such as `REM Sleep`.
+   - Heart rate, respiration, temperature, and overall physical stability.
+   - A concise initial assessment and client statement.
+9. The player reviews and confirms the client report. The crystal ball remains unavailable until this confirmation so the information cannot be skipped accidentally.
+10. The assistant asks the player to place a hand on the crystal ball.
+11. The existing white fade and teleport transition move the player and assistant to the Memory Room.
+
+The Office choice flow supports these routes and any repeated exploration variants:
+
+- Job explanation -> start.
+- Job explanation -> explore -> start.
+- Explore -> start.
+- Explore -> job explanation -> start.
+- Explore -> job explanation -> explore -> start.
 
 Suggested state flags:
 
 - `HasHeardJobExplanation`
 - `HasExploredOffice`
 - `IsReadyToStart`
+- `HasConfirmedClientReport`
 
 The Office choices let the player control onboarding pace. The primary narrative agency occurs later through attention placement.
 
 #### Stage 2: Initial Memory Room Organization
 
-1. Three recent memory objects appear: the water bottle, sunset photograph, and sketchbook.
-2. The player may inspect them in any order.
-3. Picking up an object plays its memory clip.
-4. The player assigns attention by placing the object in one of three spatial categories:
+1. On arrival, the assistant explains that the room and its existing objects are formed from the client's established long-term memories.
+2. The assistant clarifies that memories cannot be deleted or rewritten. The player's task is to decide how much current attention each surfaced memory receives.
+3. Three recent surface-memory objects appear: the water bottle, sunset photograph, and LEGO bricks.
+4. The assistant introduces the three spatial attention categories:
    - `Focus`: high current attention.
-   - `Context`: retained in active life context without dominating attention.
-   - `Background`: still present, but outside current attention.
-5. No visible score or mood value appears in the Memory Room.
-6. The game records each object's attention position.
-7. After all three objects are placed, the reorganization disturbs deeper painful memories that have collected in the client's subconscious.
-8. The Giant Clown crisis begins. The giant grabs and swallows the player and assistant.
+   - `Context`: available in the client's active life context without dominating attention.
+   - `Background`: still present and accessible, but outside current attention.
+5. The player may inspect the three objects in any order. Picking up an object plays its memory clip.
+6. After viewing a memory, the player places the object in one of the three categories. Objects may be moved again before confirmation.
+7. No visible score, mood value, correct-answer color, or failure label appears.
+8. After the second object is placed, the assistant notices that something is missing:
 
-The crisis occurs on every path so the production needs only one main story spine. The player's initial choices may later affect crisis presentation, but the final report is calculated from the final seven-object placement.
+   > "Strange... these all seem to be memories that only recently surfaced. Where are the more painful memories that have been receiving so much attention?"
+
+9. A low sound, brief light fluctuation, or subtle room vibration hints that the missing memories have collected elsewhere.
+10. After all three objects are placed, the player may revise the layout and confirm the preliminary organization.
+11. Confirmation disturbs the deeper painful memories that have collected in the client's subconscious.
+12. The Giant Clown crisis begins. The giant grabs and swallows the player and assistant.
+
+The crisis occurs on every path so the production needs only one main story spine. It is not a punishment for an incorrect preliminary layout. The final report is calculated only from the final seven-object placement later in the experience.
 
 #### Stage 3: Giant Interior / Deep Memory Crisis
 
@@ -116,14 +143,20 @@ Dialogue failures have immediate local consequences only. They are not included 
 
 #### Stage 5: Office Report and Ending
 
-1. The office computer announces that the session report is ready.
-2. The computer first shows the client's initial state.
+1. The player and assistant return to the Office. The crystal ball stops glowing and the subconscious connection closes.
+2. The computer displays `Processing Session Data`, followed by `Session Report Ready`.
 3. The player selects `View Updated Report`.
-4. The game chooses one of three professional report templates from the final attention distribution.
-5. The report inserts the names of highly attended memories where useful.
-6. The player selects `Play Client Message` to hear or read the client's personal feedback.
-7. The assistant states that the day's work is complete.
-8. The experience ends.
+4. The report reads only the seven confirmed final positions. Each object has a `Background`, `Context`, or `Focus` outcome, producing `3^7 = 2187` possible attention layouts.
+5. The implementation does not require 2187 separately authored reports. It selects one of three outcome fragments for each of the seven objects, for a total of 21 authored object-level fragments, then combines them with an overall synthesis.
+6. The report displays:
+   - Client and session information.
+   - The final attention position of all seven memories.
+   - One position-specific finding for each memory.
+   - A qualitative overall analysis and suggested direction.
+   - A personal client message.
+7. The player selects `Play Client Message` to hear or read the client's feedback.
+8. The assistant states that the day's work is complete.
+9. The player closes the report and the experience ends.
 
 The report uses qualitative language, not scores, stars, percentages, or explicit success/failure colors.
 
@@ -131,7 +164,7 @@ The report uses qualitative language, not scores, stars, percentages, or explici
 
 ### Recent Surface Memory 1: Water Bottle
 
-- **Object:** A used insulated water bottle with a small medicine bag attached.
+- **Object:** A used insulated water bottle.
 - **Memory:** The client has a fever but remains alone in the office to finish a project. They drink water, take medicine, and continue editing after everyone else has left.
 - **Internal line:** "Just keep going. I can rest after I finish."
 - **Emotional quality:** Painful/current negative pattern.
@@ -147,13 +180,13 @@ The report uses qualitative language, not scores, stars, percentages, or explici
 - **Meaning:** An experience can deserve attention without proving ability, producing value, or receiving approval.
 - **Deep link:** The old alarm clock. The memory counters the belief that stopping is wasted time.
 
-### Recent Surface Memory 3: Sketchbook
+### Recent Surface Memory 3: LEGO Bricks
 
-- **Object:** A worn sketchbook with a pencil under the cover. The final page contains a recently completed and signed drawing.
-- **Memory:** The client once enjoyed drawing but stopped after beginning full-time work. One evening they return to the hobby and complete a picture. It is imperfect and never posted online, but they sign it and feel privately satisfied.
-- **Internal line:** "There are still things I could change, but I genuinely like it."
+- **Object:** A gradually completed LEGO model and several loose bricks.
+- **Memory:** The client spends a long evening assembling a LEGO model. Watching it take shape piece by piece draws them into a calm flow state. Completing it brings private satisfaction and a genuine sense of achievement without requiring external approval.
+- **Internal line:** "It took a long time, but I like seeing what I built piece by piece."
 - **Emotional quality:** Positive self-recognition.
-- **Meaning:** The client can value creativity, effort, and personal growth without external evaluation.
+- **Meaning:** Patient creation, flow, and gradual progress can provide achievement and personal value without external evaluation.
 - **Deep links:** The second-place medal and red correction pen.
 
 ### Deep Memory 1: Second-Place Medal
@@ -165,7 +198,7 @@ The report uses qualitative language, not scores, stars, percentages, or explici
   - "If you had worked harder, you would not have lost."
 - **Internalized belief:** Only the highest achievement has value.
 - **Emotions:** Inferiority, perfectionism, fear of failure.
-- **Surface link:** The sketchbook demonstrates that imperfect work can still deserve personal recognition.
+- **Surface link:** The LEGO model demonstrates that gradual, imperfect progress can still deserve personal recognition.
 
 ### Deep Memory 2: Old Alarm Clock
 
@@ -198,14 +231,14 @@ The report uses qualitative language, not scores, stars, percentages, or explici
   - "You will make the same mistake again."
 - **Internalized belief:** One mistake proves total incompetence.
 - **Emotions:** Self-doubt, shame, fear of authority judgment.
-- **Surface link:** The sketchbook allows imperfect marks to remain without erasing the value of the whole work.
+- **Surface link:** A misplaced LEGO piece can be corrected without erasing the value of the completed model.
 
 ### Memory Relationship Summary
 
 ```text
 Second-place medal
   -> I must be the best to have value
-  -> Sketchbook: imperfect work can still deserve self-recognition
+  -> LEGO bricks: gradual progress can still deserve self-recognition
 
 Old alarm clock
   -> Rest is irresponsible
@@ -218,7 +251,7 @@ Old phone
 
 Red correction pen
   -> One mistake proves I have no ability
-  -> Sketchbook: mistakes do not erase the value of the whole work
+  -> LEGO bricks: one misplaced piece does not erase the value of the whole model
 ```
 
 ## Planned Deep-Memory Dialogue Scripts
@@ -261,7 +294,7 @@ Client:
 Second-round success choices:
 
 - "Their expectations belong to them. They cannot replace your judgment of your own value."
-- "Like your sketchbook, something can be imperfect and still deserve your signature."
+- "Like your LEGO model, gradual progress can deserve recognition before everything is perfect."
 
 **Resolution line:**
 
@@ -399,7 +432,7 @@ Client:
 Second-round success choices:
 
 - "Taking responsibility and correcting a consequence is different from denying your entire ability."
-- "Like the imperfect lines in your sketchbook, one error does not remove the value of the whole work."
+- "Like one misplaced piece in your LEGO model, one error does not remove the value of the whole work."
 
 **Resolution line:**
 
@@ -409,131 +442,46 @@ The mirror becomes the red correction pen.
 
 ## Planned Office Outcome Reports
 
-### Ending Calculation
+### Outcome Model
 
-The final report reads only the seven confirmed Memory Room positions.
+The previous three-template ending calculation is obsolete. The approved design uses compositional object-level feedback.
 
-Track three counts:
+- The final report reads only the seven confirmed Memory Room positions.
+- Each object has a `Background`, `Context`, and `Focus` feedback fragment.
+- Seven objects multiplied by three positions require 21 authored fragments.
+- The seven ternary positions produce `3^7 = 2187` possible final layouts.
+- The report selects seven fragments and combines them with an overall synthesis and personal client message.
+- Dialogue failures in the Giant Interior and the preliminary three-object layout do not affect this report.
 
-- `NegativeFocusCount`: number of the five painful memories in `Focus`.
-- `NegativeBackgroundCount`: number of the five painful memories in `Background`.
-- `PositiveFocusCount`: number of the sunset photograph and sketchbook in `Focus`.
+These labels describe current attention rather than memory storage:
 
-Use this priority order:
+- `Background / Low`: the memory remains present and accessible but rarely enters current attention. It does not mean deletion, denial, suppression, or forgetting.
+- `Context / Medium`: the memory remains available as useful context or guidance without dominating the present.
+- `Focus / High`: the memory frequently enters current awareness and significantly influences feelings and behavior.
 
-```text
-if NegativeBackgroundCount >= 4:
-    Avoidance ending
-else if NegativeFocusCount >= 2 or PositiveFocusCount == 0:
-    Pain-Dominated ending
-else:
-    Broadened-Attention ending
-```
+There is no single correct final layout. `Background` and `Context` can both be reasonable for reframed painful memories, with different benefits and costs. Positive restorative memories may benefit from `Focus`. High attention to the four deep painful memories risks allowing the original pain to regain control even though the new interpretation remains present.
 
-This maps every arrangement to one of three reports without authoring a separate branch for every combination.
+Report language should describe tendencies using phrases such as "may," "is more likely to," or "the current distribution suggests." It should not present a deterministic psychological diagnosis.
 
-### Ending 1: Attention Remains Dominated by Pain
+### Object-Level Outcome Fragments
 
-**Meaning:** The client understands the sources of distress, but painful memories still occupy most active attention. The crisis has subsided temporarily and could reform.
+| Memory object | Background / Low attention | Context / Medium attention | Focus / High attention |
+| --- | --- | --- | --- |
+| **Water Bottle** | The client spends less time revisiting the distress of working while ill, reducing the immediate emotional burden. However, they may continue to minimize physical symptoms and delay rest or support. | The client recognizes signs of illness and overwork and is more likely to rest, take medication, or request support without allowing physical discomfort to dominate their attention. | Physical discomfort and the experience of having to continue working remain highly active. The client may repeatedly focus on pain, resentment, and fear of being unable to continue. |
+| **Sunset Photograph** | The memory remains available but rarely enters the client's current attention. Work and responsibility may continue to overshadow small restorative experiences. | The client occasionally returns to this peaceful memory and allows themselves to pause without abandoning their responsibilities. | The client actively notices and creates similar restorative moments. Daily life is no longer defined only by work, productivity, and responsibility. |
+| **LEGO Bricks** | The satisfaction of completing the model remains accessible but is rarely used to support the client's self-image. External judgment may still have a stronger influence on their sense of ability. | The client can return to this private achievement when facing criticism. It balances external judgment without turning the hobby into another test of performance. | Patient creation and personal judgment receive greater attention. The client's sense of ability becomes less dependent on external recognition, and the hobby becomes a stable source of satisfaction and self-worth. |
+| **Second-Place Medal** | The parents' reaction no longer drives constant comparison. However, the achievement itself is also less available as a source of recognition for the client's effort. | The client remembers both the pain and the new understanding. They can value their effort and continue improving without needing first place to prove their worth. | Despite the new understanding, the ranking and the parents' disappointment frequently return to attention. Achievement remains closely tied to proving personal worth. |
+| **Old Alarm Clock** | Guilt associated with rest becomes less active. However, the client may be less likely to use this experience as a reminder to notice exhaustion and physical limits early. | The client recognizes physical limits and understands rest as part of responsible self-care rather than an escape from responsibility. | The client repeatedly evaluates whether they are tired enough or have earned the right to rest. Self-care risks becoming another responsibility that must be performed correctly. |
+| **Old Phone** | The rejection no longer controls future decisions about asking for help. The client is more willing to approach trusted people without treating their response as a judgment of personal worth. | The client remembers both the risk of rejection and the legitimacy of asking for support. They choose whom to trust carefully, although some hesitation may remain. | The client frequently anticipates rejection. They overexplain, repeatedly edit, or delete requests for help and are more likely to carry pressure alone. |
+| **Red Correction Pen** | The humiliation no longer defines the client's ability. They can correct routine mistakes without repeatedly returning to the event, although similar public criticism may still catch them unprepared. | The client uses the experience as a limited reminder to review work, accept consequences, and correct mistakes without treating an error as proof of total incompetence. | The client remains highly alert to mistakes and authority judgment. Repeated checking may develop into perfectionism, delay, and renewed self-doubt. |
 
-**Professional report:**
+### General Interpretation
 
-```text
-SESSION OUTCOME REPORT
-
-Attention Pattern:
-Attention remains concentrated around distressing experiences.
-
-Primary Focus:
-Failure, external criticism and personal responsibility continue
-to occupy a significant part of the client's attention.
-
-Observed Effect:
-The client has gained a clearer understanding of these memories,
-but continues to revisit them repeatedly.
-
-Assessment:
-The crisis has temporarily subsided, but the current attention
-pattern may allow similar emotional distress to form again.
-
-Suggested Direction:
-Maintain awareness of these experiences while allowing restorative
-and self-affirming memories to occupy more attention.
-```
-
-The report may list the actual objects currently in `Focus`.
-
-**Client message:**
-
-> "I understand where those voices came from now, but I still keep returning to them. I know there are other memories, but they still feel far away."
-
-### Ending 2: Immediate Relief Through Avoidance
-
-**Meaning:** Most painful memories have been pushed out of active attention. The client feels immediate relief, but the painful experiences remain disconnected and may return when triggered.
-
-**Professional report:**
-
-```text
-SESSION OUTCOME REPORT
-
-Attention Pattern:
-Distressing memories have been moved almost entirely outside
-the client's active attention.
-
-Primary Focus:
-Restorative and self-affirming experiences now receive greater attention.
-
-Observed Effect:
-The client reports immediate relief and reduced emotional pressure.
-
-Assessment:
-The current state appears stable, but several painful experiences
-remain disconnected from the client's active understanding.
-They may return unexpectedly when triggered by similar situations.
-
-Suggested Direction:
-Allow difficult memories to remain visible without permitting
-them to dominate the client's attention.
-```
-
-**Client message:**
-
-> "I feel much lighter, as if I no longer have to think about those things. But when everything becomes quiet, it still feels like something is knocking from far away."
-
-### Ending 3: Broadened Attention
-
-**Meaning:** At least one positive memory receives active attention while painful memories remain available in context without dominating the client's view of the present.
-
-**Professional report:**
-
-```text
-SESSION OUTCOME REPORT
-
-Attention Pattern:
-Attention is distributed across restorative, self-affirming
-and difficult experiences.
-
-Primary Focus:
-The client is giving greater attention to meaningful and
-personally valuable experiences.
-
-Observed Effect:
-Painful memories remain accessible, but no longer dominate
-the client's interpretation of the present.
-
-Assessment:
-The client demonstrates a broader view of their personal history.
-Distressing experiences are acknowledged without being treated
-as a complete definition of the self.
-
-Suggested Direction:
-Continue giving attention to experiences that support curiosity,
-rest and self-directed achievement.
-```
-
-**Client message:**
-
-> "Those experiences have not disappeared, and remembering them still hurts. But I also remember the sunset and how I felt when I finished that drawing. It finally feels as though they can all exist at the same time."
+| Memory type | Background / Low | Context / Medium | Focus / High |
+| --- | --- | --- | --- |
+| Positive or restorative memories | Remain accessible but may be overshadowed by pressure. | Provide consistent emotional support without dominating attention. | Become active sources of restoration, flow, self-recognition, and personal meaning. |
+| Immediate health or warning memories | Cause less distress but may receive insufficient practical attention. | Support proportionate awareness and action. | May lead to repeated worry or excessive monitoring. |
+| Reframed painful memories | No longer dominate the client's present life. | Remain available as useful experience and understanding. | Risk allowing the original pain to regain control of current attention. |
 
 
 ## Important Files
