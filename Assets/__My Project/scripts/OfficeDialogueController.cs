@@ -114,6 +114,9 @@ public class OfficeDialogueController : MonoBehaviour
 
     private void FinishExplorationDeparture()
     {
+        // Choices stay hidden while the player explores.
+        // An external trigger (door, button, zone) must call ReturnFromExploration()
+        // to bring the dialogue choices back.
         isBusy = false;
     }
 

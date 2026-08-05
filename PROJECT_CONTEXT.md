@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-07-30
+Last updated: 2026-08-05
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -10,12 +10,15 @@ This is a Unity VR narrative/interactive experience built on top of the EZPZ Int
 
 The current custom game appears to be a memory/brain-themed VR experience. The player starts in an office-like space, interacts with a crystal ball, transitions into the Hippocampus area, places or reviews memory-related content, and eventually enters a Nightmare/Giant Clown crisis sequence. The Nightmare sequence includes a giant clown approaching, manipulating the roof, grabbing the player, moving the player toward the clown's mouth, then transitioning into a swallow/fall sequence and finally into a Mirror Chamber.
 
-The current development focus is the Nightmare/Giant Clown sequence, especially:
+The current development focus (as of 2026-08-05) is implementing the planned narrative stages incrementally:
 
-- Making the giant's hand, IK target, grab anchor, roof, and player movement feel synchronized.
-- Avoiding sudden jumps in VR player position or camera rotation.
-- Making screen fade transitions support the intended narrative timing.
-- Keeping assistant dialogue independent from physical/animation coroutine timing.
+- **Stage 1 (Office)**: Branching dialogue with fixed-text buttons, crystal ball entry, and office → Hippocampus transition — **implemented**.
+- **Stage 2 (Memory Room)**: Three surface-memory objects with per-object assistant dialogue triggered via Holdable UnityEvents, and three placement zones (Focus / Context / Background) to trigger the crisis — **in progress**.
+- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **not yet started**.
+- **Stage 4 (Final Redistribution)**: Seven-object attention placement — **not yet started**.
+- **Stage 5 (Office Report)**: Compositional report generation — **not yet started**.
+
+The Nightmare/Giant Clown crisis sequence (roof grab, player grab, swallow transition) was the previous development focus and is implemented but may need tuning.
 
 ## Planned Final Narrative Design (Not Yet Implemented)
 
@@ -494,18 +497,32 @@ Important scripts:
 
 - `GameStateController.cs`
   - Owns the main game state machine.
-  - Starts the office intro, crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, Mirror Chamber intro, and Back To Office return.
+  - Starts the office intro (now routed through `OfficeDialogueController`), crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, Mirror Chamber intro, and Back To Office return.
   - Also owns coarse scene-root activation for performance on headset builds.
   - Controls Office, Hippocampus, and Nightmare Global Volume weights through state changes.
   - Owns the shared player movement lock entry point used by the clown grab and swallow/fall flow.
   - Fades the assigned Hippocampus Particle System emission rate to 0 when Giant Crisis begins.
   - Plays the assigned heartbeat AudioSource just before the clown crisis sequence starts.
 
-- `CrystalBall.cs`
+- `OfficeDialogueController.cs`
+  - Controls the office-stage branching dialogue and choice system.
+  - Uses three named button references (not a dynamic array): `jobExplanationButton`, `exploreOfficeButton`, `startWorkButton`.
+  - Button text is pre-set in the hierarchy — code only controls visibility, never changes labels.
+  - Implements the Planned Design flow: greetings → choices → job explanation / explore / start work.
+  - `exploreOfficeButton` serves double duty as both initial exploration and re-exploration (merged with the old `waitALittleButton`).
+  - `IsJobExplanationAvailable` only requires `!HasHeardJobExplanation` — exploring no longer hides the "Learn about the role" button.
+  - `SelectStartWork()` hides all buttons, plays start-work dialogue, then transitions to `AwaitCrystalBall`. The UnityEvent on `startWorkButton` is expected to handle showing the crystal ball and PC screen via `GameObject.SetActive(true)`.
+
+- `CrystalBall.cs` (VR)
   - Detects when the player's hand stays near the crystal ball.
   - Drives the white screen fade before transitioning to Hippocampus.
   - Sends configurable XR controller haptic feedback while the player's hand is held on/near the crystal ball.
   - If the player removes their hand before the hold time completes, the fade returns to transparent and the timer resets.
+
+- `CrystalBall_WebGL.cs` (WebGL)
+  - Simpler click-to-transition crystal ball for WebGL (no hand-tracking / haptic logic).
+  - Public `Transition()` method starts a white fade and then calls `SetState(TransitionToHippocampus)`.
+  - Implements `ICrystalBallEntry` so `GameStateController.SetCrystalBallEnabled()` works identically to VR.
 
 - `ScreenFadeController.cs`
   - Controls fade image alpha and color.
@@ -514,9 +531,10 @@ Important scripts:
 
 - `AssistantController.cs`
   - Controls assistant dialogue lines and stages.
-  - Has Nightmare warning dialogue and Swallow Transition dialogue.
-  - Has Mirror Chamber intro, Break Glass prompt, Glass Broken Praise, and Return To Office dialogue stages for the final glass sequence.
-  - Assistant dialogue should remain independent from the clown crisis coroutine timing.
+  - Has Hippocampus intro, per-object memory reveal (water bottle / sunset photo / LEGO bricks, each with a one-shot guard), Nightmare warning, Swallow Transition, Mirror Chamber intro, Break Glass, Glass Broken Praise, and Return To Office dialogue.
+  - Per-object memory methods (`PlayWaterBottleMemory()`, `PlaySunsetPhotoMemory()`, `PlayLegoBricksMemory()`) are designed to be bound to Holdable grab UnityEvents.
+  - The old `PlayMemoryRevealed()` / `PlayMemoryPlacementHint()` generic flow has been removed.
+  - Assistant dialogue is independent from the clown crisis coroutine timing.
 
 - `ClownController.cs`
   - Main controller for the Giant Clown / Nightmare crisis sequence.
@@ -531,12 +549,9 @@ Important scripts:
   - For VR, disables manually assigned movement/teleport `Behaviour` components while leaving turn providers unassigned so turning can remain available.
   - For WebGL, calls `FirstPersonController.SetMovementInputEnabled(false)` so WASD/jump/sprint movement stops while mouse look remains active.
 
-- `MemoryContentDisplay.cs`
-  - Memory content no longer displays text or images.
-  - It now only plays the currently attached `VideoPlayer` when any memory content show method is triggered.
-  - The old public methods are kept so existing UnityEvent bindings in the scene do not break.
-  - It prepares a `RawImage` and runtime `RenderTexture` if the scene does not provide a visible video output surface.
-  - On WebGL runtime, it switches the `VideoPlayer` to URL mode and loads `Application.streamingAssetsPath + "/video.mp4"` by default, because WebGL does not support playing assigned `VideoClip` assets reliably.
+- **`MemoryContentDisplay.cs` — DELETED (2026-08-05).**
+  - Its runtime RawImage/RenderTexture creation and WebGL URL switching are no longer needed.
+  - The new approach: pre-configure `Image` or `RawImage` + `VideoPlayer` directly on the Canvas in the hierarchy, and use Holdable UnityEvents to toggle visibility.
 
 Main scene:
 
@@ -863,9 +878,7 @@ Important IK note:
 - Assistant dialogue is independent and should not block the clown crisis coroutine unless explicitly requested.
 - Footsteps and rumble are sequential: footsteps finish first, rumble starts afterward.
 - `SwallowTransition` starts before the hand-to-mouth movement is complete, allowing the fade to black to overlap with the final mouth movement for a smoother visual transition.
-- Memory content display is video-only now; it should play its assigned/current `VideoPlayer` instead of controlling text or image UI.
-- A `VideoPlayer` under a world-space Canvas still needs a visible output surface. `MemoryContentDisplay` now creates/uses a `RawImage` plus a runtime `RenderTexture` so video can render on the Canvas.
-- WebGL video playback uses StreamingAssets URL loading. Keep the playable WebGL file at `Assets/StreamingAssets/video.mp4` unless `MemoryContentDisplay.webGLStreamingAssetsVideoFileName` is changed.
+- Memory content display is now handled via pre-configured Image/RawImage/VideoPlayer components on the Canvas, toggled by Holdable UnityEvents. The old `MemoryContentDisplay` script has been removed.
 - Breaking the final Chamber glass should eventually call `GameStateController.SetState(GameState.BackToOffice)`. The return spawn transforms are exposed on `GameStateController` for manual scene assignment.
 - Current final Chamber glass flow:
   - `MirrorChamber` plays the assistant Mirror Chamber intro.

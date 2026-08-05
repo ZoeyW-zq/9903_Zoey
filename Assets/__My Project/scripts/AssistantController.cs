@@ -25,11 +25,10 @@ public class AssistantController : MonoBehaviour
     [Header("Hippocampus Intro")]
     [SerializeField] private DialogueLine[] hippocampusIntroLines;
 
-    [Header("Memory Revealed")]
-    [SerializeField] private DialogueLine[] memoryRevealedLines;
-
-    [Header("Memory Placement Hint")]
-    [SerializeField] private DialogueLine[] memoryPlacementHintLines;
+    [Header("Per-Object Memory Reveal")]
+    [SerializeField] private DialogueLine[] waterBottleMemoryLines;
+    [SerializeField] private DialogueLine[] sunsetPhotoMemoryLines;
+    [SerializeField] private DialogueLine[] legoBricksMemoryLines;
 
     [Header("Nightmare Warning")]
     [SerializeField] private DialogueLine[] nightmareWarningLines;
@@ -51,8 +50,9 @@ public class AssistantController : MonoBehaviour
 
     private Coroutine dialogueRoutine;
     private bool glassBrokenSequenceStarted;
-    // The water bottle grab event can fire repeatedly, but this reveal should only interrupt dialogue once.
-    private bool memoryRevealedPlayed;
+    private bool waterBottleMemoryPlayed;
+    private bool sunsetPhotoMemoryPlayed;
+    private bool legoBricksMemoryPlayed;
 
     private void Awake()
     {
@@ -66,18 +66,31 @@ public class AssistantController : MonoBehaviour
         PlayStage(hippocampusIntroLines);
     }
 
-    public void PlayMemoryRevealed()
+    public void PlayWaterBottleMemory()
     {
-        if (memoryRevealedPlayed)
+        if (waterBottleMemoryPlayed)
             return;
 
-        memoryRevealedPlayed = true;
-        PlayStage(memoryRevealedLines, PlayMemoryPlacementHint);
+        waterBottleMemoryPlayed = true;
+        PlayStage(waterBottleMemoryLines);
     }
 
-    public void PlayMemoryPlacementHint()
+    public void PlaySunsetPhotoMemory()
     {
-        PlayStage(memoryPlacementHintLines, () => SetGameState(GameStateController.GameState.AwaitMemoryPlacement));
+        if (sunsetPhotoMemoryPlayed)
+            return;
+
+        sunsetPhotoMemoryPlayed = true;
+        PlayStage(sunsetPhotoMemoryLines);
+    }
+
+    public void PlayLegoBricksMemory()
+    {
+        if (legoBricksMemoryPlayed)
+            return;
+
+        legoBricksMemoryPlayed = true;
+        PlayStage(legoBricksMemoryLines);
     }
 
     public void PlayNightmareWarning()
