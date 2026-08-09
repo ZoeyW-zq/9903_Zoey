@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-08-05
+Last updated: 2026-08-09
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -10,11 +10,11 @@ This is a Unity VR narrative/interactive experience built on top of the EZPZ Int
 
 The current custom game appears to be a memory/brain-themed VR experience. The player starts in an office-like space, interacts with a crystal ball, transitions into the Hippocampus area, places or reviews memory-related content, and eventually enters a Nightmare/Giant Clown crisis sequence. The Nightmare sequence includes a giant clown approaching, manipulating the roof, grabbing the player, moving the player toward the clown's mouth, then transitioning into a swallow/fall sequence and finally into a Mirror Chamber.
 
-The current development focus (as of 2026-08-05) is implementing the planned narrative stages incrementally:
+The current development focus (as of 2026-08-09) is implementing the planned narrative stages incrementally, with current work focused on the WebGL scene:
 
 - **Stage 1 (Office)**: Branching dialogue with fixed-text buttons, crystal ball entry, and office → Hippocampus transition — **implemented**.
-- **Stage 2 (Memory Room)**: Three surface-memory objects with per-object assistant dialogue triggered via Holdable UnityEvents, and three placement zones (Focus / Context / Background) to trigger the crisis — **in progress**.
-- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **not yet started**.
+- **Stage 2 (Memory Room)**: Three surface-memory objects, per-object assistant dialogue, three placement zones (Focus / Context / Background), and EZPZ-button confirmation are connected in `scene_WebGL.unity`. Successful confirmation triggers the Giant Crisis — **main framework implemented and basic validation successful; detailed validation and one deferred narrative cue remain**.
+- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **current implementation focus; main framework is next**.
 - **Stage 4 (Final Redistribution)**: Seven-object attention placement — **not yet started**.
 - **Stage 5 (Office Report)**: Compositional report generation — **not yet started**.
 
@@ -549,6 +549,23 @@ Important scripts:
   - For VR, disables manually assigned movement/teleport `Behaviour` components while leaving turn providers unassigned so turning can remain available.
   - For WebGL, calls `FirstPersonController.SetMovementInputEnabled(false)` so WASD/jump/sprint movement stops while mouse look remains active.
 
+- `MemoryPlacementItem.cs`
+  - Marks the root of a memory object that can be placed in an attention zone.
+  - Exposes an optional `memoryId` for identification and future report work.
+
+- `MemoryPlacementZone.cs`
+  - Represents a `Focus`, `Context`, or `Background` trigger zone.
+  - Finds `MemoryPlacementItem` on the entering collider or its parents and reports placement changes to `MemoryPlacementController`.
+  - Tracks collider counts per item so a memory with multiple colliders is not counted more than once inside the same zone.
+
+- `MemoryPlacementController.cs`
+  - Owns the list of memory items required for the current placement stage.
+  - Tracks each required item's current zone by object reference rather than using the old EZPZ `NumberHolder` / `NumberCheckUtillity` counter approach.
+  - Rejects confirmation until every required item is in a valid zone.
+  - Displays an incomplete or successful confirmation message through an assigned TextMeshPro component.
+  - Calls `ClownController.TriggerCrisis()` after successful preliminary confirmation.
+  - The same controller can later support the seven-object stage by assigning seven required items, but it does not yet expose final placement data to the office report system.
+
 - **`MemoryContentDisplay.cs` — DELETED (2026-08-05).**
   - Its runtime RawImage/RenderTexture creation and WebGL URL switching are no longer needed.
   - The new approach: pre-configure `Image` or `RawImage` + `VideoPlayer` directly on the Canvas in the hierarchy, and use Holdable UnityEvents to toggle visibility.
@@ -556,6 +573,35 @@ Important scripts:
 Main scene:
 
 - `Assets/__My Project/scene.unity`
+
+WebGL scene:
+
+- `Assets/__My Project/scene_WebGL.unity`
+
+## WebGL Memory Placement and Confirmation
+
+Current `scene_WebGL.unity` setup:
+
+- The water bottle, sunset photograph, and LEGO bricks each have a `MemoryPlacementItem` and are assigned to `MemoryPlacementController.requiredItems`.
+- The three attention areas each have `MemoryPlacementZone` connected to the same controller:
+  - `Focus` uses `MemoryPlacementZoneType.Focus`.
+  - `Context` uses `MemoryPlacementZoneType.Context`.
+  - `Background` uses `MemoryPlacementZoneType.Background`.
+- The confirmation control is an EZPZ Button prefab, not a `UnityEngine.UI.Button`.
+- The EZPZ button's `InteractableGeneral.onPrimaryInteract` event calls `MemoryPlacementController.ConfirmPlacement()`.
+- The button remains physically interactive before placement is complete. An early click displays the incomplete-placement message and does not advance the state.
+- The controller's assigned TextMeshPro child is hidden initially and whenever placement changes.
+- A valid click displays the success message once and calls `ClownController.TriggerCrisis()`.
+- `ClownController.TriggerCrisis()` guards against duplicate activation and changes the game state to `GiantCrisis`.
+
+This setup is connected in the scene, but the full interaction must still be verified in WebGL Play Mode: enter and leave each zone, move an item between zones, press Confirm early, place all three items, and confirm that the crisis begins exactly once.
+
+Deferred Stage 2 detail:
+
+- After the second surface-memory object is placed, the assistant should notice that the painful memories are missing.
+- A supporting light fluctuation, low sound, or subtle room vibration should hint that those memories have collected elsewhere.
+- This narrative/environmental cue is intentionally deferred until after the main Stage 3-5 framework is complete. Remind the developer about it during later polish, detailed validation, or Stage 2 completion work.
+- Basic validation of the current Stage 2 placement and confirmation flow has been successful. Detailed edge-case and presentation validation is also deferred until the overall flow is complete.
 
 ## Game State Flow
 
@@ -869,6 +915,10 @@ Important IK note:
 
 ## Current Design Decisions
 
+- Memory placement completeness is based on the identity of required memory objects, not a floating-point counter.
+- The EZPZ Confirm Button remains clickable before completion so it can provide explicit incomplete-placement feedback.
+- Completing placement does not automatically start the crisis. The player must press Confirm.
+- The preliminary three-object placement controller is intentionally reusable for seven objects, but final report storage/query behavior will be added only when Stage 4 and Stage 5 are implemented.
 - The player's VR camera should not be forcibly rotated during grab/mouth movement.
 - Player follows the hand by position only, via `xrOrigin.position`; while grabbed, the tracked head is kept aligned to `grabAnchor` without parenting or forced rotation.
 - Roof and player share the same `grabAnchor` concept to keep the hand/roof/player relationship consistent.
@@ -894,6 +944,11 @@ Important IK note:
 
 ## Known Risks / Things to Check in Unity
 
+- Verify in WebGL Play Mode that each required memory is detected when entering and leaving every placement zone, especially if the object has multiple colliders.
+- Verify that moving a memory directly from one zone to another leaves it assigned only to the new zone.
+- Verify that an early Confirm click shows the incomplete message, while a valid Confirm click shows success and starts `GiantCrisis` exactly once.
+- If confirmation messages are changed to Chinese, the assigned TextMeshPro font asset must contain the required CJK glyphs.
+- The success message is shown immediately before the crisis starts; its practical on-screen duration depends on the crisis visual timing and may need a deliberate delay if players cannot read it.
 - If `footstepsAudio` is looping, the crisis coroutine will wait forever before rumble/animation starts.
 - If `handIKTarget` or `playerHead` is missing, the grab stage now stops and logs an error instead of continuing.
 - If `grabAnchor` is placed poorly on the hand skeleton, the player/roof may appear offset even if script logic is correct.
@@ -911,7 +966,7 @@ For script-only changes, use:
 dotnet build Assembly-CSharp.csproj --no-restore
 ```
 
-Recent builds passed with 0 errors. The project currently still reports existing warnings:
+The 2026-08-09 memory-placement script build passed with 0 errors. The project currently still reports existing warnings:
 
 - Duplicate `using` directives in `AssistantController.cs`.
 - Obsolete `FindObjectsSortMode` usage in EZPZ Interaction Toolkit scripts.
