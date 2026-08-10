@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-08-09
+Last updated: 2026-08-10
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -10,11 +10,11 @@ This is a Unity VR narrative/interactive experience built on top of the EZPZ Int
 
 The current custom game appears to be a memory/brain-themed VR experience. The player starts in an office-like space, interacts with a crystal ball, transitions into the Hippocampus area, places or reviews memory-related content, and eventually enters a Nightmare/Giant Clown crisis sequence. The Nightmare sequence includes a giant clown approaching, manipulating the roof, grabbing the player, moving the player toward the clown's mouth, then transitioning into a swallow/fall sequence and finally into a Mirror Chamber.
 
-The current development focus (as of 2026-08-09) is implementing the planned narrative stages incrementally, with current work focused on the WebGL scene:
+The current development focus (as of 2026-08-10) is implementing the planned narrative stages incrementally, with current work focused on the WebGL scene:
 
 - **Stage 1 (Office)**: Branching dialogue with fixed-text buttons, crystal ball entry, and office → Hippocampus transition — **implemented**.
 - **Stage 2 (Memory Room)**: Three surface-memory objects, per-object assistant dialogue, three placement zones (Focus / Context / Background), and EZPZ-button confirmation are connected in `scene_WebGL.unity`. Successful confirmation triggers the Giant Crisis — **main framework implemented and basic validation successful; detailed validation and one deferred narrative cue remain**.
-- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **current implementation focus; main framework is next**.
+- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **`MemoryDialogueController` script implemented (2026-08-09); four deep-memory 3D models imported; scene binding and per-mirror dialogue content are the next steps**.
 - **Stage 4 (Final Redistribution)**: Seven-object attention placement — **not yet started**.
 - **Stage 5 (Office Report)**: Compositional report generation — **not yet started**.
 
@@ -127,28 +127,34 @@ The crisis occurs on every path so the production needs only one main story spin
    - The voice and nearby environment briefly intensify.
    - The mirror returns to its idle state and displays `Start Conversation` again.
 8. Selecting either constructive first-round response enters a second round.
-9. Every second-round option is constructive. Any second-round choice successfully completes the memory, but the wording lets the player choose the perspective they prefer.
-10. On success, the client forms a more flexible interpretation. The mirror stops echoing and returns to the original memory object.
-11. After all four objects are restored, the painful memories no longer sustain the Giant Clown. The giant space dissolves.
-12. The player, assistant, and four restored objects return to the Memory Room.
+9. Every second round contains two options:
+   - One constructive response that successfully completes the memory.
+   - One harmful response that reinforces the same negative belief as the first-round harmful shortcut.
+10. Selecting the second-round harmful response uses the same agitated client line and failure behavior as the first-round harmful response. The environment intensifies, the dialogue closes, and `Start Conversation` returns.
+11. Selecting the constructive second-round response lets the client form a more flexible interpretation. **The mirror auto-shatters** — the painful echo dissipates, the container cracks open on its own, and the original memory object (medal, clock, phone, or pen) is released. No player action is needed to break the mirror.
+12. After all four mirrors have shattered and their memory objects are freed, the echoes no longer sustain the Giant Clown. The giant space begins to dissolve.
+13. With the interference gone, the assistant's teleport signal is restored. The assistant locks onto the Memory Room coordinates and actively teleports the player, themselves, and the four freed memory objects back to the Memory Room.
 
 Dialogue failures have immediate local consequences only. They are not included in the final office report and do not permanently block progress.
 
 #### Stage 4: Final Attention Redistribution
 
-1. The three recent objects and four restored deep-memory objects are now present together.
-2. The player has enough context to reconsider all seven memories.
-3. The player places every object in `Focus`, `Context`, or `Background`.
-4. No real memory can be deleted.
-5. The player can revise the layout until confirming the final distribution.
-6. The confirmed positions are stored for the office report.
-7. The player and assistant return to the Office.
+1. The player and assistant return to the Memory Room. The ceiling shows damage from the giant's emergence (the assistant notes it is outside their job description).
+2. The three recent objects and four restored deep-memory objects are now present together.
+3. The player has enough context to reconsider all seven memories.
+4. The player places every object in `Focus`, `Context`, or `Background`.
+5. No real memory can be deleted.
+6. The player can revise the layout until confirming the final distribution.
+7. Upon confirmation, the assistant locks onto the office coordinates and teleports the player back via the crystal ball.
+8. The confirmed positions are stored for the office report.
 
 #### Stage 5: Office Report and Ending
 
-1. The player and assistant return to the Office. The crystal ball stops glowing and the subconscious connection closes.
+> ⚠️ **Assistant dialogue for this stage is TBD (待定).** The client message and assistant closing lines depend on the final attention distribution outcome. Positive, mixed, and negative-leaning outcomes need different tones and content. The dialogue file (Assistant_Voice_Lines_Design.md) marks Sections 20-21 as pending the outcome system design.
+
+1. The player and assistant return to the Office via crystal ball teleport. The crystal ball stops glowing and the subconscious connection closes.
 2. The computer displays `Processing Session Data`, followed by `Session Report Ready`.
-3. The player selects `View Updated Report`.
+3. The player selects `View Report` to see the final results.
 4. The report reads only the seven confirmed final positions. Each object has a `Background`, `Context`, or `Focus` outcome, producing `3^7 = 2187` possible attention layouts.
 5. The implementation does not require 2187 separately authored reports. It selects one of three outcome fragments for each of the seven objects, for a total of 21 authored object-level fragments, then combines them with an overall synthesis.
 6. The report displays:
@@ -156,9 +162,9 @@ Dialogue failures have immediate local consequences only. They are not included 
    - The final attention position of all seven memories.
    - One position-specific finding for each memory.
    - A qualitative overall analysis and suggested direction.
-   - A personal client message.
-7. The player selects `Play Client Message` to hear or read the client's feedback.
-8. The assistant states that the day's work is complete.
+   - A personal client message (TBD — pending outcome variants).
+7. The player selects `Play Client Message` to hear or read the client's feedback (TBD).
+8. The assistant delivers closing remarks (TBD — needs variants for different outcome profiles).
 9. The player closes the report and the experience ends.
 
 The report uses qualitative language, not scores, stars, percentages, or explicit success/failure colors.
@@ -277,16 +283,18 @@ Red correction pen
 
 The dialogue closes, the voice intensifies, and `Start Conversation` returns.
 
+This same harmful response and reset behavior are used if the harmful option is selected during either second-round branch.
+
 **If choice 1 was selected:**
 
 Client:
 
 > "But if I am satisfied with second place, does that mean I have no ambition?"
 
-Second-round success choices:
+Second-round choices:
 
-- "Recognizing what you have achieved does not prevent you from continuing to grow."
-- "You can want to improve while still allowing yourself to be happy with what you did."
+- "Recognizing what you have achieved does not prevent you from continuing to grow." *(Constructive; succeeds)*
+- "Maybe if you stop pushing yourself to be first, you really will lose your ambition." *(Harmful; triggers the shared harmful response and exits)*
 
 **If choice 2 was selected:**
 
@@ -294,10 +302,10 @@ Client:
 
 > "They looked so disappointed. It is hard to believe second place really had value."
 
-Second-round success choices:
+Second-round choices:
 
-- "Their expectations belong to them. They cannot replace your judgment of your own value."
-- "Like your LEGO model, gradual progress can deserve recognition before everything is perfect."
+- "Like your LEGO model, gradual progress can deserve recognition before everything is perfect." *(Constructive; succeeds)*
+- "If they were disappointed, perhaps only first place can make the achievement valuable." *(Harmful; triggers the shared harmful response and exits)*
 
 **Resolution line:**
 
@@ -323,16 +331,18 @@ The mirror becomes the second-place medal.
 
 The dialogue closes, the clock accelerates, and `Start Conversation` returns.
 
+This same harmful response and reset behavior are used if the harmful option is selected during either second-round branch.
+
 **If choice 1 was selected:**
 
 Client:
 
 > "But if I rest, the work may fall on someone else."
 
-Second-round success choices:
+Second-round choices:
 
-- "You can communicate and request support instead of continuing alone until you cannot function."
-- "Caring for your body is also part of being able to meet future responsibilities."
+- "Caring for your body is also part of being able to meet future responsibilities." *(Constructive; succeeds)*
+- "To avoid leaving work to other people, you should keep going even when you are exhausted." *(Harmful; triggers the shared harmful response and exits)*
 
 **If choice 2 was selected:**
 
@@ -340,10 +350,10 @@ Client:
 
 > "Every time I stop, I feel guilty, as if I have done something wrong."
 
-Second-round success choices:
+Second-round choices:
 
-- "That guilt comes from an old rule. It does not prove that you did something wrong."
-- "You once stopped to watch the sunset. Those few minutes did not harm anyone."
+- "You once stopped to watch the sunset. Those few minutes did not harm anyone." *(Constructive; succeeds)*
+- "If stopping makes you feel guilty, finish everything before you allow yourself to rest." *(Harmful; triggers the shared harmful response and exits)*
 
 **Resolution line:**
 
@@ -369,16 +379,18 @@ The mirror becomes the old alarm clock and its hands stop looping.
 
 The dialogue closes, unsent messages multiply, and `Start Conversation` returns.
 
+This same harmful response and reset behavior are used if the harmful option is selected during either second-round branch.
+
 **If choice 1 was selected:**
 
 Client:
 
 > "What if I ask again and I am rejected again?"
 
-Second-round success choices:
+Second-round choices:
 
-- "You can choose people you trust. One refusal cannot decide whether you deserve support."
-- "Making a request gives another person a choice. It does not force your responsibility onto them."
+- "You can choose people you trust. One refusal cannot decide whether you deserve support." *(Constructive; succeeds)*
+- "To avoid being rejected again, it may be safest never to ask for help." *(Harmful; triggers the shared harmful response and exits)*
 
 **If choice 2 was selected:**
 
@@ -386,10 +398,10 @@ Client:
 
 > "Needing help still makes me feel unreliable."
 
-Second-round success choices:
+Second-round choices:
 
-- "Being reliable does not mean doing everything alone. It includes knowing when collaboration is needed."
-- "When you worked alone while sick, continuing by yourself did not make you safer."
+- "Being reliable does not mean doing everything alone. It includes knowing when collaboration is needed." *(Constructive; succeeds)*
+- "Reliable people should solve their own problems without needing anyone else's help." *(Harmful; triggers the shared harmful response and exits)*
 
 **Resolution line:**
 
@@ -415,16 +427,18 @@ The mirror becomes the cracked old phone.
 
 The dialogue closes, red marks spread, and `Start Conversation` returns.
 
+This same harmful response and reset behavior are used if the harmful option is selected during either second-round branch.
+
 **If choice 1 was selected:**
 
 Client:
 
 > "Every time I submit something now, I still remember that red pen."
 
-Second-round success choices:
+Second-round choices:
 
-- "The memory can remind you to check, but it does not have to decide the result in advance."
-- "You can take your work seriously while accepting that mistakes remain possible."
+- "You can take your work seriously while accepting that mistakes remain possible." *(Constructive; succeeds)*
+- "Use that anxiety as a warning and keep checking until you can guarantee there are no mistakes." *(Harmful; triggers the shared harmful response and exits)*
 
 **If choice 2 was selected:**
 
@@ -432,10 +446,10 @@ Client:
 
 > "But what if the next mistake has real consequences?"
 
-Second-round success choices:
+Second-round choices:
 
-- "Taking responsibility and correcting a consequence is different from denying your entire ability."
-- "Like one misplaced piece in your LEGO model, one error does not remove the value of the whole work."
+- "Taking responsibility and correcting a consequence is different from denying your entire ability." *(Constructive; succeeds)*
+- "If mistakes can have real consequences, you must make sure that you never make another one." *(Harmful; triggers the shared harmful response and exits)*
 
 **Resolution line:**
 
@@ -531,10 +545,11 @@ Important scripts:
 
 - `AssistantController.cs`
   - Controls assistant dialogue lines and stages.
-  - Has Hippocampus intro, per-object memory reveal (water bottle / sunset photo / LEGO bricks, each with a one-shot guard), Nightmare warning, Swallow Transition, Mirror Chamber intro, Break Glass, Glass Broken Praise, and Return To Office dialogue.
-  - Per-object memory methods (`PlayWaterBottleMemory()`, `PlaySunsetPhotoMemory()`, `PlayLegoBricksMemory()`) are designed to be bound to Holdable grab UnityEvents.
-  - The old `PlayMemoryRevealed()` / `PlayMemoryPlacementHint()` generic flow has been removed.
-  - Assistant dialogue is independent from the clown crisis coroutine timing.
+  - **Implemented dialogue arrays**: Hippocampus intro, per-object memory reveal (water bottle / sunset photo / LEGO bricks, each with a one-shot guard), Nightmare warning, Swallow Transition, Mirror Chamber intro.
+  - **New arrays needed** (per dialogue design): `memoryReleasedLines` (per-mirror auto-shatter reaction), `allMemoriesReleasedLines` (all four resolved, signal restored, active teleport out), `returnToOfficeLines` rewritten as return-to-memory-space (ceiling damage, seven-object redistribution intro).
+  - **New arrays needed for Stage 4**: confirmation response (post-confirm teleport back to office), return-to-office & report review (merged office arrival + report ready).
+  - **Stage 5 TBD**: client message and closing lines pending outcome variant design.
+  - The old `breakGlassLines` and `glassBrokenPraiseLines` arrays are deprecated — the player no longer manually breaks a glass wall. Each mirror auto-shatters when its conversation resolves successfully.
 
 - `ClownController.cs`
   - Main controller for the Giant Clown / Nightmare crisis sequence.
@@ -566,6 +581,32 @@ Important scripts:
   - Calls `ClownController.TriggerCrisis()` after successful preliminary confirmation.
   - The same controller can later support the seven-object stage by assigning seven required items, but it does not yet expose final placement data to the office report system.
 
+- **`MemoryDialogueController.cs`** (NEW — 2026-08-09)
+  - Implements the two-round mirror conversation system for Stage 3 (Giant Interior / Deep Memory Crisis).
+  - Data-driven: all dialogue text and audio clips are configured through serialized fields in the Inspector.
+  - Conversation flow:
+    1. Player enters the mirror's trigger area — a `Start Conversation` button appears.
+    2. `BeginConversation()` plays an opening line and shows three Round 1 choices.
+    3. Round 1: three choices —
+       - Two constructive responses that enter Round 2 (`goesToRound2 = true`, `nextBranchIndex` selects which Round 2 branch).
+       - One harmful shortcut (`goesToRound2 = false`) that plays a rejection response, briefly intensifies the environment, then returns to idle.
+    4. Round 2: two choices per branch —
+       - One constructive response (`completesMemory = true`) that resolves the mirror successfully.
+       - One harmful response (`completesMemory = false`) that triggers the same rejection behavior as the Round 1 shortcut.
+    5. Completing the conversation invokes `onComplete` (a `UnityEvent`) — used to deactivate the mirror and return the memory object.
+    6. Harmful exits call `CloseConversation()` — the `Start Conversation` button reappears.
+  - Exposes `SetPlayerInArea(bool)` — call from trigger enter/exit to control button visibility.
+  - Exposes `SelectChoice(int)` — called by `MemoryDialogueChoiceRelay` from UI buttons.
+  - Normalizes array sizes to 3 (Round 1) and 2 (Round 2 branches × 2 choices) via `NormalizeData()` in `Awake()` and `OnValidate()`, so the arrays auto-size correctly in the Inspector.
+  - UI references: `startButtonRoot`, `dialogueRoot`, `round1ChoicesRoot`, `dialogueText` (TMP), `dialogueAudioSource`.
+  - Per-branch UI: each Round 2 branch has `choicesRoot` — a unique `GameObject` parent for its two choice buttons.
+  - Design rationale: two rounds with harmful shortcuts in *both* rounds (not just Round 1), as documented in the narrative design section. This gives the player more opportunities to choose the wrong path and see the immediate feedback.
+
+- **`MemoryDialogueChoiceRelay.cs`** (NEW — 2026-08-09)
+  - Lightweight bridge: a UI button's `onClick` → `MemoryDialogueChoiceRelay.TriggerChoice()` → `MemoryDialogueController.SelectChoice(choiceIndex)`.
+  - Each relay carries a `choiceIndex` (0–2 for Round 1, 0–1 for Round 2).
+  - Auto-finds the parent `MemoryDialogueController` if not manually assigned.
+
 - **`MemoryContentDisplay.cs` — DELETED (2026-08-05).**
   - Its runtime RawImage/RenderTexture creation and WebGL URL switching are no longer needed.
   - The new approach: pre-configure `Image` or `RawImage` + `VideoPlayer` directly on the Canvas in the hierarchy, and use Holdable UnityEvents to toggle visibility.
@@ -577,6 +618,57 @@ Main scene:
 WebGL scene:
 
 - `Assets/__My Project/scene_WebGL.unity`
+
+## Imported Model Assets (2026-08-05 to 2026-08-09)
+
+New 3D models imported for the deep-memory objects (Stage 3) and the surface-memory content:
+
+### Deep Memory Objects (Stage 3)
+
+- **Second-Place Medal**: `Assets/__My Project/model/Ace Combat 7 Medals ACE/`
+  - FBX + silver-medal texture (PNG).
+  - Represents the "second-place medal" deep memory.
+  - Still needs prefab creation and scene placement as a mirror-linked object.
+
+- **Old Alarm Clock**: `Assets/__My Project/model/clock/`
+  - FBX + Albedo / Normal / MetallicSmoothness / AO textures (PNG).
+  - Represents the "old alarm clock" deep memory.
+  - Still needs prefab creation, scene placement, and looping-hand animation.
+
+- **Old Phone**: `Assets/__My Project/model/cell-phone/`
+  - FBX + diffuse / AO textures (JPG).
+  - Represents the "old phone with cracked screen" deep memory.
+  - Still needs cracked-screen variant and prefab creation.
+
+- **Red Correction Pen**: `Assets/Detailed ballpoint pens/`
+  - 5 color prefabs (black, blue, green, red, white).
+  - Includes `AudioOnCollision` script for sound effects (cap on/off, hit).
+  - Red pen represents the "red correction pen" deep memory.
+  - Also useful as a generic office prop.
+
+### Surface Memory Content (Stage 2)
+
+- **Medicine**: `Assets/__My Project/media/medicine.mp4` + `medicine.png`
+  - Video + thumbnail for the water-bottle memory's visual content.
+
+- **Sunset Photograph**: `Assets/__My Project/media/sunset photo.png` + `sunset.png`
+  - Two sunset images for the sunset-photograph memory's visual content.
+
+- **Brick Toy**: `Assets/__My Project/media/brick toy.png`
+  - Image for the LEGO-bricks memory's visual content.
+
+### Breakable Containers Asset Pack
+
+- `Assets/Breakable Containers/`
+  - Comprehensive package with Normal and Cracked variants of: Clay Vase, Clay Vase Tall, Clay Vase Cubic, Clay Jar, Clay Kettle, Jar (BlueRed), Jar (BrownPurple), Vase (WhiteBrown), Cauldron, Flower Pot.
+  - Includes demo scene (`Demo Scene/Demo.unity`).
+  - Likely imported for the auto-shatter visual effect on resolved mirrors in the Mirror Chamber.
+  - Not yet integrated into the main game flow.
+
+## Additional Package Imports
+
+- **XR Hands (1.8.0)**: HandVisualizer sample + Hands Interaction Demo (3.4.1) with hand tracking, poke interaction, affordances, and shader graphs.
+- **BrickToy 3D LowPoly WarriorRobots**: Low-poly robot prefabs (may be for the LEGO-bricks memory or future use).
 
 ## WebGL Memory Placement and Confirmation
 
@@ -607,7 +699,7 @@ Deferred Stage 2 detail:
 
 Current high-level state order in `GameStateController`:
 
-1. `OfficeIntro`
+1. `OfficeDialogue`
    - Assistant plays intro.
 
 2. `AwaitCrystalBall`
@@ -633,16 +725,18 @@ Current high-level state order in `GameStateController`:
    - Calls `SwallowController.StartSwallowTransition()`.
 
 8. `MirrorChamber`
+   - Player and assistant arrive inside the Giant Clown interior.
    - Assistant moved to mirror chamber spawn point.
    - Assistant plays Mirror Chamber intro.
+   - Four mirrors are present, each broadcasting the client's negative internal voice.
+   - Player approaches each mirror in any order, starts a conversation (via `MemoryDialogueController`), and either resolves or fails the dialogue.
+   - **On resolution success**: the mirror auto-shatters — the echo stops, the container cracks open, and the original memory object (medal, clock, phone, pen) is revealed. No player action is needed to break the mirror.
+   - **On dialogue failure**: the voice intensifies, the dialogue closes, and the `Start Conversation` button returns. The mirror stays intact.
+   - After all four mirrors are resolved, the painful echoes no longer sustain the Giant Clown. The giant space dissolves automatically.
+   - Player, assistant, and the four freed memory objects return to the Memory Room (HippoRoot).
 
-9. `BreakGlass`
-   - Triggered when the assistant begins the Glass Broken Praise lines.
-   - Keeps `DungeonRoot` active.
-   - Fades the Nightmare Global Volume weight to 0.
-
-10. `BackToOffice`
-   - Intended to be triggered after the Tall Stylized Breakable Glass in the Chamber is broken.
+9. `BackToOffice`
+   - Intended to be triggered after the final seven-object attention redistribution is confirmed in Stage 4.
    - Fades the screen to black over 1 second.
    - Activates `OfficeRoot`.
    - Moves player and assistant robot to manually assigned office return spawn transforms while the screen is black.
@@ -663,11 +757,12 @@ To reduce headset runtime cost, the main scene is organized into three coarse ro
 
 `GameStateController` has Inspector references for these three roots and activates only one root at a time:
 
-- `OfficeIntro` and `AwaitCrystalBall` activate `OfficeRoot`.
+- `OfficeDialogue` and `AwaitCrystalBall` activate `OfficeRoot`.
 - `TransitionToHippocampus`, `Hippocampus`, `AwaitMemoryPlacement`, and `GiantCrisis` activate `HippoRoot`.
 - `SwallowTransition` currently does not switch roots directly. This lets the black fade / swallow hand-to-mouth overlap begin while the previous root remains active.
 - `MirrorChamber` activates `DungeonRoot`.
-- `BackToOffice` activates `OfficeRoot` after the screen has faded to black.
+- When the giant dissolves after all mirrors resolve, the player returns to the Memory Room — `HippoRoot` is re-activated.
+- `BackToOffice` activates `OfficeRoot` after the screen has faded to black (triggered after Stage 4 final confirmation).
 
 Persistent gameplay objects such as the XR Origin/player, `GameStateController`, screen fade, assistant robot, and global event/input objects should stay outside these three roots so they remain active throughout the experience.
 
@@ -675,11 +770,11 @@ Persistent gameplay objects such as the XR Origin/player, `GameStateController`,
 
 `GameStateController` exposes Inspector references for the Office, Hippocampus, and Nightmare Global Volumes, plus a shared Global Volume fade duration.
 
-- On startup and when entering `OfficeIntro`, Office Global Volume is weight 1 while Hippocampus and Nightmare are weight 0.
+- On startup and when entering `OfficeDialogue`, Office Global Volume is weight 1 while Hippocampus and Nightmare are weight 0.
 - During `TransitionToHippocampus`, once the screen is fully white, Office Global Volume is set to weight 0 and Hippocampus Global Volume is set to weight 1 before the fade back in.
 - Entering `GiantCrisis` first fades the Hippocampus Global Volume weight to 0, then activates the Nightmare Global Volume and fades its weight to 1.
 - The Giant Crisis sequence starts after the Nightmare Global Volume fade-in completes.
-- Entering `BreakGlass` fades the Nightmare Global Volume weight to 0.
+- When the giant dissolves after all four mirrors are resolved, the Nightmare Global Volume fades to 0 as the player returns to the Memory Room.
 - During `BackToOffice`, once the screen is fully black, Office Global Volume is restored to weight 1 while Hippocampus and Nightmare are set to weight 0.
 
 ## Crisis Particle State Control
@@ -803,8 +898,9 @@ Target behavior:
 - During the full-black hold, assistant enters Swallow Transition dialogue and can output text/audio.
 - Then player is transferred to the pipe/fall start point.
 - `SwallowController` switches the game state to `MirrorChamber` while the screen is still black.
-- `MirrorChamber` activates `DungeonRoot`, moves the assistant to the Mirror Chamber spawn point, and starts Mirror Chamber intro.
+- `MirrorChamber` activates `DungeonRoot`, moves the player and assistant to the Mirror Chamber spawn point, and starts Mirror Chamber intro.
 - Fade returns to transparent and controlled fall begins after the state has already switched to `MirrorChamber`.
+- The player resolves four deep-memory conversations. Each resolved mirror auto-shatters. When all four are done, the giant dissolves and the player returns to the Memory Room.
 
 Current implementation:
 
@@ -929,18 +1025,12 @@ Important IK note:
 - Footsteps and rumble are sequential: footsteps finish first, rumble starts afterward.
 - `SwallowTransition` starts before the hand-to-mouth movement is complete, allowing the fade to black to overlap with the final mouth movement for a smoother visual transition.
 - Memory content display is now handled via pre-configured Image/RawImage/VideoPlayer components on the Canvas, toggled by Holdable UnityEvents. The old `MemoryContentDisplay` script has been removed.
-- Breaking the final Chamber glass should eventually call `GameStateController.SetState(GameState.BackToOffice)`. The return spawn transforms are exposed on `GameStateController` for manual scene assignment.
-- Current final Chamber glass flow:
-  - `MirrorChamber` plays the assistant Mirror Chamber intro.
-  - After the intro completes, `AssistantController` plays the Break Glass prompt.
-  - The scene instance named `Tall Stylized Breakable Glass` has `notifyGameStateControllerOnShatter` enabled.
-  - The same scene instance also has `shatterOnAllowedContact` enabled, so any collider on its allowed contact/impact mask can force shatter on contact instead of needing to satisfy the normal impact-speed thresholds.
-  - When `StylizedBreakableGlass.Shatter()` runs, it invokes `GameStateController.HandleFinalChamberGlassShattered()`.
-  - The controller asks the assistant to play the Glass Broken Praise line(s), then the Return To Office line(s).
-  - Only after those lines finish does the assistant call `GameStateController.SetState(GameState.BackToOffice)`.
-  - `BackToOffice` now runs a black screen transition before moving the player and assistant back to the office.
-  - `StylizedBreakableGlass` also exposes `onShattered` for optional UnityEvent bindings.
-  - `StylizedBreakableGlass` exposes `ForceShatter()` for explicit script or UnityEvent driven shatter without requiring a minimum impact speed.
+- The `BreakGlass` game state and `HandleFinalChamberGlassShattered()` in `GameStateController` are **deprecated** (2026-08-10). The player no longer manually breaks a glass wall. Instead:
+  - Each mirror auto-shatters when its `MemoryDialogueController` conversation resolves successfully (via the `onComplete` UnityEvent).
+  - After all four mirrors are resolved, the giant space dissolves automatically.
+  - The player, assistant, and four freed memory objects return to the Memory Room (HippoRoot).
+  - The `BackToOffice` state is now reserved for after Stage 4 (final seven-object redistribution), not for the mirror chamber exit.
+  - `StylizedBreakableGlass` assets are still usable for the auto-shatter visual effect on each mirror — bind their `ForceShatter()` to the `MemoryDialogueController.onComplete` event.
 
 ## Known Risks / Things to Check in Unity
 
@@ -957,6 +1047,37 @@ Important IK note:
 - If the roof seems to rotate unnaturally, keep `alignRoofRotationToGrabAnchor` off.
 - If the roof seems not to align with the hand enough, tune `roofAttachDuration` and the local position of `grabAnchor`.
 - If Rig weight appears not to change, verify that the Inspector is showing the outer `Rig` component weight, not only the `TwoBoneIKConstraint` weight.
+- `MemoryDialogueController` uses a data-driven approach: all dialogue branching, text, and audio are configured in the Inspector via serialized fields — no per-mirror subclassing needed. Four instances with different field values cover the four planned deep-memory conversations.
+- The Stage 3 dialogue now includes harmful shortcuts in Round 2 as well as Round 1 (updated 2026-08-09 from the earlier "all Round 2 choices are constructive" design). This creates more gameplay tension: the player must navigate carefully through both rounds.
+
+## Stage 3 Implementation Notes
+
+### MemoryDialogueController Scene Setup
+
+The `MemoryDialogueController` is implemented but not yet connected in the scene (`scene_WebGL.unity`). The following setup steps are needed for each of the four mirrors:
+
+1. Add a `MemoryDialogueController` component to each mirror's root or a dedicated dialogue GameObject.
+2. Configure the serialized fields:
+   - **UI**: assign `startButtonRoot`, `dialogueRoot`, `round1ChoicesRoot`, `dialogueText` (TMP).
+   - **Audio**: assign `dialogueAudioSource`.
+   - **Opening**: set `openingText` and `openingClip` (the initial internal voice line for that memory).
+   - **Round 1**: configure three `Round1ChoiceData` entries — two constructive (set `goesToRound2 = true` and pick `nextBranchIndex = 0` or `1`), one harmful (set `goesToRound2 = false`). Fill in `responseText` and `responseClip` for each.
+   - **Round 2**: configure two `Round2BranchData` entries — each has a `choicesRoot` (the GameObject parent for that branch's two buttons), `promptText`, `promptClip`, and two `Round2ChoiceData` choices (one with `completesMemory = true`, one with `false`).
+   - **Completion**: bind `onComplete` to deactivate the mirror and activate the restored memory object (e.g., medal, clock, phone, or pen).
+3. Create a trigger collider around each mirror. Bind `OnTriggerEnter` → `MemoryDialogueController.SetPlayerInArea(true)` and `OnTriggerExit` → `SetPlayerInArea(false)`.
+4. Create button GameObjects for Round 1 (3 buttons) and Round 2 (2 buttons per branch, each branch under its own `choicesRoot`). Attach `MemoryDialogueChoiceRelay` to each button and set `choiceIndex`.
+5. Configure Round 1 choice index to 0, 1, 2 (lower-left, lower-right, top-center — order in Inspector matches order in gameplay).
+6. Configure Round 2 choice index to 0 (constructive/success) and 1 (harmful/fail) per branch.
+
+### Stage 3 Next Steps
+
+- Create prefabs for each of the four deep-memory 3D objects (medal, clock, phone, red pen).
+- Place the four mirrors and their assigned memory objects in the Mirror Chamber (scene_WebGL.unity).
+- Set up the `MemoryDialogueController` on each mirror with the planned dialogue scripts (see Planned Deep-Memory Dialogue Scripts section).
+- Wire the `onComplete` UnityEvent to swap the mirror back to the memory object.
+- Test the full flow: enter area → start conversation → round 1 → harmful exit vs. round 2 → success exit vs. harmful exit.
+- Ensure all four mirrors can be completed in any order.
+- Wire the completion of all four mirrors to dissolve the Giant Clown space and trigger the transition back to the Memory Room.
 
 ## Verification Pattern
 
@@ -966,7 +1087,7 @@ For script-only changes, use:
 dotnet build Assembly-CSharp.csproj --no-restore
 ```
 
-The 2026-08-09 memory-placement script build passed with 0 errors. The project currently still reports existing warnings:
+The 2026-08-09 memory-placement script build passed with 0 errors. The 2026-08-09 MemoryDialogueController + MemoryDialogueChoiceRelay build also passed with 0 errors. The project currently still reports existing warnings:
 
 - Duplicate `using` directives in `AssistantController.cs`.
 - Obsolete `FindObjectsSortMode` usage in EZPZ Interaction Toolkit scripts.
