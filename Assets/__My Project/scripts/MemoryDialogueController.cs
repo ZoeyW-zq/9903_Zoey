@@ -81,8 +81,20 @@ public class MemoryDialogueController : MonoBehaviour
     private void Awake()
     {
         NormalizeData();
+        ConfigureAudioSource();
         HideDialogue();
         RefreshStartButton();
+    }
+
+    private void OnEnable()
+    {
+        PlayOpeningLoop();
+    }
+
+    private void OnDisable()
+    {
+        StopFlowRoutine();
+        StopAudio();
     }
 
     private void OnValidate()
@@ -110,7 +122,7 @@ public class MemoryDialogueController : MonoBehaviour
         HideStartButton();
         ShowDialogue();
         ShowRound1Choices();
-        ShowLine(openingText, openingClip);
+        ShowText(openingText);
     }
 
     public void SelectChoice(int choiceIndex)
@@ -230,6 +242,9 @@ public class MemoryDialogueController : MonoBehaviour
 
         HideDialogue();
         RefreshStartButton();
+
+        if (!completed)
+            PlayOpeningLoop();
     }
 
     private void ShowDialogue()
@@ -292,17 +307,23 @@ public class MemoryDialogueController : MonoBehaviour
 
     private void ShowLine(string text, AudioClip clip)
     {
-        if (dialogueText != null)
-            dialogueText.text = text;
+        ShowText(text);
 
         if (dialogueAudioSource == null)
             return;
 
         dialogueAudioSource.Stop();
+        dialogueAudioSource.loop = false;
         dialogueAudioSource.clip = clip;
 
         if (clip != null)
             dialogueAudioSource.Play();
+    }
+
+    private void ShowText(string text)
+    {
+        if (dialogueText != null)
+            dialogueText.text = text;
     }
 
     private void StopAudio()
@@ -311,7 +332,33 @@ public class MemoryDialogueController : MonoBehaviour
             return;
 
         dialogueAudioSource.Stop();
+        dialogueAudioSource.loop = false;
         dialogueAudioSource.clip = null;
+    }
+
+    private void ConfigureAudioSource()
+    {
+        if (dialogueAudioSource == null)
+            return;
+
+        dialogueAudioSource.playOnAwake = false;
+        dialogueAudioSource.loop = false;
+        dialogueAudioSource.spatialBlend = 1f;
+    }
+
+    private void PlayOpeningLoop()
+    {
+        if (!isActiveAndEnabled || completed || conversationActive
+            || dialogueAudioSource == null || openingClip == null)
+        {
+            return;
+        }
+
+        dialogueAudioSource.Stop();
+        dialogueAudioSource.playOnAwake = false;
+        dialogueAudioSource.loop = true;
+        dialogueAudioSource.clip = openingClip;
+        dialogueAudioSource.Play();
     }
 
     private void RefreshStartButton()

@@ -11,6 +11,8 @@ public class OfficeDialogueController : MonoBehaviour
     [SerializeField] private Button jobExplanationButton;
     [SerializeField] private Button exploreOfficeButton;
     [SerializeField] private Button startWorkButton;
+    [SerializeField] private Button finishReadingButton;
+    [SerializeField] private GameObject computerScreenContent;
 
     [Header("Dialogue")]
     [SerializeField] private AssistantController.DialogueLine[] greetingLines;
@@ -30,6 +32,7 @@ public class OfficeDialogueController : MonoBehaviour
 
     private bool isBusy;
     private bool isExploring;
+    private bool waitingForReadingConfirmation;
 
     private void Awake()
     {
@@ -39,6 +42,11 @@ public class OfficeDialogueController : MonoBehaviour
             exploreOfficeButton.onClick.AddListener(SelectExploreOffice);
         if (startWorkButton != null)
             startWorkButton.onClick.AddListener(SelectStartWork);
+        if (finishReadingButton != null)
+            finishReadingButton.onClick.AddListener(FinishReading);
+
+        SetComputerScreenVisible(false);
+        SetButtonVisible(finishReadingButton, false);
     }
 
     public void BeginOfficeDialogue()
@@ -47,7 +55,9 @@ public class OfficeDialogueController : MonoBehaviour
         HasExploredOffice = false;
         IsReadyToStart = false;
         isExploring = false;
+        waitingForReadingConfirmation = false;
         isBusy = true;
+        SetComputerScreenVisible(false);
         HideAllChoiceButtons();
         Play(greetingLines, FinishDialogue);
     }
@@ -93,6 +103,24 @@ public class OfficeDialogueController : MonoBehaviour
 
     private void OnStartWorkDialogueComplete()
     {
+        isBusy = false;
+        waitingForReadingConfirmation = true;
+        SetComputerScreenVisible(true);
+        SetButtonVisible(finishReadingButton, true);
+
+        if (choiceCanvas != null)
+            choiceCanvas.SetActive(true);
+    }
+
+    public void FinishReading()
+    {
+        if (!waitingForReadingConfirmation || isBusy)
+            return;
+
+        waitingForReadingConfirmation = false;
+        isBusy = true;
+        HideAllChoiceButtons();
+
         if (gameStateController != null)
             gameStateController.SetState(GameStateController.GameState.AwaitCrystalBall);
 
@@ -129,6 +157,7 @@ public class OfficeDialogueController : MonoBehaviour
         }
 
         Debug.LogWarning("OfficeDialogueController: AssistantController is not assigned.", this);
+        onComplete?.Invoke();
     }
 
     private void RefreshChoices()
@@ -144,6 +173,7 @@ public class OfficeDialogueController : MonoBehaviour
         SetButtonVisible(jobExplanationButton, choicesAvailable && IsJobExplanationAvailable);
         SetButtonVisible(exploreOfficeButton, choicesAvailable);
         SetButtonVisible(startWorkButton, choicesAvailable);
+        SetButtonVisible(finishReadingButton, false);
 
         if (choiceCanvas != null)
             choiceCanvas.SetActive(choicesAvailable);
@@ -160,8 +190,15 @@ public class OfficeDialogueController : MonoBehaviour
         SetButtonVisible(jobExplanationButton, false);
         SetButtonVisible(exploreOfficeButton, false);
         SetButtonVisible(startWorkButton, false);
+        SetButtonVisible(finishReadingButton, false);
 
         if (choiceCanvas != null)
             choiceCanvas.SetActive(false);
+    }
+
+    private void SetComputerScreenVisible(bool visible)
+    {
+        if (computerScreenContent != null)
+            computerScreenContent.SetActive(visible);
     }
 }

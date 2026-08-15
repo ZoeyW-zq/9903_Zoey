@@ -397,7 +397,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Learn about the role
+  m_text: "Learn about \nthe role"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -424,8 +424,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.19
-  m_fontSizeBase: 0.19
+  m_fontSize: 0.16
+  m_fontSizeBase: 0.16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -434,12 +434,12 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -10.24
   m_characterHorizontalScale: 1
-  m_wordSpacing: 0
+  m_wordSpacing: 0.62
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: -11.59
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
@@ -585,7 +585,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -608,8 +608,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.65023136, y: 0.80892384, z: 0.31694555}
-  m_Center: {x: -0.009893894, y: 0.40162617, z: -0.0019271374}
+  m_Size: {x: 0.3244146, y: 0.4228814, z: 0.31694555}
+  m_Center: {x: 0.0007452988, y: 0.20860608, z: -0.0019271332}
 --- !u!114 &29040852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -617,7 +617,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 29040848}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46af44fc27f29524da026e4f9f3da44d, type: 3}
   m_Name: 
@@ -1123,8 +1123,8 @@ Transform:
   m_GameObject: {fileID: 61023192}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.14687, y: -5.639, z: -4.1400003}
-  m_LocalScale: {x: 1.9575, y: 0.057129998, z: 0.33716}
+  m_LocalPosition: {x: -3.39, y: -5.784, z: -4.4218}
+  m_LocalScale: {x: 1.9575, y: 0.057129998, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1708284703}
@@ -2142,6 +2142,62 @@ MonoBehaviour:
   yLookOnly: 1
   startRotation: {x: 0, y: 0, z: 0, w: 0}
   yRotation: 0
+--- !u!1 &103664643
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 103664644}
+  - component: {fileID: 103664645}
+  m_Layer: 0
+  m_Name: Audio Reverb Zone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &103664644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103664643}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.38268343, z: -0, w: 0.92387956}
+  m_LocalPosition: {x: 0.86, y: 0, z: 0.58}
+  m_LocalScale: {x: 1, y: 0.49, z: 0.28000003}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1749475378}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!167 &103664645
+AudioReverbZone:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103664643}
+  m_Enabled: 1
+  m_MinDistance: 4.8
+  m_MaxDistance: 12.38
+  m_ReverbPreset: 9
+  m_Room: -1000
+  m_RoomHF: 0
+  m_DecayTime: 2.91
+  m_DecayHFRatio: 1.3
+  m_Reflections: -602
+  m_ReflectionsDelay: 0.015
+  m_Reverb: -302
+  m_ReverbDelay: 0.022
+  m_HFReference: 5000
+  m_Diffusion: 100
+  m_Density: 100
+  m_LFReference: 250
+  m_RoomLF: 0
 --- !u!1 &106045446 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7831156578428871150, guid: 9f70849d58331044695438beb06d3264, type: 3}
@@ -2269,8 +2325,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2330,31 +2386,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 110311888}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1040235605}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 902770132}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!65 &110311891
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3293,6 +3325,149 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4609788322409818909, guid: 3f4f9e59c5674ae459490b5df24a6111, type: 3}
   m_PrefabInstance: {fileID: 152363649}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &166225869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 166225870}
+  - component: {fileID: 166225874}
+  - component: {fileID: 166225873}
+  - component: {fileID: 166225872}
+  - component: {fileID: 166225871}
+  m_Layer: 5
+  m_Name: Button_finishReading
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &166225870
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166225869}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.34, y: 0.34, z: 0.34}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 193769882}
+  m_Father: {fileID: 1472470782}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1.2, y: 0.54}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!65 &166225871
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166225869}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.893489, y: 0.35164788, z: 0.10124196}
+  m_Center: {x: 0.021866633, y: -0.0028567496, z: 0.0026999642}
+--- !u!114 &166225872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166225869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 166225873}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &166225873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166225869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &166225874
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166225869}
+  m_CullTransparentMesh: 1
 --- !u!1 &166925016
 GameObject:
   m_ObjectHideFlags: 0
@@ -3321,8 +3496,8 @@ Transform:
   m_GameObject: {fileID: 166925016}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.15999985, y: 4, z: 5.64}
-  m_LocalScale: {x: 6.637985, y: 0.49168, z: 1.4426513}
+  m_LocalPosition: {x: -0.15999985, y: 4, z: 6.03}
+  m_LocalScale: {x: 7.7989693, y: 0.49168, z: 2.661522}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1410890458}
@@ -3437,7 +3612,7 @@ Transform:
   m_GameObject: {fileID: 170776932}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -5.233462, y: -3.45, z: -5.3984847}
+  m_LocalPosition: {x: -4.498, y: -3.326, z: -4.389}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3485,7 +3660,7 @@ Light:
   m_Color: {r: 0.81960785, g: 0.65722215, b: 0.46666667, a: 1}
   m_Intensity: 15.8
   m_Range: 10
-  m_SpotAngle: 75.41791
+  m_SpotAngle: 120.16791
   m_InnerSpotAngle: 3.1005878
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
@@ -3658,7 +3833,7 @@ PrefabInstance:
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteractLift.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 8300000, guid: 73ed07d48802bab4f98d6789463f9897, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteract.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
@@ -3980,6 +4155,143 @@ Transform:
   m_Children: []
   m_Father: {fileID: 385032835}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &193769881
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 193769882}
+  - component: {fileID: 193769884}
+  - component: {fileID: 193769883}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &193769882
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193769881}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 166225870}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &193769883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193769881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "Finish \nreading\n"
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4281479730
+  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 0.16
+  m_fontSizeBase: 0.16
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: -5.6
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: -9.46
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &193769884
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193769881}
+  m_CullTransparentMesh: 1
 --- !u!1 &194572320
 GameObject:
   m_ObjectHideFlags: 0
@@ -4341,15 +4653,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458161794608450097, guid: f7d49d5d637949741803377a17232282, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.05
+      value: 2.45
       objectReference: {fileID: 0}
     - target: {fileID: 6458161794608450097, guid: f7d49d5d637949741803377a17232282, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.05
+      value: 2.45
       objectReference: {fileID: 0}
     - target: {fileID: 6458161794608450097, guid: f7d49d5d637949741803377a17232282, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3.05
+      value: 2.45
       objectReference: {fileID: 0}
     - target: {fileID: 6458161794608450097, guid: f7d49d5d637949741803377a17232282, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4361,7 +4673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6458161794608450097, guid: f7d49d5d637949741803377a17232282, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.11
       objectReference: {fileID: 0}
     - target: {fileID: 6458161794608450097, guid: f7d49d5d637949741803377a17232282, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4399,6 +4711,10 @@ PrefabInstance:
     - {fileID: 4917387778864392607, guid: f7d49d5d637949741803377a17232282, type: 3}
     - {fileID: 4917387778864392608, guid: f7d49d5d637949741803377a17232282, type: 3}
     - {fileID: 4917387778864392609, guid: f7d49d5d637949741803377a17232282, type: 3}
+    - {fileID: 4917387778864392617, guid: f7d49d5d637949741803377a17232282, type: 3}
+    - {fileID: 4917387778864392616, guid: f7d49d5d637949741803377a17232282, type: 3}
+    - {fileID: 4917387778864392615, guid: f7d49d5d637949741803377a17232282, type: 3}
+    - {fileID: 4917387778864392614, guid: f7d49d5d637949741803377a17232282, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -10389,6 +10705,7 @@ Transform:
   - {fileID: 466925799}
   - {fileID: 294780298}
   - {fileID: 500972754}
+  - {fileID: 665210399}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &326021642
@@ -11153,15 +11470,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2da7a58b0313f474384780a34ff59286, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.72000015
+      value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da7a58b0313f474384780a34ff59286, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.72
+      value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da7a58b0313f474384780a34ff59286, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.72000015
+      value: 0.37
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2da7a58b0313f474384780a34ff59286, type: 3}
       propertyPath: m_LocalPosition.x
@@ -12093,8 +12410,8 @@ Transform:
   m_GameObject: {fileID: 411957647}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.9058704, y: -5.152, z: -4.1400003}
-  m_LocalScale: {x: 1.9575, y: 0.057129998, z: 0.33716}
+  m_LocalPosition: {x: -4.561, y: -5.322, z: -4.425}
+  m_LocalScale: {x: 1.9575, y: 0.057129998, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1975840622}
@@ -16141,7 +16458,7 @@ PrefabInstance:
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteractLift.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 8300000, guid: 73ed07d48802bab4f98d6789463f9897, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteract.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
@@ -16294,6 +16611,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MemoryDialogueChoiceRelay
   controller: {fileID: 1039825879}
   choiceIndex: 2
+--- !u!1 &665210398
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 665210399}
+  m_Layer: 0
+  m_Name: DeepMemoryPoints
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &665210399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665210398}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.701, y: -4.879, z: -8.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1600193128}
+  - {fileID: 1243771780}
+  - {fileID: 1820941901}
+  - {fileID: 1697160099}
+  m_Father: {fileID: 322340564}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &678520422
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17276,7 +17628,7 @@ MonoBehaviour:
   durationWithoutAudio: 3
   openingText: Maybe I just don't have the ability at all... I deserve to be criticized
     in front of everyone.
-  openingClip: {fileID: 0}
+  openingClip: {fileID: 8300000, guid: 066dce1805187d4428ea880ce43afd00, type: 3}
   round1Choices:
   - goesToRound2: 1
     nextBranchIndex: 0
@@ -17290,31 +17642,31 @@ MonoBehaviour:
     nextBranchIndex: 0
     responseText: Right, I have to make sure everything is perfect. If I make another
       mistake, they'll find out I'm not reliable at all.
-    responseClip: {fileID: 0}
+    responseClip: {fileID: 8300000, guid: 34dab0f9b22325743ab6b22246d7a002, type: 3}
   round2Branches:
   - choicesRoot: {fileID: 253558337}
     promptText: But now every time I submit a file, I think of that red pen.
-    promptClip: {fileID: 0}
+    promptClip: {fileID: 8300000, guid: f33c4e18a5f16ed45b1e363b393182b2, type: 3}
     choices:
     - responseText: I can check carefully and fix mistakes, but I don't need to rely
         on never making mistakes to prove my ability.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: f0b2e59199be2b94897b008f0b1a0e8e, type: 3}
       completesMemory: 1
     - responseText: Right, I have to make sure everything is perfect. If I make another
         mistake, they'll find out I'm not reliable at all.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: 34dab0f9b22325743ab6b22246d7a002, type: 3}
       completesMemory: 0
   - choicesRoot: {fileID: 1360804421}
     promptText: But what if the next mistake really does cause consequences?
-    promptClip: {fileID: 0}
+    promptClip: {fileID: 8300000, guid: 75f5bca3146f39543a8f8a069d4d6ddb, type: 3}
     choices:
     - responseText: I can check carefully and fix mistakes, but I don't need to rely
         on never making mistakes to prove my ability.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: f0b2e59199be2b94897b008f0b1a0e8e, type: 3}
       completesMemory: 1
     - responseText: Right, I have to make sure everything is perfect. If I make another
         mistake, they'll find out I'm not reliable at all.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: 34dab0f9b22325743ab6b22246d7a002, type: 3}
       completesMemory: 0
   onComplete:
     m_PersistentCalls:
@@ -17352,6 +17704,42 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1681669335}
+        m_TargetAssemblyTypeName: GameStateController, Assembly-CSharp
+        m_MethodName: HandleFirstMemoryReleased
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1563328849}
+        m_TargetAssemblyTypeName: NumberHolder, Assembly-CSharp
+        m_MethodName: Add
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1563328848}
+        m_TargetAssemblyTypeName: NumberCheckUtillity, Assembly-CSharp
+        m_MethodName: CheckNumber
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 4
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
@@ -18166,7 +18554,7 @@ PrefabInstance:
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteractLift.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 8300000, guid: 73ed07d48802bab4f98d6789463f9897, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteract.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
@@ -19404,10 +19792,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 1.7
   MaxDistance: 4
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -19815,8 +20203,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -19990,7 +20378,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4283914075
-  m_fontColor: {r: 0.3584906, g: 0.33988965, b: 0.33988965, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -21287,7 +21675,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 957669671}
-  - component: {fileID: 957669673}
+  - component: {fileID: 957669676}
   - component: {fileID: 957669672}
   - component: {fileID: 957669674}
   - component: {fileID: 957669675}
@@ -21341,27 +21729,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &957669673
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 957669670}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.08013439, y: 0.078448296, z: 0.96516895}
-  m_Center: {x: -0.00004053116, y: 0.000039696693, z: -0.002626419}
 --- !u!114 &957669674
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21369,7 +21736,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 957669670}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46af44fc27f29524da026e4f9f3da44d, type: 3}
   m_Name: 
@@ -21449,6 +21816,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MemoryPlacementItem
   memoryId: pen
+--- !u!136 &957669676
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957669670}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.018746106
+  m_Height: 0.792364
+  m_Direction: 2
+  m_Center: {x: 0.0020741043, y: -1.12608795e-17, z: -0.10924899}
 --- !u!1 &957961764
 GameObject:
   m_ObjectHideFlags: 0
@@ -22540,7 +22930,7 @@ MonoBehaviour:
   durationWithoutAudio: 3
   openingText: Several times when I gathered the courage to ask for help, it didn't
     end well. I need to make myself stronger so I can stop asking anyone for help.
-  openingClip: {fileID: 0}
+  openingClip: {fileID: 8300000, guid: bf5b40842df4ea644817c11edae369f8, type: 3}
   round1Choices:
   - goesToRound2: 1
     nextBranchIndex: 0
@@ -22554,31 +22944,31 @@ MonoBehaviour:
     nextBranchIndex: 0
     responseText: Right. Only if I carry it all alone will I avoid being rejected
       again. No matter how tired I get, I can't speak up.
-    responseClip: {fileID: 0}
+    responseClip: {fileID: 8300000, guid: 736982c0d7370e04d9a36c80c70845a2, type: 3}
   round2Branches:
   - choicesRoot: {fileID: 803598511}
     promptText: But if I ask for help next time and still get rejected?
-    promptClip: {fileID: 0}
+    promptClip: {fileID: 8300000, guid: ecd41431e851b7d4dbfa6cab3196952c, type: 3}
     choices:
     - responseText: I can try speaking up. How others respond shouldn't decide whether
         I am allowed to need help.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: eb22a20bb8b76264bafb8af9bb6eb16b, type: 3}
       completesMemory: 1
     - responseText: Right. Only if I carry it all alone will I avoid being rejected
         again. No matter how tired I get, I can't speak up.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: 736982c0d7370e04d9a36c80c70845a2, type: 3}
       completesMemory: 0
   - choicesRoot: {fileID: 1631515657}
     promptText: But needing help from others still makes me feel unreliable.
-    promptClip: {fileID: 0}
+    promptClip: {fileID: 8300000, guid: aa4adf830403f9f4ebecd6fdc46843c4, type: 3}
     choices:
     - responseText: I can try speaking up. How others respond shouldn't decide whether
         I am allowed to need help.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: eb22a20bb8b76264bafb8af9bb6eb16b, type: 3}
       completesMemory: 1
     - responseText: Right. Only if I carry it all alone will I avoid being rejected
         again. No matter how tired I get, I can't speak up.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: 736982c0d7370e04d9a36c80c70845a2, type: 3}
       completesMemory: 0
   onComplete:
     m_PersistentCalls:
@@ -22619,6 +23009,42 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1681669335}
+        m_TargetAssemblyTypeName: GameStateController, Assembly-CSharp
+        m_MethodName: HandleFirstMemoryReleased
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1563328849}
+        m_TargetAssemblyTypeName: NumberHolder, Assembly-CSharp
+        m_MethodName: Add
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1563328848}
+        m_TargetAssemblyTypeName: NumberCheckUtillity, Assembly-CSharp
+        m_MethodName: CheckNumber
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 4
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &1040045691
 GameObject:
   m_ObjectHideFlags: 0
@@ -22647,8 +23073,8 @@ Transform:
   m_GameObject: {fileID: 1040045691}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.13, y: 4, z: 3.7800002}
-  m_LocalScale: {x: 1.8899118, y: 0.49168, z: 2.4412024}
+  m_LocalPosition: {x: 2.57, y: 4, z: 2.94}
+  m_LocalScale: {x: 2.8378916, y: 0.49168, z: 3.6310446}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1410890458}
@@ -23052,7 +23478,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -23075,8 +23501,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.41555786, y: 1.0326259, z: 0.08633566}
-  m_Center: {x: -0.0018520355, y: 0.0040762424, z: 0.016296625}
+  m_Size: {x: 0.24949107, y: 0.60325146, z: 0.023133574}
+  m_Center: {x: -0.0023385393, y: 0.0040705204, z: 0.0057645156}
 --- !u!114 &1053855826
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23084,7 +23510,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1053855822}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46af44fc27f29524da026e4f9f3da44d, type: 3}
   m_Name: 
@@ -23865,7 +24291,7 @@ Transform:
   m_GameObject: {fileID: 1130666773}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.007, y: -5.564, z: -3.98}
+  m_LocalPosition: {x: -2.855, y: -4.823, z: -3.98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -23885,15 +24311,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9f91124485e8e743851fd066209135b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MemoryPlacementController
-  requiredItems:
+  initialRequiredItems:
   - {fileID: 128546519}
   - {fileID: 2108710128}
   - {fileID: 1967310039}
+  finalRequiredItems: []
+  memoryRoomItemsRoot: {fileID: 0}
+  assistantController: {fileID: 1209064767}
+  missingMemoryCueCount: 2
+  clownController: {fileID: 536313668}
   feedbackText: {fileID: 2058956250}
   incompleteMessage: Not all memory items have been placed. Please finish placing
     them and try again.
-  successMessage: Placement confirmed.
-  clownController: {fileID: 536313668}
 --- !u!1001 &1139375924
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25021,121 +25450,108 @@ MonoBehaviour:
   jobExplanationButton: {fileID: 1659688365}
   exploreOfficeButton: {fileID: 881631556}
   startWorkButton: {fileID: 110311890}
+  finishReadingButton: {fileID: 166225872}
+  computerScreenContent: {fileID: 902770132}
   greetingLines:
   - text: "Good morning \u2014 well, it's always morning somewhere in someone's memory,
-      right?"
-    audioClip: {fileID: 0}
+      right?  I'm your assistant. You can call me\u2026 actually, I don't have a
+      name yet. Maybe you can give me one later?"
+    audioClip: {fileID: 8300000, guid: 7d62dea708293414f9180ce05368593c, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: " I'm your assistant. You can call me\u2026 actually, I don't have a name
-      yet. Maybe you can give me one later?"
-    audioClip: {fileID: 0}
-    fallbackSubtitleDuration: 2
-    keepVisibleAfterLine: 0
-  - text: 'Anyway! Welcome to the Memory Organizer workspace. '
-    audioClip: {fileID: 0}
-    fallbackSubtitleDuration: 2
-    keepVisibleAfterLine: 0
-  - text: "Your client is currently in REM sleep and waiting for us. No pressure
-      \u2014 they're literally unconscious."
-    audioClip: {fileID: 0}
+  - text: "Anyway! Welcome to the Memory Organizer workspace. Your client is currently
+      in REM sleep and waiting for us. No pressure \u2014 they're literally unconscious."
+    audioClip: {fileID: 8300000, guid: 3e059c388ac8aaa4f9b4408546d9d9fb, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
   - text: Before we dive in, would you like to learn more about what a Memory Organizer
       does, take a look around the office, or just jump right in?
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 141fb3878cd20ab49810bc11a3606334, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: I promise all three options are equally valid. Well, two of them buy me
-      more time to finish my system check.
-    audioClip: {fileID: 0}
+  - text: ' I promise all three options are equally valid. Well, two of them buy
+      me more time to finish my system check.'
+    audioClip: {fileID: 8300000, guid: 02afbeff517d8b1498bd9ad76d855f25, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 1
   jobExplanationLines:
   - text: "Great question! So, a Memory Organizer is kind of like\u2026 an interior
       designer for the mind. Except you can't knock down walls, and the furniture
       has feelings."
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: e23422028c103c0428c7cfbbf0d65188, type: 3}
     fallbackSubtitleDuration: 3
     keepVisibleAfterLine: 0
   - text: "Here's the important part \u2014 and I always emphasize this to new Organizers:
       you cannot delete, alter, or create memories. That's not how brains work, and
       honestly, it would be terrifying if it were."
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 1e594764018eda14dbe3b6766d0d778d, type: 3}
     fallbackSubtitleDuration: 3
     keepVisibleAfterLine: 0
-  - text: "What you CAN do is help the client decide how much attention each memory
-      gets right now. Think of it like\u2026 adjusting the volume knobs on different
-      radio stations."
-    audioClip: {fileID: 0}
-    fallbackSubtitleDuration: 3
-    keepVisibleAfterLine: 0
-  - text: Some memories are blasting at full volume and drowning out everything else.
-      Some are barely audible, even though they deserve to be heard. Your job is
-      to help rebalance the mix.
-    audioClip: {fileID: 0}
+  - text: What you CAN do is help the client decide how much attention each memory
+      gets.
+    audioClip: {fileID: 8300000, guid: 636ec91d43f426548982b2ef1a407966, type: 3}
     fallbackSubtitleDuration: 3
     keepVisibleAfterLine: 0
   - text: Does that make sense? I practiced that explanation seventeen times in the
       mirror. The mirror was not impressed, but I think it went okay.
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: bae91e659eee2a24895ed374a1b924e5, type: 3}
     fallbackSubtitleDuration: 3
     keepVisibleAfterLine: 1
   explorationDepartureLines:
   - text: "Ooh, exploring! Take your time \u2014 I'll just be here\u2026 floating.
       Very still. Radiating patience."
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 6f73af4589fd2544abf78e88e7ba14d5, type: 3}
     fallbackSubtitleDuration: 3
     keepVisibleAfterLine: 0
   - text: "When you're ready to continue, just come find me. I'm not going anywhere.
       Literally \u2014 I don't have legs."
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: c2e373ef74d394b4894d1551e14cedc9, type: 3}
     fallbackSubtitleDuration: 3
-    keepVisibleAfterLine: 1
+    keepVisibleAfterLine: 0
   explorationReturnLines:
   - text: You're back! Did you find anything interesting? I spent the time reorganizing
       my internal file structure. Alphabetically. It was very satisfying.
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 1d106075d66078d4f9f7b8defff78ee8, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
   - text: 'Ready to get started for real this time? The client''s been in REM for
       a while now. '
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 38bfc42b1cbeb0e42b35f93e3f354ab7, type: 3}
     fallbackSubtitleDuration: 1
     keepVisibleAfterLine: 0
   - text: They're probably having the most interesting dreams while we chat.
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: e0dd09927cfe1744e87ebde5a9b180d6, type: 3}
     fallbackSubtitleDuration: 1
     keepVisibleAfterLine: 1
   startWorkLines:
   - text: 'Alright! Here we go. Professional mode: engaged.'
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: fe6953d5eb69a354c8233f8a0b8b915a, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
   - text: "Let me pull up the client's file. One moment\u2026 and\u2026 there we
       are. The computer screen should be showing the case details now. "
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 0f68ef6e35f17d849a4140af789e8fce, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
   - text: "Take a moment to review them \u2014 I'll wait. Again. I'm very good at
       waiting."
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 6eab328748a807b479d7417d7a393370, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 1
   crystalBallInstructionLines:
   - text: "Client report reviewed? Great. Now \u2014 do you see that crystal ball
       that just appeared? That's our entry point into the client's subconscious."
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 83ab75b5b71889841a9785fa8bd33d8d, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
   - text: Place your hand on the crystal ball and keep it there. It needs about two
       seconds to establish a stable connection.
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: d49499b9af28a524c8222ac4d2129a28, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
   - text: "Well. See you on the other side! \u2026 That sounded more dramatic than
       I intended. But also, I meant it."
-    audioClip: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 81829978eedf4a4468a8a4085e426f4e, type: 3}
     fallbackSubtitleDuration: 1
     keepVisibleAfterLine: 1
 --- !u!82 &1209064765
@@ -25157,7 +25573,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 124
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 27.99
@@ -25268,97 +25684,179 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AssistantController
   audioSource: {fileID: 1209064765}
   subtitleText: {fileID: 994167672}
-  gameStateController: {fileID: 1681669335}
   hippocampusIntroLines:
-  - text: "Alright, we\u2019re inside the client\u2019s subconscious now."
-    audioClip: {fileID: 8300000, guid: 8cc8bd99083038e4aa8472794ef5d794, type: 3}
+  - text: And we're here! Welcome to the memory space. Everything you see around
+      you? These are the client's established memories, the ones that have been here
+      for years.
+    audioClip: {fileID: 8300000, guid: d820aec6ac08bc94e9657f7c6386a257, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: This room is built from his memories. Every object here represents something
-      precious from his life.
-    audioClip: {fileID: 8300000, guid: dd90541b22a74eb4b8d7d9646a825db0, type: 3}
+  - text: Let me explain how this works. These are the client's recent memories,
+      you can pick up and examine. Your job is to decide how much current attention
+      each one deserves.
+    audioClip: {fileID: 8300000, guid: d80196adbf328314dbc5389856cdf2fc, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: Our job right now is to take the memory represented by this water bottle
-      on the table, and put it where it belongs.
-    audioClip: {fileID: 8300000, guid: 43d09b548e193ec458702e905209699d, type: 3}
+  - text: "There are three attention zones on the wall. 'Focus' \u2014 for memories
+      that need immediate, active attention. 'Context' \u2014 for memories that should
+      stay available as useful background. And 'Background' \u2014 for memories that
+      are still present and accessible, but don't need to dominate awareness right
+      now."
+    audioClip: {fileID: 8300000, guid: a2fe8d8eea94dc346b70e7f75db4daf8, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 1
   waterBottleMemoryLines:
-  - text: ohhhhh bottle
-    audioClip: {fileID: 0}
+  - text: "Ah, this one\u2026 The client has a fever. Everyone else has gone home.
+      He's drinking water, taking medicine, and just\u2026 keeping going.\n"
+    audioClip: {fileID: 8300000, guid: c4b29dac6f603c64ba4f69de407e95b7, type: 3}
     fallbackSubtitleDuration: 1
     keepVisibleAfterLine: 1
   sunsetPhotoMemoryLines:
-  - text: brilliant view!
-    audioClip: {fileID: 0}
+  - text: "Oh, this is a beautiful one. He took this photo. Not for social media,
+      not to show anyone. Just\u2026 because the sky looked beautiful, and that felt
+      worth remembering."
+    audioClip: {fileID: 8300000, guid: 19093a9d6c98a504e801d93f3879dfc9, type: 3}
     fallbackSubtitleDuration: 1
     keepVisibleAfterLine: 1
   legoBricksMemoryLines:
-  - text: I wish I could build myself a body
-    audioClip: {fileID: 0}
+  - text: "Look at this! The client spent a whole evening assembling this model \u2014
+      brick by brick. He fell into that deep, quiet focus where time just\u2026 disappears.
+      There's only pure, private satisfaction. The kind that doesn't need an audience."
+    audioClip: {fileID: 8300000, guid: a705b2575fb508d4c8199c03e7926aff, type: 3}
     fallbackSubtitleDuration: 1
     keepVisibleAfterLine: 1
+  missingPainfulMemoryLines:
+  - text: "Hmm. Wait a moment. Something's not right here\u2026"
+    audioClip: {fileID: 8300000, guid: 939005e8b56be1646b2db23fa7056513, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "Those established memories \u2014 they're all\u2026 pleasant. Or at least,
+      not deeply painful."
+    audioClip: {fileID: 8300000, guid: b70b6559374ded34091c085b87a58c92, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "But that can't be right. A normal memory space doesn't look like this
+      \u2014 it's never just the happy stuff. The painful ones should be here too.
+      Where are they?"
+    audioClip: {fileID: 8300000, guid: 28a3d514570b9e0468aa78e0631e9db9, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: Let's finish placing these three first. But I'm going to keep an eye on
+      things. Metaphorically. I don't actually have eyelids. Also, my left sensor
+      array has been glitching since Tuesday, so if I miss something, that's my excuse.
+    audioClip: {fileID: 8300000, guid: 449ee2ce1e160024e87335aec03e1620, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 1
   nightmareWarningLines:
-  - text: Did you hear that? What was that sound?
-    audioClip: {fileID: 8300000, guid: 932b82c5cc7cfe34fa3147d8d91d52b8, type: 3}
+  - text: "Wait \u2014 I heard something."
+    audioClip: {fileID: 8300000, guid: 7e7c7624178d56b4dadbc08f3e08deb5, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: "Uh-oh. I\u2019m detecting emotional instability. His heart rate is rising.
-      Is he having a nightmare?"
-    audioClip: {fileID: 8300000, guid: 1cab3fc4cca1559478d6c8a3d1955fc0, type: 3}
+  - text: "Um. I'm picking up a\u2026 very large presence. Approaching. Rapidly.
+      I don't know what it is..."
+    audioClip: {fileID: 8300000, guid: 85fa26f0dc00ad5438a1da17a6b4b947, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: Wait, what is that thing? That monster is absolutely not supposed to be
-      here!
-    audioClip: {fileID: 8300000, guid: 4b4a91b7a4eae304abf6f93d1a3665d5, type: 3}
+  - text: WHAT IS THAT. WHAT!!!!
+    audioClip: {fileID: 8300000, guid: f3d7cbdf57a6c0b4cae47355a3b18b0f, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "Okay. I can just teleport us back to\u2026 wait. The signal  is getting
+      weaker."
+    audioClip: {fileID: 8300000, guid: 4e3cb8c2dff36b54fbd4b273abdfdf84, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 1
   swallowTransitionLines:
-  - text: "Oh my gosh, we\u2019re about to get eaten by this thing! Oh no no no!
-      Wait\u2026 "
-    audioClip: {fileID: 8300000, guid: 24b169ebc324f7c43b25f90405c1c509, type: 3}
-    fallbackSubtitleDuration: 2
+  - text: OH NO NO NO
+    audioClip: {fileID: 8300000, guid: 17ead2805feffd34ea5c44d1e9936ad5, type: 3}
+    fallbackSubtitleDuration: 0
     keepVisibleAfterLine: 0
-  - text: "huh? I think I\u2019m falling. And weirdly enough, the inside of this
-      monster feels\u2026 kind of safe?"
-    audioClip: {fileID: 8300000, guid: 73ed07d48802bab4f98d6789463f9897, type: 3}
-    fallbackSubtitleDuration: 2
-    keepVisibleAfterLine: 1
   mirrorChamberIntroLines:
-  - text: "I landed safely! I\u2019ll be waiting for you down here."
-    audioClip: {fileID: 8300000, guid: d3ec845a04a10174b8e2cf71a1e721d8, type: 3}
+  - text: "Well, That's so\u2026 intimate. And so loud."
+    audioClip: {fileID: 8300000, guid: 8d8927a98ae6a234e8be2f84bdad09bf, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: "It looks like this monster is made from a lot of painful memories the
-      client just couldn\u2019t forget. We need to find a way to help him."
-    audioClip: {fileID: 8300000, guid: d8bfa03b11859164dae8931520eabd10, type: 3}
-    fallbackSubtitleDuration: 2
-    keepVisibleAfterLine: 1
-  breakGlassLines:
-  - text: Look! That glass is holding a bunch of objects tied to negative emotions
-      and painful memories.
-    audioClip: {fileID: 8300000, guid: 68fcf3c7d66646544a3256defe38d1e9, type: 3}
+  - text: "Wait. Those voices\u2026 I recognize these. These are the client's painful
+      memories. The ones that were missing from the memory room. They've been trapped
+      here \u2014 trapped inside those\u2026 those containers."
+    audioClip: {fileID: 8300000, guid: b561bd7820caded4d97060b4cc5ac234, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: I think all we need to do is smash it. Therapeutic? Maybe. Effective? Definitely!
-    audioClip: {fileID: 8300000, guid: 2774120efdece994ca837ee6239550c4, type: 3}
-    fallbackSubtitleDuration: 2
-    keepVisibleAfterLine: 1
-  glassBrokenPraiseLines:
-  - text: That was amazing! You broke the glass!
-    audioClip: {fileID: 8300000, guid: e8f55c20d2e599549a4911ff77fc9915, type: 3}
+  - text: "I think\u2026 I think you need to talk to them. Each one. The voices are
+      loud because nobody's ever really answered them \u2014 just let them talk. "
+    audioClip: {fileID: 8300000, guid: b059592125585d546a3c751ae92bf6cc, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 0
-  - text: "I\u2019m detecting that the client\u2019s emotions have stabilized now.
-      Very nice work, tiny hero of the subconscious."
-    audioClip: {fileID: 8300000, guid: cf39f61b0879cd747b56b66602552a70, type: 3}
+  - text: 'Maybe if someone responds differently, something changes? I''m guessing
+      here. This is definitely not in my manual.
+
+'
+    audioClip: {fileID: 8300000, guid: 064ae7f31b17e3f40bd12eaf33164ae2, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "I'll stay close. Or as close as I can without getting in your way, keep
+      trying to reconnect to the outside. And if anything goes wrong, I'll\u2026
+      well, I'll think of something. Probably."
+    audioClip: {fileID: 8300000, guid: 84b69fbc53b698b49a9f67ff0503407b, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 1
-  returnToOfficeLines:
-  - text: I can take us back to the office now. You handled your very first job wonderfully.
-      Congratulations!
-    audioClip: {fileID: 8300000, guid: 5a3bcbe62e04e544ab3294625b212773, type: 3}
+  memoryReleasedLines:
+  - text: "It broke! On its own - you didn\u2019t even touch it! And the echo disappeared!"
+    audioClip: {fileID: 8300000, guid: 50f9cfaa48ea60843b7e7c855ff416ed, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: And look - the real memory was still there. Intact. Waiting. It just needed
+      to be understood differently.
+    audioClip: {fileID: 8300000, guid: c3d819860ac34ee4f9b1a50468f0f496, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 1
+  allMemoriesReleasedLines:
+  - text: "That\u2019s all four! Every single painful echo has been quieted. The
+      real memories - they\u2019re all free now."
+    audioClip: {fileID: 8300000, guid: 8955eb10fb2c5594cad898839e45445e, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "Can you feel that? The whole space is shifting. Without the echoes feeding
+      it, this place can\u2019t hold itself together. It\u2019s coming apart!"
+    audioClip: {fileID: 8300000, guid: 7bf96d70e001a1c4b8f336eb18142323, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "Wait - the signal! It\u2019s coming back! The connection is re-establishing.
+      I can lock onto the memory room coordinates now!"
+    audioClip: {fileID: 8300000, guid: 9ed9dd1eb5b1a8d46b9680bb12517f5e, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "I\u2019m initiating the transfer! Everyone hold on - we are LEAVING!"
+    audioClip: {fileID: 8300000, guid: 2ac80c901348e1c4c830abf6ce007cf1, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 1
+  returnToMemorySpaceLines:
+  - text: "And we\u2019re back. The memory room. Solid ground. Familiar walls. No
+      giant clowns in sight. I have never been so relieved to see this place."
+    audioClip: {fileID: 8300000, guid: 3a45a10d76ea88f43949545f9057f1ad, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: Although, that ceiling is definitely going to need some work. Structural
+      damage is NOT in our job description.
+    audioClip: {fileID: 8300000, guid: c98033ba1dc64184689626e7ed5c271d, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 0
+  - text: "Now there\u2019s one more big task ahead - the final attention redistribution
+      with all seven memories. When you\u2019re ready, hit the confirm button."
+    audioClip: {fileID: 8300000, guid: d55a84ed7a9adfe4999625fee8fd08f9, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 1
+  confirmationResponseLines:
+  - text: Final distribution confirmed! Alright - let's head back to the office and
+      see what the report says. See you on the other side!
+    audioClip: {fileID: 8300000, guid: cd553689ee52c4045a69a091c6c3b442, type: 3}
+    fallbackSubtitleDuration: 2
+    keepVisibleAfterLine: 1
+  officeReturnAndReportLines:
+  - text: "And we're back in the office! The computer should already be processing
+      the session data\u2026 yep, the report is ready. Go ahead and select 'View
+      Report' - let's see what your final distribution looks like on paper."
+    audioClip: {fileID: 8300000, guid: 7f494605ac9376c4583c8468fd9b69b5, type: 3}
     fallbackSubtitleDuration: 2
     keepVisibleAfterLine: 1
 --- !u!4 &1209064768
@@ -25512,7 +26010,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start working
+  m_text: "Start \nworking"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -25539,8 +26037,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.19
-  m_fontSizeBase: 0.19
+  m_fontSize: 0.16
+  m_fontSizeBase: 0.16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -25549,12 +26047,12 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -5.5
   m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: -3.85
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
@@ -25989,6 +26487,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1243771779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1243771780}
+  m_Layer: 0
+  m_Name: clock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1243771780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1243771779}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.021999776, y: 0, z: -0.5720006}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 665210399}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1246805543
 GameObject:
   m_ObjectHideFlags: 0
@@ -26048,7 +26577,7 @@ MonoBehaviour:
   durationWithoutAudio: 3
   openingText: Unfinished things keep chasing me like an alarm bell. I'm exhausted,
     but I still can't stop.
-  openingClip: {fileID: 0}
+  openingClip: {fileID: 8300000, guid: 91e365f50f8d57b45a1c3179ad6d7ab7, type: 3}
   round1Choices:
   - goesToRound2: 1
     nextBranchIndex: 0
@@ -26061,29 +26590,29 @@ MonoBehaviour:
   - goesToRound2: 0
     nextBranchIndex: 0
     responseText: But the work never ends... does that mean I can never stop?
-    responseClip: {fileID: 0}
+    responseClip: {fileID: 8300000, guid: 81953babad19a29428c1cc9869c0145f, type: 3}
   round2Branches:
   - choicesRoot: {fileID: 750629101}
     promptText: But if I rest, am I being irresponsible to myself and to others?
-    promptClip: {fileID: 0}
+    promptClip: {fileID: 8300000, guid: 24368a11211e6224f89bd7238dfa98bd, type: 3}
     choices:
     - responseText: Rest is not avoiding responsibility. I can stop to take care
         of myself, and then decide what to do next.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: afa7814d7ba73ec48a22ce80f7ed00c7, type: 3}
       completesMemory: 1
     - responseText: But the work never ends... does that mean I can never stop?
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: 81953babad19a29428c1cc9869c0145f, type: 3}
       completesMemory: 0
   - choicesRoot: {fileID: 2034981382}
     promptText: But every time I stop, I feel guilty, like I've done something wrong.
-    promptClip: {fileID: 0}
+    promptClip: {fileID: 8300000, guid: b6c5e139c30c9e14c83f89b826da31a1, type: 3}
     choices:
     - responseText: Rest is not avoiding responsibility. I can stop to take care
         of myself, and then decide what to do next.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: afa7814d7ba73ec48a22ce80f7ed00c7, type: 3}
       completesMemory: 1
     - responseText: But the work never ends... does that mean I can never stop?
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: 81953babad19a29428c1cc9869c0145f, type: 3}
       completesMemory: 0
   onComplete:
     m_PersistentCalls:
@@ -26121,6 +26650,42 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1681669335}
+        m_TargetAssemblyTypeName: GameStateController, Assembly-CSharp
+        m_MethodName: HandleFirstMemoryReleased
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1563328849}
+        m_TargetAssemblyTypeName: NumberHolder, Assembly-CSharp
+        m_MethodName: Add
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1563328848}
+        m_TargetAssemblyTypeName: NumberCheckUtillity, Assembly-CSharp
+        m_MethodName: CheckNumber
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 4
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
@@ -26321,7 +26886,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Explore office
+  m_text: "Explore \noffice"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -26348,8 +26913,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.19
-  m_fontSizeBase: 0.19
+  m_fontSize: 0.16
+  m_fontSizeBase: 0.16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -26358,12 +26923,12 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -5.95
   m_characterHorizontalScale: 1
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: -4.98
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
@@ -26746,7 +27311,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4283914075
-  m_fontColor: {r: 0.3584906, g: 0.33988965, b: 0.33988965, a: 1}
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -27043,7 +27608,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -27066,8 +27631,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.23750782, y: 0.41211212, z: 0.04210663}
-  m_Center: {x: -0.0017676353, y: 0.0009997487, z: -0.0034923553}
+  m_Size: {x: 0.18025379, y: 0.31767932, z: 0.022305893}
+  m_Center: {x: 0.00014402022, y: 0.001001257, z: -0.0019687132}
 --- !u!114 &1311779584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27075,7 +27640,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1311779580}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46af44fc27f29524da026e4f9f3da44d, type: 3}
   m_Name: 
@@ -28480,7 +29045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1410890458
 Transform:
   m_ObjectHideFlags: 0
@@ -28490,7 +29055,7 @@ Transform:
   m_GameObject: {fileID: 1410890457}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.09, y: 0.07, z: 0.66}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -28666,10 +29231,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 1.7
   MaxDistance: 4
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -29658,6 +30223,7 @@ RectTransform:
   - {fileID: 1659688362}
   - {fileID: 881631553}
   - {fileID: 110311887}
+  - {fileID: 166225870}
   m_Father: {fileID: 2035507199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
@@ -29816,7 +30382,7 @@ PrefabInstance:
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteractLift.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 8300000, guid: 73ed07d48802bab4f98d6789463f9897, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 2122754435223985580, guid: 9f70849d58331044695438beb06d3264, type: 3}
       propertyPath: onPrimaryInteract.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
@@ -30423,6 +30989,18 @@ PrefabInstance:
       value: memoryitem_medal
       objectReference: {fileID: 0}
     - target: {fileID: 1630870884933094347, guid: 7f0e9d4464921064896975412b214af3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 65.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630870884933094347, guid: 7f0e9d4464921064896975412b214af3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 65.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630870884933094347, guid: 7f0e9d4464921064896975412b214af3, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 51.401764
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630870884933094347, guid: 7f0e9d4464921064896975412b214af3, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
@@ -30433,6 +31011,10 @@ PrefabInstance:
     - target: {fileID: 1630870884933094347, guid: 7f0e9d4464921064896975412b214af3, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1630870884933094347, guid: 7f0e9d4464921064896975412b214af3, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -30954,14 +31536,124 @@ Transform:
   m_GameObject: {fileID: 1550377317}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.7078705, y: -4.69, z: -4.1400003}
-  m_LocalScale: {x: 1.9575, y: 0.057129998, z: 0.33716}
+  m_LocalPosition: {x: -5.71, y: -4.794, z: -4.425}
+  m_LocalScale: {x: 1.9575, y: 0.057129998, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1651872617}
   - {fileID: 793106767}
   m_Father: {fileID: 500972754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1563328846
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1563328847}
+  - component: {fileID: 1563328849}
+  - component: {fileID: 1563328848}
+  m_Layer: 0
+  m_Name: counter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1563328847
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563328846}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1749475378}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1563328848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563328846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23ed0768895dd5d4080cc87e8030a0ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NumberCheckUtillity
+  reference: {fileID: 1563328849}
+  referencePeers: []
+  onEnoughToBuy:
+    m_PersistentCalls:
+      m_Calls: []
+  onNotEnoughToBuy:
+    m_PersistentCalls:
+      m_Calls: []
+  onEqual:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1681669335}
+        m_TargetAssemblyTypeName: GameStateController, Assembly-CSharp
+        m_MethodName: HandleAllMemoriesResolved
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onGreaterThan:
+    m_PersistentCalls:
+      m_Calls: []
+  onLessThan:
+    m_PersistentCalls:
+      m_Calls: []
+  onGreaterOrEqual:
+    m_PersistentCalls:
+      m_Calls: []
+  onLessOrEqual:
+    m_PersistentCalls:
+      m_Calls: []
+  onGreatest:
+    m_PersistentCalls:
+      m_Calls: []
+  onNotGreatest:
+    m_PersistentCalls:
+      m_Calls: []
+  onLeast:
+    m_PersistentCalls:
+      m_Calls: []
+  onNotLeast:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1563328849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563328846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d4028026a139fb46b6a4cc059e7a1cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NumberHolder
+  value: 0
+  prefix: '$ '
+  suffix: ' remaining'
+  format: N2
+  textDisplay: {fileID: 0}
+  textDisplayUGui: {fileID: 0}
 --- !u!1 &1564003477
 GameObject:
   m_ObjectHideFlags: 0
@@ -31325,6 +32017,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1600193127
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1600193128}
+  m_Layer: 0
+  m_Name: medal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1600193128
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1600193127}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.38140616, y: -0.612124, z: 0.4297294, w: 0.543292}
+  m_LocalPosition: {x: 0.018, y: 0, z: -0.279}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 665210399}
+  m_LocalEulerAnglesHint: {x: 70.14, y: -96.818, z: 0}
 --- !u!1 &1609253364
 GameObject:
   m_ObjectHideFlags: 0
@@ -31605,8 +32328,8 @@ Transform:
   m_GameObject: {fileID: 1614329786}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.14999962, y: 4, z: 1.3499999}
-  m_LocalScale: {x: 6.637985, y: 0.49168, z: 2.6703897}
+  m_LocalPosition: {x: -0.14999962, y: 4, z: 0.23}
+  m_LocalScale: {x: 8.288188, y: 0.49168, z: 2.8399596}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1410890458}
@@ -32366,8 +33089,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -32907,6 +33630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameStateController
   assistantController: {fileID: 1209064767}
   officeDialogueController: {fileID: 1209064764}
+  memoryPlacementController: {fileID: 0}
   crystalBall: {fileID: 1040235613}
   screenFadeController: {fileID: 957961769}
   player: {fileID: 1165201051}
@@ -32916,6 +33640,20 @@ MonoBehaviour:
   assistantMirrorChamberSpawnPoint: {fileID: 1728560716}
   backToOfficePlayerSpawnPoint: {fileID: 1791810549}
   backToOfficeAssistantSpawnPoint: {fileID: 191871939}
+  resolvedMemoryObjects:
+  - {fileID: 1053855823}
+  - {fileID: 29040849}
+  - {fileID: 1311779581}
+  - {fileID: 957669671}
+  memoryRoomReturnPoints:
+  - {fileID: 1600193128}
+  - {fileID: 1243771780}
+  - {fileID: 1820941901}
+  - {fileID: 1697160099}
+  memoryRoomReturnParent: {fileID: 322340564}
+  memoryRoomReturnFadeOutDuration: 1
+  memoryRoomReturnFadeInDuration: 1
+  resolvedMemoriesNightmareFadeDuration: 4
   clownController: {fileID: 536313668}
   swallowController: {fileID: 1681669337}
   playerMovementLockController: {fileID: 1681669338}
@@ -32931,6 +33669,7 @@ MonoBehaviour:
   heartBeatAudio: {fileID: 1748633984}
   hippocampusFadeColor: {r: 1, g: 1, b: 1, a: 1}
   backToOfficeFadeColor: {r: 0, g: 0, b: 0, a: 1}
+  memoryRoomReturnSkybox: {fileID: 2100000, guid: ee967902b82039747804c84b35170771, type: 2}
   backToOfficeFadeOutDuration: 1
   backToOfficeFadeInDuration: 1
 --- !u!4 &1681669336
@@ -33178,6 +33917,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5636959924584143644, guid: 02af3f7645118454f94a58768dc08baf, type: 3}
   m_PrefabInstance: {fileID: 1695051729}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1697160098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1697160099}
+  m_Layer: 0
+  m_Name: pen
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1697160099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697160098}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.049, y: 0, z: 0.457}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 665210399}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1708284702
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34333,10 +35103,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 103664644}
   - {fileID: 755891858}
   - {fileID: 1246805544}
   - {fileID: 1039825878}
   - {fileID: 1994542147}
+  - {fileID: 1563328847}
   - {fileID: 1647156344}
   - {fileID: 2059921878}
   - {fileID: 695020818}
@@ -34738,10 +35510,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 1.7
   MaxDistance: 4
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -35699,6 +36471,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1820941900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1820941901}
+  m_Layer: 0
+  m_Name: phone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1820941901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1820941900}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.6266718, y: 0, z: 0, w: 0.77928334}
+  m_LocalPosition: {x: 0.0059997737, y: 0, z: 0.1949994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 665210399}
+  m_LocalEulerAnglesHint: {x: 77.61, y: 0, z: 0}
 --- !u!1 &1826628975
 GameObject:
   m_ObjectHideFlags: 0
@@ -37384,8 +38187,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283914075
-  m_fontColor: {r: 0.3584906, g: 0.33988965, b: 0.33988965, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -38575,8 +39378,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4283914075
-  m_fontColor: {r: 0.3584906, g: 0.33988965, b: 0.33988965, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -39840,7 +40643,7 @@ MonoBehaviour:
   durationWithoutAudio: 3
   openingText: No one remembers second place... maybe only first place would make
     my parents happy.
-  openingClip: {fileID: 0}
+  openingClip: {fileID: 8300000, guid: 8c745fbbc78889d458ed1977c6a2e12c, type: 3}
   round1Choices:
   - goesToRound2: 1
     nextBranchIndex: 0
@@ -39854,32 +40657,33 @@ MonoBehaviour:
     nextBranchIndex: 0
     responseText: Right... if it's not first place yet, I'm still not good enough.
       I can't stop.
-    responseClip: {fileID: 0}
+    responseClip: {fileID: 8300000, guid: bf7c3b094243a4d4dbeb23a4cd9242e0, type: 3}
   round2Branches:
   - choicesRoot: {fileID: 1338147607}
-    promptText: But now every time I submit a file, I think of that red pen.
-    promptClip: {fileID: 0}
-    choices:
-    - responseText: I can keep growing, but I don't have to wait until I'm first
-        place before I allow myself to recognize what I've already done.
-      responseClip: {fileID: 0}
-      completesMemory: 1
-    - responseText: Right... if it's not first place yet, I'm still not good enough.
-        I can't stop.
-      responseClip: {fileID: 0}
-      completesMemory: 0
-  - choicesRoot: {fileID: 2014392491}
     promptText: But if I'm satisfied with second place, does that mean I'm not ambitious
       enough?
-    promptClip: {fileID: 0}
+    promptClip: {fileID: 8300000, guid: 3753f634f0cbf504dbb9bf52e0d952e4, type: 3}
     choices:
     - responseText: I can keep growing, but I don't have to wait until I'm first
         place before I allow myself to recognize what I've already done.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: 214ba20ecd1664548bb4f3cf45527294, type: 3}
       completesMemory: 1
     - responseText: Right... if it's not first place yet, I'm still not good enough.
         I can't stop.
-      responseClip: {fileID: 0}
+      responseClip: {fileID: 8300000, guid: bf7c3b094243a4d4dbeb23a4cd9242e0, type: 3}
+      completesMemory: 0
+  - choicesRoot: {fileID: 2014392491}
+    promptText: But they always think I'm still not good enough. It's hard for me
+      to believe second place really has value.
+    promptClip: {fileID: 8300000, guid: 414493ebca713fb4d82131c5dd9a192a, type: 3}
+    choices:
+    - responseText: I can keep growing, but I don't have to wait until I'm first
+        place before I allow myself to recognize what I've already done.
+      responseClip: {fileID: 8300000, guid: 214ba20ecd1664548bb4f3cf45527294, type: 3}
+      completesMemory: 1
+    - responseText: Right... if it's not first place yet, I'm still not good enough.
+        I can't stop.
+      responseClip: {fileID: 8300000, guid: bf7c3b094243a4d4dbeb23a4cd9242e0, type: 3}
       completesMemory: 0
   onComplete:
     m_PersistentCalls:
@@ -39917,6 +40721,42 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1681669335}
+        m_TargetAssemblyTypeName: GameStateController, Assembly-CSharp
+        m_MethodName: HandleFirstMemoryReleased
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1563328849}
+        m_TargetAssemblyTypeName: NumberHolder, Assembly-CSharp
+        m_MethodName: Add
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1563328848}
+        m_TargetAssemblyTypeName: NumberCheckUtillity, Assembly-CSharp
+        m_MethodName: CheckNumber
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 4
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
@@ -40367,15 +41207,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 4ee2fa7dfb039004d861c2a2ac8c72d9, type: 3}
       propertyPath: m_LocalScale.x
-      value: 13.42
+      value: 10.39
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ee2fa7dfb039004d861c2a2ac8c72d9, type: 3}
       propertyPath: m_LocalScale.y
-      value: 13.42
+      value: 10.39
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ee2fa7dfb039004d861c2a2ac8c72d9, type: 3}
       propertyPath: m_LocalScale.z
-      value: 13.42
+      value: 10.39
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 4ee2fa7dfb039004d861c2a2ac8c72d9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41828,10 +42668,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 1.7
   MaxDistance: 4
   Pan2D: 0
-  rolloffMode: 2
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -42273,8 +43113,8 @@ Transform:
   m_GameObject: {fileID: 2130271665}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.4300003, y: 4, z: 3.81}
-  m_LocalScale: {x: 1.9138561, y: 0.49168, z: 2.334194}
+  m_LocalPosition: {x: -2.83, y: 4, z: 3.17}
+  m_LocalScale: {x: 2.4091623, y: 0.49168, z: 3.7903697}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1410890458}

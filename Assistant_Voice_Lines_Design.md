@@ -30,9 +30,8 @@
 |---|-------------|-------------|
 | 1 | "Great question! So, a Memory Organizer is kind of like… an interior designer for the mind. Except you can't knock down walls, and the furniture has feelings." | "好问题！记忆整理师呢，有点像……心灵室内设计师。不过你不能敲墙，而且所有家具都有情绪。" |
 | 2 | "Here's the important part — and I always emphasize this to new Organizers: you cannot delete, alter, or create memories. That's not how brains work, and honestly, it would be terrifying if it were." | "重点来了——我对每位新整理师都会强调这个：你不能删除、修改或创造记忆。大脑不是这么运作的，说实话，要是真能这样的话也太恐怖了。" |
-| 3 | "What you CAN do is help the client decide how much attention each memory gets right now. Think of it like… adjusting the volume knobs on different radio stations. Some memories are blasting at full volume and drowning out everything else. Some are barely audible, even though they deserve to be heard. Your job is to help rebalance the mix." | "你能做的，是帮来访者决定此时此刻每段记忆获得多少「关注度」。可以想象成……调不同电台的音量旋钮。有些记忆音量开到最大，把其他声音都盖住了。有些几乎听不到，尽管它们值得被听见。你的工作就是帮忙重新调音。" |
-| 4 | "You'll also help the client reframe some painful memories. Not rewrite them — just help them see those memories from a new angle. Like turning a scary shadow puppet to reveal it's just someone's hand." | "你还会帮来访者重新理解一些痛苦记忆。不是改写它们——只是帮他们从新角度看同一段记忆。就像把吓人的手影转个方向，发现原来只是一只手而已。" |
-| 5 | "Does that make sense? I practiced that explanation seventeen times in the mirror. The mirror was not impressed, but I think it went okay." | "讲清楚了吗？我在镜子前练习了十七遍这段说明。镜子没什么反应，但我觉得效果还行。" |
+| 3 | "What you CAN do is help the client decide how much attention each memory gets." | "你能做的，是帮来访者决定此时此刻每段记忆获得多少「关注度」。" |
+| 4 | "Does that make sense? I practiced that explanation seventeen times in the mirror. The mirror was not impressed, but I think it went okay." | "讲清楚了吗？我在镜子前练习了十七遍这段说明。镜子没什么反应，但我觉得效果还行。" |
 
 ---
 

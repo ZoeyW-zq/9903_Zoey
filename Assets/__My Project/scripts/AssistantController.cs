@@ -20,7 +20,6 @@ public class AssistantController : MonoBehaviour
 
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private TMP_Text subtitleText;
-    [SerializeField] private GameStateController gameStateController;
 
     [Header("Hippocampus Intro")]
     [SerializeField] private DialogueLine[] hippocampusIntroLines;
@@ -29,6 +28,9 @@ public class AssistantController : MonoBehaviour
     [SerializeField] private DialogueLine[] waterBottleMemoryLines;
     [SerializeField] private DialogueLine[] sunsetPhotoMemoryLines;
     [SerializeField] private DialogueLine[] legoBricksMemoryLines;
+
+    [Header("Missing Painful Memories")]
+    [SerializeField] private DialogueLine[] missingPainfulMemoryLines;
 
     [Header("Nightmare Warning")]
     [SerializeField] private DialogueLine[] nightmareWarningLines;
@@ -39,20 +41,22 @@ public class AssistantController : MonoBehaviour
     [Header("Dungeon Intro")]
     [SerializeField] private DialogueLine[] mirrorChamberIntroLines;
 
-    [Header("Break Glass")]
-    [SerializeField] private DialogueLine[] breakGlassLines;
+    [Header("Mirror Resolution")]
+    [SerializeField] private DialogueLine[] memoryReleasedLines;
+    [SerializeField] private DialogueLine[] allMemoriesReleasedLines;
+    [SerializeField] private DialogueLine[] returnToMemorySpaceLines;
 
-    [Header("Glass Broken Praise")]
-    [SerializeField] private DialogueLine[] glassBrokenPraiseLines;
-
-    [Header("Return To Office")]
-    [SerializeField] private DialogueLine[] returnToOfficeLines;
+    [Header("Final Redistribution")]
+    [SerializeField] private DialogueLine[] confirmationResponseLines;
+    [SerializeField] private DialogueLine[] officeReturnAndReportLines;
 
     private Coroutine dialogueRoutine;
-    private bool glassBrokenSequenceStarted;
     private bool waterBottleMemoryPlayed;
     private bool sunsetPhotoMemoryPlayed;
     private bool legoBricksMemoryPlayed;
+    private bool missingPainfulMemoryPlaying;
+    private bool missingPainfulMemoryPlayed;
+    private System.Action dialogueInterruptedCallback;
 
     private void Awake()
     {
@@ -93,6 +97,25 @@ public class AssistantController : MonoBehaviour
         PlayStage(legoBricksMemoryLines);
     }
 
+    public void PlayMissingPainfulMemories(System.Action onComplete = null)
+    {
+        if (missingPainfulMemoryPlayed || missingPainfulMemoryPlaying)
+        {
+            onComplete?.Invoke();
+            return;
+        }
+
+        System.Action finishMissingMemoryCue = () =>
+        {
+            missingPainfulMemoryPlaying = false;
+            missingPainfulMemoryPlayed = true;
+            onComplete?.Invoke();
+        };
+
+        missingPainfulMemoryPlaying = true;
+        PlayStage(missingPainfulMemoryLines, finishMissingMemoryCue, finishMissingMemoryCue);
+    }
+
     public void PlayNightmareWarning()
     {
         PlayStage(nightmareWarningLines);
@@ -105,26 +128,32 @@ public class AssistantController : MonoBehaviour
 
     public void PlayMirrorChamberIntro()
     {
-        glassBrokenSequenceStarted = false;
-        PlayStage(mirrorChamberIntroLines, PlayBreakGlassPrompt);
+        PlayStage(mirrorChamberIntroLines);
     }
 
-    public void PlayBreakGlassPrompt()
+    public void PlayMemoryReleased()
     {
-        PlayStage(breakGlassLines);
+        PlayStage(memoryReleasedLines);
     }
 
-    public void PlayGlassBrokenReturnSequence()
+    public void PlayAllMemoriesReleasedSequence(System.Action onComplete = null)
     {
-        if (glassBrokenSequenceStarted)
-            return;
+        PlayStage(allMemoriesReleasedLines, onComplete);
+    }
 
-        glassBrokenSequenceStarted = true;
-        SetGameState(GameStateController.GameState.BreakGlass);
-        PlayStage(glassBrokenPraiseLines, () =>
-        {
-            PlayStage(returnToOfficeLines, () => SetGameState(GameStateController.GameState.BackToOffice));
-        });
+    public void PlayReturnToMemorySpaceSequence(System.Action onComplete = null)
+    {
+        PlayStage(returnToMemorySpaceLines, onComplete);
+    }
+
+    public void PlayConfirmationResponse(System.Action onComplete = null)
+    {
+        PlayStage(confirmationResponseLines, onComplete);
+    }
+
+    public void PlayOfficeReturnAndReport(System.Action onComplete = null)
+    {
+        PlayStage(officeReturnAndReportLines, onComplete);
     }
 
     public void ClearSubtitle()
@@ -138,7 +167,10 @@ public class AssistantController : MonoBehaviour
         PlayStage(lines, onComplete);
     }
 
-    private void PlayStage(DialogueLine[] lines, System.Action onComplete = null)
+    private void PlayStage(
+        DialogueLine[] lines,
+        System.Action onComplete = null,
+        System.Action onInterrupted = null)
     {
         StopActiveDialogue();
 
@@ -148,6 +180,7 @@ public class AssistantController : MonoBehaviour
             return;
         }
 
+        dialogueInterruptedCallback = onInterrupted;
         dialogueRoutine = StartCoroutine(RunStage(lines, onComplete));
     }
 
@@ -157,8 +190,11 @@ public class AssistantController : MonoBehaviour
             StopCoroutine(dialogueRoutine);
 
         dialogueRoutine = null;
+        System.Action onInterrupted = dialogueInterruptedCallback;
+        dialogueInterruptedCallback = null;
         StopAudio();
         ClearSubtitle();
+        onInterrupted?.Invoke();
     }
 
     private void ConfigureAudioSource()
@@ -183,12 +219,6 @@ public class AssistantController : MonoBehaviour
     {
         if (subtitleText != null)
             subtitleText.text = text;
-    }
-
-    private void SetGameState(GameStateController.GameState state)
-    {
-        if (gameStateController != null)
-            gameStateController.SetState(state);
     }
 
     private bool TryPlayAudio(DialogueLine line)
@@ -256,6 +286,7 @@ public class AssistantController : MonoBehaviour
 
         StopAudio();
         dialogueRoutine = null;
+        dialogueInterruptedCallback = null;
         onComplete?.Invoke();
     }
 }

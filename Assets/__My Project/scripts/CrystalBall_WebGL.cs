@@ -43,6 +43,9 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
 
         if (value)
         {
+            if (!gameObject.activeSelf)
+                gameObject.SetActive(true);
+
             triggered = false;
             StopTransition();
             StopFadeReset();
@@ -53,9 +56,19 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
                 screenFadeController.SetAlpha(0f);
             }
         }
-        else if (!triggered)
+        else
         {
-            ResetFadeToTransparent();
+            StopTransition();
+            StopFadeReset();
+
+            if (!triggered && screenFadeController != null)
+            {
+                SetEntryFadeColor();
+                screenFadeController.SetAlpha(0f);
+            }
+
+            if (gameObject.activeSelf)
+                gameObject.SetActive(false);
         }
     }
 

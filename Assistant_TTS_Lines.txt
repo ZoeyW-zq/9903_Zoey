@@ -22,11 +22,9 @@ and may sound better if kept together.
 
 2  Here's the important part — and I always emphasize this to new Organizers: you cannot delete, alter, or create memories. That's not how brains work, and honestly, it would be terrifying if it were.
 
-3  What you CAN do is help the client decide how much attention each memory gets right now. Think of it like… adjusting the volume knobs on different radio stations. Some memories are blasting at full volume and drowning out everything else. Some are barely audible, even though they deserve to be heard. Your job is to help rebalance the mix.
+3  What you CAN do is help the client decide how much attention each memory gets. 
 
-4  You'll also help the client reframe some painful memories. Not rewrite them — just help them see those memories from a new angle. Like turning a scary shadow puppet to reveal it's just someone's hand.
-
-5  Does that make sense? I practiced that explanation seventeen times in the mirror. The mirror was not impressed, but I think it went okay.
+4  Does that make sense? I practiced that explanation seventeen times in the mirror. The mirror was not impressed, but I think it went okay.
 
 
 ========== 3. EXPLORATION DEPARTURE (explorationDepartureLines) ==========
@@ -40,14 +38,16 @@ and may sound better if kept together.
 
 1  You're back! Did you find anything interesting? I spent the time reorganizing my internal file structure. Alphabetically. It was very satisfying.
 
-2  Ready to get started for real this time? The client's been in REM for a while now — they're probably having the most interesting dreams while we chat.
+2  Ready to get started for real this time? The client's been in REM for a while now — 
+they're probably having the most interesting dreams while we chat.
 
 
 ========== 5. START WORK (startWorkLines) ==========
 
 1  Alright! Here we go. Professional mode: engaged.
 
-2  Let me pull up the client's file. One moment… and… there we are. The computer screen should be showing the case details now. Take a moment to review them — I'll wait. Again. I'm very good at waiting.
+2  Let me pull up the client's file. One moment… and… there we are. The computer screen should be showing the case details now. 
+Take a moment to review them — I'll wait. Again. I'm very good at waiting.
 
 
 ========== 6. CRYSTAL BALL INSTRUCTION (crystalBallInstructionLines) ==========
@@ -63,7 +63,7 @@ and may sound better if kept together.
 
 1  And we're here! Welcome to the memory space. Everything you see around you? These are the client's established memories, the ones that have been here for years.
 
-2  Let me explain how this works. Some of the client's recent memories are about to surface — they'll appear as physical objects you can pick up and examine. Your job is to decide how much current attention each one deserves.
+2  Let me explain how this works. These are the client's recent memories, you can pick up and examine. Your job is to decide how much current attention each one deserves.
 
 3  There are three attention zones on the wall. 'Focus' — for memories that need immediate, active attention. 'Context' — for memories that should stay available as useful background. And 'Background' — for memories that are still present and accessible, but don't need to dominate awareness right now.
 
@@ -72,17 +72,17 @@ and may sound better if kept together.
 
 ========== 8. WATER BOTTLE MEMORY (waterBottleMemoryLines) ==========
 
-1  Ah, this one… The client has a fever. Everyone else has gone home. They're drinking water, taking medicine, and just… keeping going.
+1  Ah, this one… The client has a fever. Everyone else has gone home. He's drinking water, taking medicine, and just… keeping going.
 
 
 ========== 9. SUNSET PHOTOGRAPH MEMORY (sunsetPhotoMemoryLines) ==========
 
-1  Oh, this is a beautiful one. They took this photo. Not for social media, not to show anyone. Just… because the sky looked beautiful, and that felt worth remembering.
+1  Oh, this is a beautiful one. He took this photo. Not for social media, not to show anyone. Just… because the sky looked beautiful, and that felt worth remembering.
 
 
 ========== 10. LEGO BRICKS MEMORY (legoBricksMemoryLines) ==========
 
-1  Look at this! The client spent a whole evening assembling this model — brick by brick. They fell into that deep, quiet focus where time just… disappears. There's only pure, private satisfaction. The kind that doesn't need an audience.
+1  Look at this! The client spent a whole evening assembling this model — brick by brick. He fell into that deep, quiet focus where time just… disappears. There's only pure, private satisfaction. The kind that doesn't need an audience.
 
 
 ========== 11. MISSING PAINFUL MEMORIES (deferred narrative cue) ==========
@@ -104,25 +104,23 @@ and may sound better if kept together.
 
 3  WHAT IS THAT. WHAT — is that a GIANT CLOWN?! Why is there a giant clown?! Nobody mentioned a giant clown! I read the entire case file! Twice! There was no clown appendix!
 
-4  Okay. Okay. No need to panic. I can just teleport us back to the office — one button, clean exit. Just give me a second to… wait. Why is the signal getting weaker? Oh no. Oh no no no — the connection is dropping! I can't — I can't get a lock on the office coordinates!
+4  Okay. Okay. No need to panic. I can just teleport us back to the office — one button, clean exit. Just give me a second to… wait. Why is the signal getting weaker? Oh no. Oh no no no
 
 
 ========== 13. SWALLOW TRANSITION (swallowTransitionLines) ==========
 
-1  ……… Okay. So. We're inside a giant clown now. Those are words I just said, and they are accurate. I'm processing that.
+1  Well, We're inside a giant clown now. it's so… intimate. In a terrifying way. Closed in. And so loud.
 
 
 ========== 14. MIRROR CHAMBER INTRO (mirrorChamberIntroLines) ==========
 
-1  Well, it's so… intimate. In a terrifying way. Closed in. And so loud.
+1  Wait. Those voices… I recognize these. These are the client's painful memories. The ones that were missing from the memory room. They've been trapped here — trapped inside those… those containers.
 
-2  Wait. Those voices… I recognize these. These are the client's painful memories. The ones that were missing from the memory room. They've been trapped here — trapped inside those… those containers.
+2  I think… I think you need to talk to them. Each one. The voices are loud because nobody's ever really answered them — just let them talk. 
 
-3  They've been echoing in here for so long that the client probably doesn't even hear them as memories anymore. Just as noise. Just as… 'this is who I am.' But it's not. It's just old pain on a loop.
+3 Maybe if someone responds differently, something changes? I'm guessing here. This is definitely not in my manual.
 
-4  I think… I think you need to talk to them. Each one. The voices are loud because nobody's ever really answered them — just let them talk. Maybe if someone responds differently, something changes? I'm guessing here. This is definitely not in my manual.
-
-5  I'll stay close. Or as close as I can without getting in your way, keep trying to reconnect to the outside. And if anything goes wrong, I'll… well, I'll think of something. Probably.
+4  I'll stay close. Or as close as I can without getting in your way, keep trying to reconnect to the outside. And if anything goes wrong, I'll… well, I'll think of something. Probably.
 
 
 ========== 15. MEMORY RELEASED (memoryReleasedLines) [NEW] ==========
@@ -134,7 +132,7 @@ and may sound better if kept together.
 
 ========== 16. ALL MEMORIES RELEASED (allMemoriesReleasedLines) [NEW] ==========
 
-1  That's all four! Every single painful echo has been quieted. The real memories — the medal, the clock, the phone, the pen — they're all free now.
+1  That's all four! Every single painful echo has been quieted. The real memories, they're all free now.
 
 2  Can you feel that? The whole space is… shifting. Without the echoes feeding it, this place can't hold itself together. It's coming apart!
 
@@ -149,23 +147,17 @@ and may sound better if kept together.
 
 2  ……Although. That ceiling is definitely going to need some work. I'll dispatch a repair crew later. Structural damage is NOT in our job description.
 
-3  So. That was the giant clown. Those painful memories the client had been feeding for years — they grew into something that could literally swallow us. And the only way out was to help the client hear those memories differently. You did that. Four times.
-
-4  Now there's one more big task ahead — the final attention redistribution with all seven memories. The three you placed earlier, plus the four we just freed. They're all here now. But first… let me take a moment to NOT be inside a giant anything. This is really underrated. When you're ready, just hit the confirm button — take all the time you need.
+3  Now there's one more big task ahead — the final attention redistribution with all seven memories. The three you placed earlier, plus the four we just freed. They're all here now. When you're ready, just hit the confirm button — take all the time you need.
 
 
 ========== 18. CONFIRMATION RESPONSE (NEW) ==========
 
-1  Final distribution confirmed! Alright — let's head back to the office and see what the report says. The crystal ball should still be active… give me a second to lock onto the return coordinates.
-
-2  Here we go. Smooth ride this time, I promise. No giant clowns. No digestive tracts. Just a normal, boring, wonderful teleport. See you on the other side!
+1  Final distribution confirmed! Alright — let's head back to the office and see what the report says.  See you on the other side!
 
 
 ========== 19. RETURN TO OFFICE & REPORT REVIEW (NEW) ==========
 
-1  And we're back in the office!
-
-2  The computer should already be processing the session data… yep, the report is ready. Go ahead and select 'View Report' — let's see what your final distribution looks like on paper.
+1  And we're back in the office! The computer should already be processing the session data… yep, the report is ready. Go ahead and select 'View Report' — let's see what your final distribution looks like on paper.
 
 
 ========== EDGE CASE: IDLE PROMPT ==========

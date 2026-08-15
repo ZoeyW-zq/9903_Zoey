@@ -12,16 +12,17 @@ public class GameStateController : MonoBehaviour
         TransitionToHippocampus,
         Hippocampus,
         AwaitMemoryPlacement,
+        FinalMemoryPlacement,
         GiantCrisis,
         SwallowTransition,
         MirrorChamber,
-        BreakGlass,
         BackToOffice
     }
 
     [Header("References")]
     [SerializeField] private AssistantController assistantController;
     [SerializeField] private OfficeDialogueController officeDialogueController;
+    [SerializeField] private MemoryPlacementController memoryPlacementController;
     [SerializeField] private MonoBehaviour crystalBall;
     [SerializeField] private ScreenFadeController screenFadeController;
     [SerializeField] private Transform player;
@@ -31,6 +32,14 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private Transform assistantMirrorChamberSpawnPoint;
     [SerializeField] private Transform backToOfficePlayerSpawnPoint;
     [SerializeField] private Transform backToOfficeAssistantSpawnPoint;
+
+    [Header("Resolved Memories")]
+    [SerializeField] private Transform[] resolvedMemoryObjects = new Transform[4];
+    [SerializeField] private Transform[] memoryRoomReturnPoints = new Transform[4];
+    [SerializeField] private Transform memoryRoomReturnParent;
+    [SerializeField, Min(0f)] private float memoryRoomReturnFadeOutDuration = 1f;
+    [SerializeField, Min(0f)] private float memoryRoomReturnFadeInDuration = 1f;
+    [SerializeField, Min(0f)] private float resolvedMemoriesNightmareFadeDuration = 4f;
     [SerializeField] private ClownController clownController;
     [SerializeField] private SwallowController swallowController;
     [SerializeField] private PlayerMovementLockController playerMovementLockController;
@@ -57,6 +66,9 @@ public class GameStateController : MonoBehaviour
     [SerializeField] private Color hippocampusFadeColor = Color.white;
     [SerializeField] private Color backToOfficeFadeColor = Color.black;
 
+    [Header("Memory Room Return Environment")]
+    [SerializeField] private Material memoryRoomReturnSkybox;
+
     [Header("Back To Office Transition")]
     [SerializeField] private float backToOfficeFadeOutDuration = 1f;
     [SerializeField] private float backToOfficeFadeInDuration = 1f;
@@ -70,6 +82,8 @@ public class GameStateController : MonoBehaviour
     private Coroutine giantCrisisRoutine;
     private Coroutine hippocampusParticleRoutine;
     private float hippocampusParticleNormalEmissionRate;
+    private bool firstMemoryReleasedResponsePlayed;
+    private bool memoryRoomReturnStarted;
 
     private void Awake()
     {
@@ -95,15 +109,31 @@ public class GameStateController : MonoBehaviour
         EnterState(state);
     }
 
-    public void HandleFinalChamberGlassShattered()
+    public void HandleAllMemoriesResolved()
     {
-        if (state != GameState.MirrorChamber)
+        if (state != GameState.MirrorChamber || memoryRoomReturnStarted)
             return;
 
+        memoryRoomReturnStarted = true;
+        StartResolvedMemoriesNightmareFadeOut();
+        StartCoroutine(ReturnToMemoryRoomRoutine());
+    }
+
+    public void HandleFirstMemoryReleased()
+    {
+        if (state != GameState.MirrorChamber || firstMemoryReleasedResponsePlayed)
+            return;
+
+        firstMemoryReleasedResponsePlayed = true;
+
         if (assistantController != null)
-            assistantController.PlayGlassBrokenReturnSequence();
-        else
-            SetState(GameState.BackToOffice);
+            assistantController.PlayMemoryReleased();
+    }
+
+    // Kept only so the imported breakable-glass package remains source-compatible.
+    // The WebGL scene no longer uses a manual glass-shatter transition.
+    public void HandleFinalChamberGlassShattered()
+    {
     }
 
     public void ReleaseClownPlayerControl()
@@ -154,6 +184,15 @@ public class GameStateController : MonoBehaviour
                 SetActiveSceneRoot(SceneRoot.Hippo);
                 break;
 
+            case GameState.FinalMemoryPlacement:
+                SetActiveSceneRoot(SceneRoot.Hippo);
+
+                if (memoryPlacementController != null)
+                    memoryPlacementController.BeginFinalPlacement();
+                else
+                    Debug.LogWarning("GameStateController: MemoryPlacementController is not assigned.", this);
+                break;
+
             case GameState.GiantCrisis:
                 giantCrisisRoutine = StartCoroutine(EnterGiantCrisisRoutine());
                 break;
@@ -166,11 +205,6 @@ public class GameStateController : MonoBehaviour
                 SetActiveSceneRoot(SceneRoot.Dungeon);
                 MoveToSpawn(assistantRobot, assistantMirrorChamberSpawnPoint);
                 assistantController.PlayMirrorChamberIntro();
-                break;
-
-            case GameState.BreakGlass:
-                SetActiveSceneRoot(SceneRoot.Dungeon);
-                StartVolumeTransition(VolumeTransitionSlot.Nightmare, 0f, false);
                 break;
 
             case GameState.BackToOffice:
@@ -451,12 +485,35 @@ public class GameStateController : MonoBehaviour
             clownController.StartCrisisSequence();
     }
 
-    private IEnumerator FadeVolumeWeight(Volume volume, float targetWeight, bool activateBeforeFade)
+    private void StartResolvedMemoriesNightmareFadeOut()
+    {
+        StopVolumeTransition(VolumeTransitionSlot.Nightmare);
+        nightmareVolumeRoutine = StartCoroutine(FadeResolvedMemoriesNightmareVolume());
+    }
+
+    private IEnumerator FadeResolvedMemoriesNightmareVolume()
+    {
+        yield return FadeVolumeWeight(
+            globalVolumeNightmare,
+            0f,
+            false,
+            resolvedMemoriesNightmareFadeDuration
+        );
+        nightmareVolumeRoutine = null;
+    }
+
+    private IEnumerator FadeVolumeWeight(
+        Volume volume,
+        float targetWeight,
+        bool activateBeforeFade,
+        float duration = -1f)
     {
         if (volume == null)
             yield break;
 
         targetWeight = Mathf.Clamp01(targetWeight);
+        if (duration < 0f)
+            duration = globalVolumeFadeDuration;
 
         if (activateBeforeFade && !volume.gameObject.activeSelf)
         {
@@ -468,7 +525,7 @@ public class GameStateController : MonoBehaviour
 
         float startWeight = volume.weight;
 
-        if (globalVolumeFadeDuration <= 0f || Mathf.Approximately(startWeight, targetWeight))
+        if (duration <= 0f || Mathf.Approximately(startWeight, targetWeight))
         {
             volume.weight = targetWeight;
             yield break;
@@ -476,10 +533,10 @@ public class GameStateController : MonoBehaviour
 
         float elapsed = 0f;
 
-        while (elapsed < globalVolumeFadeDuration)
+        while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsed / globalVolumeFadeDuration);
+            float progress = Mathf.Clamp01(elapsed / duration);
             volume.weight = Mathf.Lerp(startWeight, targetWeight, progress);
             yield return null;
         }
@@ -487,10 +544,116 @@ public class GameStateController : MonoBehaviour
         volume.weight = targetWeight;
     }
 
+    private void ApplyMemoryRoomReturnSkybox()
+    {
+        if (memoryRoomReturnSkybox == null)
+            return;
+
+        RenderSettings.skybox = memoryRoomReturnSkybox;
+        DynamicGI.UpdateEnvironment();
+    }
+
     private void MovePlayerAndAssistantToOffice()
     {
         MoveToSpawn(player, backToOfficePlayerSpawnPoint);
         MoveToSpawn(assistantRobot, backToOfficeAssistantSpawnPoint);
+    }
+
+    private IEnumerator ReturnToMemoryRoomRoutine()
+    {
+        bool releaseDialogueComplete = assistantController == null;
+
+        if (assistantController != null)
+        {
+            assistantController.PlayAllMemoriesReleasedSequence(() => releaseDialogueComplete = true);
+
+            while (!releaseDialogueComplete)
+                yield return null;
+        }
+
+        if (screenFadeController != null)
+        {
+            screenFadeController.SetColor(backToOfficeFadeColor);
+            yield return screenFadeController.FadeTo(1f, memoryRoomReturnFadeOutDuration);
+        }
+
+        SetActiveSceneRoot(SceneRoot.Hippo);
+        ApplyMemoryRoomReturnSkybox();
+        SwitchToHippocampusVolume();
+        RestoreHippocampusParticles();
+        SetCrystalBallEnabled(false);
+        MoveToSpawn(player, hippocampusSpawnPoint);
+        MoveToSpawn(assistantRobot, assistantHippocampusSpawnPoint);
+        RestoreResolvedMemoryObjects();
+        SetState(GameState.FinalMemoryPlacement);
+
+        if (screenFadeController != null)
+            yield return screenFadeController.FadeTo(0f, memoryRoomReturnFadeInDuration);
+
+        bool returnDialogueComplete = assistantController == null;
+        if (assistantController != null)
+        {
+            assistantController.PlayReturnToMemorySpaceSequence(() => returnDialogueComplete = true);
+
+            while (!returnDialogueComplete)
+                yield return null;
+        }
+
+        memoryRoomReturnStarted = false;
+    }
+
+    private void RestoreResolvedMemoryObjects()
+    {
+        if (resolvedMemoryObjects == null)
+            return;
+
+        Transform parent = memoryRoomReturnParent != null
+            ? memoryRoomReturnParent
+            : hippoRoot != null ? hippoRoot.transform : null;
+        Vector3 fallbackOrigin = hippocampusSpawnPoint != null
+            ? hippocampusSpawnPoint.position
+            : parent != null ? parent.position : Vector3.zero;
+
+        for (int i = 0; i < resolvedMemoryObjects.Length; i++)
+        {
+            Transform memoryObject = resolvedMemoryObjects[i];
+            if (memoryObject == null)
+                continue;
+
+            if (parent != null)
+                memoryObject.SetParent(parent, true);
+
+            Transform returnPoint = memoryRoomReturnPoints != null && i < memoryRoomReturnPoints.Length
+                ? memoryRoomReturnPoints[i]
+                : null;
+
+            if (returnPoint != null)
+            {
+                memoryObject.SetPositionAndRotation(returnPoint.position, returnPoint.rotation);
+            }
+            else
+            {
+                int column = i % 2;
+                int row = i / 2;
+                memoryObject.position = fallbackOrigin + new Vector3(column * 0.45f, 0.35f + row * 0.3f, row * 0.35f);
+                memoryObject.rotation = Quaternion.identity;
+            }
+
+            memoryObject.gameObject.SetActive(true);
+
+            Rigidbody body = memoryObject.GetComponent<Rigidbody>();
+            if (body != null)
+            {
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+                body.isKinematic = false;
+                body.useGravity = true;
+            }
+
+            Holdable holdable = memoryObject.GetComponent<Holdable>();
+            if (holdable != null)
+                holdable.enabled = true;
+        }
     }
 
     private void MoveToSpawn(Transform target, Transform spawnPoint)

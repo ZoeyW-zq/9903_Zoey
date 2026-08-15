@@ -1,21 +1,40 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class MemoryPlacementController : MonoBehaviour
 {
-    [Header("Required memories")]
-    [SerializeField] private List<MemoryPlacementItem> requiredItems = new();
+    private enum PlacementPhase
+    {
+        Initial,
+        Suspended,
+        Final,
+        Completed
+    }
+
+    [Header("Required Memories")]
+    [FormerlySerializedAs("requiredItems")]
+    [SerializeField] private List<MemoryPlacementItem> initialRequiredItems = new();
+    [SerializeField] private List<MemoryPlacementItem> finalRequiredItems = new();
+    [SerializeField] private Transform memoryRoomItemsRoot;
+
+    [Header("Initial Memory Room Flow")]
+    [SerializeField] private AssistantController assistantController;
+    [SerializeField, Min(1)] private int missingMemoryCueCount = 2;
+    [SerializeField] private ClownController clownController;
 
     [Header("Confirmation")]
     [SerializeField] private TMP_Text feedbackText;
     [SerializeField] private string incompleteMessage =
         "Not all memory items have been placed. Please finish placing them and try again.";
-    [SerializeField] private string successMessage = "Placement confirmed.";
-    [SerializeField] private ClownController clownController;
 
     private readonly Dictionary<MemoryPlacementItem, MemoryPlacementZoneType> itemZones = new();
-    private bool confirmed;
+    private readonly Dictionary<MemoryPlacementItem, MemoryPlacementZoneType> savedInitialZones = new();
+    private PlacementPhase phase = PlacementPhase.Initial;
+    private bool missingMemoryCueStarted;
+    private bool missingMemoryCueComplete;
+    private bool crisisPending;
 
     private void Awake()
     {
@@ -24,16 +43,19 @@ public class MemoryPlacementController : MonoBehaviour
 
     public void SetItemZone(MemoryPlacementItem item, MemoryPlacementZoneType zoneType)
     {
-        if (!requiredItems.Contains(item) || confirmed)
+        if (!IsRequiredInCurrentPhase(item))
             return;
 
         itemZones[item] = zoneType;
         HideFeedback();
+
+        if (phase == PlacementPhase.Initial)
+            EvaluateInitialMemoryRoomProgress();
     }
 
     public void ClearItemZone(MemoryPlacementItem item, MemoryPlacementZoneType zoneType)
     {
-        if (confirmed)
+        if (!IsRequiredInCurrentPhase(item))
             return;
 
         if (itemZones.TryGetValue(item, out MemoryPlacementZoneType currentZone)
@@ -46,25 +68,58 @@ public class MemoryPlacementController : MonoBehaviour
 
     public void ConfirmPlacement()
     {
-        if (confirmed)
+        if (phase != PlacementPhase.Final)
             return;
 
-        if (!AreAllItemsPlaced())
+        if (!AreAllItemsPlaced(finalRequiredItems))
         {
             ShowFeedback(incompleteMessage);
             return;
         }
 
-        confirmed = true;
-        ShowFeedback(successMessage);
+        phase = PlacementPhase.Completed;
+        HideFeedback();
 
-        if (clownController != null)
-            clownController.TriggerCrisis();
+        if (assistantController != null)
+            assistantController.PlayConfirmationResponse();
+        else
+            Debug.LogWarning("MemoryPlacementController: AssistantController is not assigned.", this);
     }
 
     public bool AreAllItemsPlaced()
     {
-        if (requiredItems.Count == 0)
+        return phase == PlacementPhase.Final
+            ? AreAllItemsPlaced(finalRequiredItems)
+            : phase == PlacementPhase.Initial && AreAllItemsPlaced(initialRequiredItems);
+    }
+
+    public void BeginFinalPlacement()
+    {
+        if (phase == PlacementPhase.Final || phase == PlacementPhase.Completed)
+            return;
+
+        itemZones.Clear();
+
+        foreach (KeyValuePair<MemoryPlacementItem, MemoryPlacementZoneType> placement in savedInitialZones)
+        {
+            if (placement.Key != null && finalRequiredItems.Contains(placement.Key))
+                itemZones[placement.Key] = placement.Value;
+        }
+
+        phase = PlacementPhase.Final;
+
+        foreach (MemoryPlacementItem item in initialRequiredItems)
+        {
+            if (item != null)
+                item.RestoreAfterRoomReturn();
+        }
+
+        HideFeedback();
+    }
+
+    private bool AreAllItemsPlaced(List<MemoryPlacementItem> requiredItems)
+    {
+        if (requiredItems == null || requiredItems.Count == 0)
             return false;
 
         foreach (MemoryPlacementItem item in requiredItems)
@@ -75,6 +130,112 @@ public class MemoryPlacementController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void EvaluateInitialMemoryRoomProgress()
+    {
+        if (phase != PlacementPhase.Initial
+            || initialRequiredItems == null
+            || initialRequiredItems.Count == 0)
+            return;
+
+        int placedCount = GetPlacedItemCount(initialRequiredItems);
+        int cueCount = Mathf.Clamp(missingMemoryCueCount, 1, initialRequiredItems.Count);
+
+        if (!missingMemoryCueStarted && placedCount >= cueCount)
+        {
+            missingMemoryCueStarted = true;
+
+            if (assistantController != null)
+            {
+                assistantController.PlayMissingPainfulMemories(OnMissingMemoryCueComplete);
+            }
+            else
+            {
+                missingMemoryCueComplete = true;
+            }
+        }
+
+        if (AreAllItemsPlaced(initialRequiredItems))
+        {
+            crisisPending = true;
+            PreserveInitialPlacementsForReturn();
+            HideFeedback();
+            TryTriggerPendingCrisis();
+        }
+    }
+
+    private int GetPlacedItemCount(List<MemoryPlacementItem> requiredItems)
+    {
+        int count = 0;
+
+        foreach (MemoryPlacementItem item in requiredItems)
+        {
+            if (item != null && itemZones.TryGetValue(item, out MemoryPlacementZoneType zoneType)
+                && zoneType != MemoryPlacementZoneType.None)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+    private bool IsRequiredInCurrentPhase(MemoryPlacementItem item)
+    {
+        if (item == null)
+            return false;
+
+        if (phase == PlacementPhase.Initial)
+            return initialRequiredItems.Contains(item);
+
+        if (phase == PlacementPhase.Final)
+            return finalRequiredItems.Contains(item);
+
+        return false;
+    }
+
+    private void PreserveInitialPlacementsForReturn()
+    {
+        phase = PlacementPhase.Suspended;
+        savedInitialZones.Clear();
+
+        foreach (MemoryPlacementItem item in initialRequiredItems)
+        {
+            if (item == null)
+                continue;
+
+            if (itemZones.TryGetValue(item, out MemoryPlacementZoneType zoneType)
+                && zoneType != MemoryPlacementZoneType.None)
+            {
+                savedInitialZones[item] = zoneType;
+            }
+
+            item.SaveForRoomReturn(memoryRoomItemsRoot);
+        }
+    }
+
+    private void OnMissingMemoryCueComplete()
+    {
+        missingMemoryCueComplete = true;
+        TryTriggerPendingCrisis();
+    }
+
+    private void TryTriggerPendingCrisis()
+    {
+        if (!crisisPending || (missingMemoryCueStarted && !missingMemoryCueComplete))
+            return;
+
+        crisisPending = false;
+
+        if (clownController != null)
+        {
+            clownController.TriggerCrisis();
+        }
+        else
+        {
+            Debug.LogError("MemoryPlacementController: ClownController is not assigned.", this);
+        }
     }
 
     private void ShowFeedback(string message)

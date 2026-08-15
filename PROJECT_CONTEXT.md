@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-08-10
+Last updated: 2026-08-15
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -10,11 +10,11 @@ This is a Unity VR narrative/interactive experience built on top of the EZPZ Int
 
 The current custom game appears to be a memory/brain-themed VR experience. The player starts in an office-like space, interacts with a crystal ball, transitions into the Hippocampus area, places or reviews memory-related content, and eventually enters a Nightmare/Giant Clown crisis sequence. The Nightmare sequence includes a giant clown approaching, manipulating the roof, grabbing the player, moving the player toward the clown's mouth, then transitioning into a swallow/fall sequence and finally into a Mirror Chamber.
 
-The current development focus (as of 2026-08-10) is implementing the planned narrative stages incrementally, with current work focused on the WebGL scene:
+The current development focus (as of 2026-08-15) is implementing the planned narrative stages incrementally, with current work focused on the WebGL scene:
 
-- **Stage 1 (Office)**: Branching dialogue with fixed-text buttons, crystal ball entry, and office → Hippocampus transition — **implemented**.
-- **Stage 2 (Memory Room)**: Three surface-memory objects, per-object assistant dialogue, three placement zones (Focus / Context / Background), and EZPZ-button confirmation are connected in `scene_WebGL.unity`. Successful confirmation triggers the Giant Crisis — **main framework implemented and basic validation successful; detailed validation and one deferred narrative cue remain**.
-- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **`MemoryDialogueController` script implemented (2026-08-09); four deep-memory 3D models imported; scene binding and per-mirror dialogue content are the next steps**.
+- **Stage 1 (Office)**: Branching dialogue with fixed-text buttons, a gated client-report reading step, crystal ball entry, and office → Hippocampus transition — **implemented; new Finish Reading and screen-content Inspector bindings still need to be assigned in WebGL**.
+- **Stage 2 (Memory Room)**: Three surface-memory objects, per-object assistant dialogue, and three placement zones (Focus / Context / Background) are connected in `scene_WebGL.unity`. Placing the second object triggers the missing-painful-memories cue; placing all three automatically triggers the Giant Crisis without waiting for Confirm — **implemented; WebGL Play Mode validation remains**.
+- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **four mirror controllers and completion events are connected in the WebGL scene; each successful mirror increments the DungeonRoot counter, and the all-four completion method returns the player, assistant, and freed objects to HippoRoot. The new resolution dialogue audio is bound; WebGL Play Mode validation and explicit return-point placement remain**.
 - **Stage 4 (Final Redistribution)**: Seven-object attention placement — **not yet started**.
 - **Stage 5 (Office Report)**: Compositional report generation — **not yet started**.
 
@@ -520,12 +520,13 @@ Important scripts:
 
 - `OfficeDialogueController.cs`
   - Controls the office-stage branching dialogue and choice system.
-  - Uses three named button references (not a dynamic array): `jobExplanationButton`, `exploreOfficeButton`, `startWorkButton`.
+  - Uses five named references (not a dynamic array): the three initial choice buttons, `finishReadingButton`, and `computerScreenContent`.
   - Button text is pre-set in the hierarchy — code only controls visibility, never changes labels.
   - Implements the Planned Design flow: greetings → choices → job explanation / explore / start work.
   - `exploreOfficeButton` serves double duty as both initial exploration and re-exploration (merged with the old `waitALittleButton`).
   - `IsJobExplanationAvailable` only requires `!HasHeardJobExplanation` — exploring no longer hides the "Learn about the role" button.
-  - `SelectStartWork()` hides all buttons, plays start-work dialogue, then transitions to `AwaitCrystalBall`. The UnityEvent on `startWorkButton` is expected to handle showing the crystal ball and PC screen via `GameObject.SetActive(true)`.
+  - `SelectStartWork()` hides all buttons and plays start-work dialogue. When that dialogue completes, `computerScreenContent` is activated and `finishReadingButton` becomes visible. `FinishReading()` is the only path that then enters `AwaitCrystalBall` and starts the crystal-ball instruction dialogue.
+  - The computer screen and reading-confirmation UI are local Office dialogue concerns. The Start Work and Finish Reading buttons should have empty persistent `Button.onClick` lists because `OfficeDialogueController.Awake()` registers both callbacks in code.
 
 - `CrystalBall.cs` (VR)
   - Detects when the player's hand stays near the crystal ball.
@@ -537,6 +538,7 @@ Important scripts:
   - Simpler click-to-transition crystal ball for WebGL (no hand-tracking / haptic logic).
   - Public `Transition()` method starts a white fade and then calls `SetState(TransitionToHippocampus)`.
   - Implements `ICrystalBallEntry` so `GameStateController.SetCrystalBallEnabled()` works identically to VR.
+  - Crystal-ball availability remains owned by `GameStateController`: entering `AwaitCrystalBall` calls `SetEnabled(true)`, which activates the WebGL crystal-ball GameObject; leaving that state disables and hides it.
 
 - `ScreenFadeController.cs`
   - Controls fade image alpha and color.
@@ -545,9 +547,8 @@ Important scripts:
 
 - `AssistantController.cs`
   - Controls assistant dialogue lines and stages.
-  - **Implemented dialogue arrays**: Hippocampus intro, per-object memory reveal (water bottle / sunset photo / LEGO bricks, each with a one-shot guard), Nightmare warning, Swallow Transition, Mirror Chamber intro.
-  - **New arrays needed** (per dialogue design): `memoryReleasedLines` (per-mirror auto-shatter reaction), `allMemoriesReleasedLines` (all four resolved, signal restored, active teleport out), `returnToOfficeLines` rewritten as return-to-memory-space (ceiling damage, seven-object redistribution intro).
-  - **New arrays needed for Stage 4**: confirmation response (post-confirm teleport back to office), return-to-office & report review (merged office arrival + report ready).
+  - **Implemented dialogue arrays**: Hippocampus intro, per-object memory reveal (water bottle / sunset photo / LEGO bricks, each with a one-shot guard), missing painful memories, Nightmare warning, Swallow Transition, Mirror Chamber intro, `memoryReleasedLines`, `allMemoriesReleasedLines`, `returnToMemorySpaceLines`, final confirmation response, and office return/report review.
+  - `swallowTransitionLines` is still empty in `scene_WebGL.unity`; `PlaySwallowTransition()` currently produces no line until subtitle/audio data is assigned.
   - **Stage 5 TBD**: client message and closing lines pending outcome variant design.
   - The old `breakGlassLines` and `glassBrokenPraiseLines` arrays are deprecated — the player no longer manually breaks a glass wall. Each mirror auto-shatters when its conversation resolves successfully.
 
@@ -576,14 +577,15 @@ Important scripts:
 - `MemoryPlacementController.cs`
   - Owns the list of memory items required for the current placement stage.
   - Tracks each required item's current zone by object reference rather than using the old EZPZ `NumberHolder` / `NumberCheckUtillity` counter approach.
-  - Rejects confirmation until every required item is in a valid zone.
-  - Displays an incomplete or successful confirmation message through an assigned TextMeshPro component.
-  - Calls `ClownController.TriggerCrisis()` after successful preliminary confirmation.
-  - The same controller can later support the seven-object stage by assigning seven required items, but it does not yet expose final placement data to the office report system.
+  - Plays the missing-painful-memories Assistant cue once two required objects are in valid zones.
+  - Automatically calls `ClownController.TriggerCrisis()` once all three initial objects are in valid zones; preliminary Confirm is no longer required.
+  - Picking up the third object may interrupt the missing-memory cue; interruption counts as completing that cue so automatic crisis progression cannot stall.
+  - This instance is a one-shot initial-room controller. Stage 4 should use a separate final-redistribution controller because this controller stays confirmed after the first three objects and contains automatic Giant Crisis behavior.
 
 - **`MemoryDialogueController.cs`** (NEW — 2026-08-09)
   - Implements the two-round mirror conversation system for Stage 3 (Giant Interior / Deep Memory Crisis).
   - Data-driven: all dialogue text and audio clips are configured through serialized fields in the Inspector.
+  - While an unresolved deep-memory controller is active, its assigned `openingClip` loops as the memory's ambient internal voice. Beginning a conversation stops the loop and plays the opening line once as part of the dialogue. After any failed Round 1 or Round 2 response finishes, closing the dialogue restores the opening loop. Successful completion and GameObject deactivation stop it permanently.
   - Conversation flow:
     1. Player enters the mirror's trigger area — a `Start Conversation` button appears.
     2. `BeginConversation()` plays an opening line and shows three Round 1 choices.
@@ -679,21 +681,18 @@ Current `scene_WebGL.unity` setup:
   - `Focus` uses `MemoryPlacementZoneType.Focus`.
   - `Context` uses `MemoryPlacementZoneType.Context`.
   - `Background` uses `MemoryPlacementZoneType.Background`.
-- The confirmation control is an EZPZ Button prefab, not a `UnityEngine.UI.Button`.
-- The EZPZ button's `InteractableGeneral.onPrimaryInteract` event calls `MemoryPlacementController.ConfirmPlacement()`.
-- The button remains physically interactive before placement is complete. An early click displays the incomplete-placement message and does not advance the state.
-- The controller's assigned TextMeshPro child is hidden initially and whenever placement changes.
-- A valid click displays the success message once and calls `ClownController.TriggerCrisis()`.
+- The existing EZPZ Confirm button remains in the scene for later final-redistribution work, but it is not required to start the initial Giant Crisis.
+- The initial crisis is driven by placement-zone occupancy: two unique objects trigger the missing-memory cue and all three trigger the crisis.
+- The Confirm button is still bound to the initial three-object `MemoryPlacementController`; it must be rebound or routed to a Stage 4 controller before final redistribution is implemented.
 - `ClownController.TriggerCrisis()` guards against duplicate activation and changes the game state to `GiantCrisis`.
 
-This setup is connected in the scene, but the full interaction must still be verified in WebGL Play Mode: enter and leave each zone, move an item between zones, press Confirm early, place all three items, and confirm that the crisis begins exactly once.
+This setup is connected in the scene, but the full interaction must still be verified in WebGL Play Mode: enter and leave each zone, move an item between zones, confirm the second placement starts the missing-memory cue, pick up the third distinct object while that cue is playing, and confirm that the crisis begins exactly once after the third placement.
 
 Deferred Stage 2 detail:
 
 - After the second surface-memory object is placed, the assistant should notice that the painful memories are missing.
-- A supporting light fluctuation, low sound, or subtle room vibration should hint that those memories have collected elsewhere.
-- This narrative/environmental cue is intentionally deferred until after the main Stage 3-5 framework is complete. Remind the developer about it during later polish, detailed validation, or Stage 2 completion work.
-- Basic validation of the current Stage 2 placement and confirmation flow has been successful. Detailed edge-case and presentation validation is also deferred until the overall flow is complete.
+- A supporting light fluctuation, low sound, or subtle room vibration could still reinforce that those memories have collected elsewhere.
+- The missing-memory dialogue cue is implemented; environmental reinforcement remains optional polish.
 
 ## Game State Flow
 
@@ -1036,9 +1035,9 @@ Important IK note:
 
 - Verify in WebGL Play Mode that each required memory is detected when entering and leaving every placement zone, especially if the object has multiple colliders.
 - Verify that moving a memory directly from one zone to another leaves it assigned only to the new zone.
-- Verify that an early Confirm click shows the incomplete message, while a valid Confirm click shows success and starts `GiantCrisis` exactly once.
-- If confirmation messages are changed to Chinese, the assigned TextMeshPro font asset must contain the required CJK glyphs.
-- The success message is shown immediately before the crisis starts; its practical on-screen duration depends on the crisis visual timing and may need a deliberate delay if players cannot read it.
+- Verify that the second uniquely placed object triggers the missing-memory dialogue exactly once.
+- Verify that the third uniquely placed object starts `GiantCrisis` exactly once without a Confirm interaction.
+- The final-distribution confirmation and office-report dialogue arrays are populated, but their Stage 4/5 transition wiring is not implemented yet.
 - If `footstepsAudio` is looping, the crisis coroutine will wait forever before rumble/animation starts.
 - If `handIKTarget` or `playerHead` is missing, the grab stage now stops and logs an error instead of continuing.
 - If `grabAnchor` is placed poorly on the hand skeleton, the player/roof may appear offset even if script logic is correct.
@@ -1054,9 +1053,9 @@ Important IK note:
 
 ### MemoryDialogueController Scene Setup
 
-The `MemoryDialogueController` is implemented but not yet connected in the scene (`scene_WebGL.unity`). The following setup steps are needed for each of the four mirrors:
+The four `MemoryDialogueController` instances are connected in the WebGL scene. The following Inspector checks are still required after importing or changing scene content:
 
-1. Add a `MemoryDialogueController` component to each mirror's root or a dedicated dialogue GameObject.
+1. Confirm each mirror's `MemoryDialogueController` has the correct UI, audio, and dialogue references.
 2. Configure the serialized fields:
    - **UI**: assign `startButtonRoot`, `dialogueRoot`, `round1ChoicesRoot`, `dialogueText` (TMP).
    - **Audio**: assign `dialogueAudioSource`.
@@ -1071,13 +1070,12 @@ The `MemoryDialogueController` is implemented but not yet connected in the scene
 
 ### Stage 3 Next Steps
 
-- Create prefabs for each of the four deep-memory 3D objects (medal, clock, phone, red pen).
-- Place the four mirrors and their assigned memory objects in the Mirror Chamber (scene_WebGL.unity).
-- Set up the `MemoryDialogueController` on each mirror with the planned dialogue scripts (see Planned Deep-Memory Dialogue Scripts section).
-- Wire the `onComplete` UnityEvent to swap the mirror back to the memory object.
+- Add and position four explicit `memoryRoomReturnPoints` under `HippoRoot`, then bind them in Medal / Clock / Phone / Pen order. The current array is empty and uses temporary fallback positions.
+- Add the missing `swallowTransitionLines` subtitle and bind its audio clip when available.
 - Test the full flow: enter area → start conversation → round 1 → harmful exit vs. round 2 → success exit vs. harmful exit.
 - Ensure all four mirrors can be completed in any order.
-- Wire the completion of all four mirrors to dissolve the Giant Clown space and trigger the transition back to the Memory Room.
+- Verify the completion event dissolves the Giant Clown space and returns the player, assistant, and four freed objects to the Memory Room.
+- Decide how per-memory `PlayMemoryReleased()` reactions should be coordinated. They are not currently called by the four mirror completion events, and directly adding the event to every mirror would make the fourth reaction immediately compete with the all-four sequence.
 
 ## Verification Pattern
 
