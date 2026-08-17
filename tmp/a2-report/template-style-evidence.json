@@ -1,0 +1,126 @@
+{
+  "input": "E:\\Desktop\\9903NarrativeAndSensemaking\\A2\\DDES9903 - A2 - Suggested Template.docx",
+  "fonts_by_char_count": {
+    "Aptos": 4769,
+    "Segoe UI": 22
+  },
+  "direct_run_formatting_runs": 210,
+  "direct_paragraph_formatting_paragraphs": 57,
+  "heading_like_paragraphs_not_heading_style": [
+    {
+      "para_index": 1,
+      "text": "DDES9903 \u2013 A2 Report Template",
+      "style": "Normal"
+    },
+    {
+      "para_index": 5,
+      "text": "-----------\nSummary",
+      "style": "Normal"
+    },
+    {
+      "para_index": 9,
+      "text": "Narrative State Network",
+      "style": "Normal"
+    },
+    {
+      "para_index": 13,
+      "text": "Player Agency",
+      "style": "Normal"
+    },
+    {
+      "para_index": 16,
+      "text": "Narrative Coherence",
+      "style": "Normal"
+    },
+    {
+      "para_index": 19,
+      "text": "Use of Space",
+      "style": "Normal"
+    },
+    {
+      "para_index": 36,
+      "text": "Use of Embodied Actions and/or Enacted Elements",
+      "style": "Normal"
+    },
+    {
+      "para_index": 40,
+      "text": "Collaborative Practice",
+      "style": "Normal"
+    },
+    {
+      "para_index": 46,
+      "text": "Academic References",
+      "style": "Normal"
+    },
+    {
+      "para_index": 50,
+      "text": "Asset Citations",
+      "style": "Normal"
+    },
+    {
+      "para_index": 62,
+      "text": "\n\nAI Acknowledgements",
+      "style": "Normal"
+    }
+  ],
+  "examples": {
+    "direct_run_formatting": [
+      {
+        "para_index": 1,
+        "run_text": "DDES9903 \u2013 A",
+        "style": "Normal"
+      },
+      {
+        "para_index": 1,
+        "run_text": "2",
+        "style": "Normal"
+      },
+      {
+        "para_index": 1,
+        "run_text": " Report Template",
+        "style": "Normal"
+      },
+      {
+        "para_index": 3,
+        "run_text": "Some parts of t",
+        "style": "Normal"
+      },
+      {
+        "para_index": 3,
+        "run_text": "his template ",
+        "style": "Normal"
+      }
+    ],
+    "direct_paragraph_formatting": [
+      {
+        "para_index": 9,
+        "text": "Narrative State Network",
+        "style": "Normal"
+      },
+      {
+        "para_index": 10,
+        "text": "Use your favourite diagram tool to create a Narrative State Network. Some suggested ones are: Miro, Canva, Microsoft Pow",
+        "style": "Normal"
+      },
+      {
+        "para_index": 11,
+        "text": "Remember, Narrative State Networks are discussed here:\nhttps://moodle.telt.unsw.edu.au/mod/page/view.php?id=7603523 ",
+        "style": "Normal"
+      },
+      {
+        "para_index": 12,
+        "text": "More generally, incorporating audience agency, or a sense of user freedom is discussed in the Week 8 materials.\n\nYour Na",
+        "style": "Normal"
+      },
+      {
+        "para_index": 13,
+        "text": "Player Agency",
+        "style": "Normal"
+      }
+    ]
+  },
+  "notes": [
+    "Direct formatting is not always wrong, but it often causes inconsistent output when templates change.",
+    "Heading-like paragraphs not using Heading styles can break TOC and accessibility."
+  ]
+}

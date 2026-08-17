@@ -383,6 +383,9 @@ public class RaycastInteractor : MonoBehaviour
     {
         hitSubject = hit.collider.gameObject.GetComponent<InteractableGeneral>();
 
+        if (hitSubject != null && !hitSubject.isActiveAndEnabled)
+            hitSubject = null;
+
         if (hitSubject != null)
         {
             if (hitSubject.customTouchDistance <= 0)
@@ -517,7 +520,9 @@ public class RaycastInteractor : MonoBehaviour
 
         if (holdableSubject == null)
         {
-            holdableSubject = hitSubject.GetComponent<Holdable>();
+            Holdable candidate = hitSubject.GetComponent<Holdable>();
+            if (candidate != null && candidate.isActiveAndEnabled)
+                holdableSubject = candidate;
         }
         else
         {

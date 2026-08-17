@@ -35,9 +35,16 @@ public class MemoryPlacementController : MonoBehaviour
     private bool missingMemoryCueStarted;
     private bool missingMemoryCueComplete;
     private bool crisisPending;
+    private bool initialTransformsSaved;
+    private GameStateController finalFlowController;
+
+    public IReadOnlyList<MemoryPlacementItem> FinalRequiredItems => finalRequiredItems;
 
     private void Awake()
     {
+        if (memoryRoomItemsRoot == null)
+            memoryRoomItemsRoot = transform.root;
+
         HideFeedback();
     }
 
@@ -80,21 +87,33 @@ public class MemoryPlacementController : MonoBehaviour
         phase = PlacementPhase.Completed;
         HideFeedback();
 
-        if (assistantController != null)
+        if (finalFlowController != null)
+            finalFlowController.HandleFinalPlacementConfirmed();
+        else if (assistantController != null)
             assistantController.PlayConfirmationResponse();
         else
-            Debug.LogWarning("MemoryPlacementController: AssistantController is not assigned.", this);
+            Debug.LogWarning("MemoryPlacementController: final flow references are not assigned.", this);
     }
 
-    public bool AreAllItemsPlaced()
+    public bool TryGetFinalPlacementZone(
+        MemoryPlacementItem item,
+        out MemoryPlacementZoneType zoneType)
     {
-        return phase == PlacementPhase.Final
-            ? AreAllItemsPlaced(finalRequiredItems)
-            : phase == PlacementPhase.Initial && AreAllItemsPlaced(initialRequiredItems);
+        if (item != null
+            && itemZones.TryGetValue(item, out zoneType)
+            && zoneType != MemoryPlacementZoneType.None)
+        {
+            return true;
+        }
+
+        zoneType = MemoryPlacementZoneType.None;
+        return false;
     }
 
-    public void BeginFinalPlacement()
+    public void BeginFinalPlacement(GameStateController gameStateController)
     {
+        finalFlowController = gameStateController;
+
         if (phase == PlacementPhase.Final || phase == PlacementPhase.Completed)
             return;
 
@@ -115,6 +134,20 @@ public class MemoryPlacementController : MonoBehaviour
         }
 
         HideFeedback();
+    }
+
+    public void SaveInitialItemTransformsForRoomExit()
+    {
+        if (phase != PlacementPhase.Suspended || initialTransformsSaved)
+            return;
+
+        foreach (MemoryPlacementItem item in initialRequiredItems)
+        {
+            if (item != null)
+                item.SaveForRoomReturn(memoryRoomItemsRoot);
+        }
+
+        initialTransformsSaved = true;
     }
 
     private bool AreAllItemsPlaced(List<MemoryPlacementItem> requiredItems)
@@ -159,7 +192,7 @@ public class MemoryPlacementController : MonoBehaviour
         if (AreAllItemsPlaced(initialRequiredItems))
         {
             crisisPending = true;
-            PreserveInitialPlacementsForReturn();
+            PreserveInitialZoneAssignments();
             HideFeedback();
             TryTriggerPendingCrisis();
         }
@@ -195,7 +228,7 @@ public class MemoryPlacementController : MonoBehaviour
         return false;
     }
 
-    private void PreserveInitialPlacementsForReturn()
+    private void PreserveInitialZoneAssignments()
     {
         phase = PlacementPhase.Suspended;
         savedInitialZones.Clear();
@@ -210,8 +243,6 @@ public class MemoryPlacementController : MonoBehaviour
             {
                 savedInitialZones[item] = zoneType;
             }
-
-            item.SaveForRoomReturn(memoryRoomItemsRoot);
         }
     }
 

@@ -50,6 +50,21 @@ public class AssistantController : MonoBehaviour
     [SerializeField] private DialogueLine[] confirmationResponseLines;
     [SerializeField] private DialogueLine[] officeReturnAndReportLines;
 
+    [Header("Session Closing")]
+    [SerializeField] private DialogueLine[] sessionClosingLines =
+    {
+        new DialogueLine
+        {
+            text = "The client is still asleep. But when they wake, they may notice that something has changed.",
+            fallbackSubtitleDuration = 4f
+        },
+        new DialogueLine
+        {
+            text = "We'll find out soon enough. For now, this session is complete. Closing the connection.",
+            fallbackSubtitleDuration = 4f
+        }
+    };
+
     private Coroutine dialogueRoutine;
     private bool waterBottleMemoryPlayed;
     private bool sunsetPhotoMemoryPlayed;
@@ -72,29 +87,17 @@ public class AssistantController : MonoBehaviour
 
     public void PlayWaterBottleMemory()
     {
-        if (waterBottleMemoryPlayed)
-            return;
-
-        waterBottleMemoryPlayed = true;
-        PlayStage(waterBottleMemoryLines);
+        PlayOnce(ref waterBottleMemoryPlayed, waterBottleMemoryLines);
     }
 
     public void PlaySunsetPhotoMemory()
     {
-        if (sunsetPhotoMemoryPlayed)
-            return;
-
-        sunsetPhotoMemoryPlayed = true;
-        PlayStage(sunsetPhotoMemoryLines);
+        PlayOnce(ref sunsetPhotoMemoryPlayed, sunsetPhotoMemoryLines);
     }
 
     public void PlayLegoBricksMemory()
     {
-        if (legoBricksMemoryPlayed)
-            return;
-
-        legoBricksMemoryPlayed = true;
-        PlayStage(legoBricksMemoryLines);
+        PlayOnce(ref legoBricksMemoryPlayed, legoBricksMemoryLines);
     }
 
     public void PlayMissingPainfulMemories(System.Action onComplete = null)
@@ -156,15 +159,29 @@ public class AssistantController : MonoBehaviour
         PlayStage(officeReturnAndReportLines, onComplete);
     }
 
+    public void PlaySessionClosing(System.Action onComplete = null)
+    {
+        PlayStage(sessionClosingLines, onComplete);
+    }
+
     public void ClearSubtitle()
     {
         if (subtitleText != null)
-            subtitleText.text = "";
+            subtitleText.text = string.Empty;
     }
 
     public void PlayDialogue(DialogueLine[] lines, System.Action onComplete = null)
     {
         PlayStage(lines, onComplete);
+    }
+
+    private void PlayOnce(ref bool played, DialogueLine[] lines)
+    {
+        if (played)
+            return;
+
+        played = true;
+        PlayStage(lines);
     }
 
     private void PlayStage(
@@ -235,7 +252,6 @@ public class AssistantController : MonoBehaviour
             return false;
         }
 
-        ConfigureAudioSource();
         audioSource.Stop();
         audioSource.clip = line.audioClip;
         audioSource.Play();

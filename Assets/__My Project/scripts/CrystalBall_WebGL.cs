@@ -9,13 +9,11 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
 
     [Header("Settings")]
     [SerializeField] private float transitionFadeDuration = 2f;
-    [SerializeField] private float fadeResetDuration = 0.35f;
     [SerializeField] private Color entryFadeColor = Color.white;
     [SerializeField] private bool enabledForEntry = true;
 
     private bool triggered;
     private Coroutine transitionRoutine;
-    private Coroutine fadeResetRoutine;
 
     public void Transition()
     {
@@ -29,11 +27,7 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
         }
 
         triggered = true;
-        StopFadeReset();
-
-        if (transitionRoutine != null)
-            StopCoroutine(transitionRoutine);
-
+        StopTransition();
         transitionRoutine = StartCoroutine(TransitionRoutine());
     }
 
@@ -48,7 +42,6 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
 
             triggered = false;
             StopTransition();
-            StopFadeReset();
 
             if (screenFadeController != null)
             {
@@ -59,7 +52,6 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
         else
         {
             StopTransition();
-            StopFadeReset();
 
             if (!triggered && screenFadeController != null)
             {
@@ -74,8 +66,6 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
 
     private IEnumerator TransitionRoutine()
     {
-        Debug.Log("Crystal Ball WebGL entry triggered.");
-
         if (screenFadeController != null)
         {
             SetEntryFadeColor();
@@ -95,21 +85,6 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
         screenFadeController.SetColor(entryFadeColor);
     }
 
-    private void ResetFadeToTransparent()
-    {
-        if (screenFadeController == null)
-            return;
-
-        StopFadeReset();
-        fadeResetRoutine = StartCoroutine(FadeToTransparentRoutine());
-    }
-
-    private IEnumerator FadeToTransparentRoutine()
-    {
-        yield return screenFadeController.FadeTo(0f, fadeResetDuration);
-        fadeResetRoutine = null;
-    }
-
     private void StopTransition()
     {
         if (transitionRoutine == null)
@@ -117,14 +92,5 @@ public class CrystalBall_WebGL : MonoBehaviour, ICrystalBallEntry
 
         StopCoroutine(transitionRoutine);
         transitionRoutine = null;
-    }
-
-    private void StopFadeReset()
-    {
-        if (fadeResetRoutine == null)
-            return;
-
-        StopCoroutine(fadeResetRoutine);
-        fadeResetRoutine = null;
     }
 }

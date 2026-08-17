@@ -1,0 +1,160 @@
+{
+  "input": "E:\\GitHub\\9903_Zoey\\output\\docx\\DDES9903_A2_Report_Draft_Memory_Organizer_Bilingual.docx",
+  "fonts_by_char_count": {
+    "Microsoft YaHei": 6017
+  },
+  "direct_run_formatting_runs": 124,
+  "direct_paragraph_formatting_paragraphs": 15,
+  "heading_like_paragraphs_not_heading_style": [
+    {
+      "para_index": 94,
+      "text": "Submission field\n\u63d0\u4ea4\u5b57\u6bb5",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 95,
+      "text": "Draft value\n\u8349\u7a3f\u503c",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 104,
+      "text": "Freytag function\nFreytag \u529f\u80fd",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 105,
+      "text": "Narrative state\n\u53d9\u4e8b\u72b6\u6001",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 106,
+      "text": "Agency carried by the state\n\u8be5\u72b6\u6001\u627f\u8f7d\u7684\u80fd\u52a8\u6027",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 128,
+      "text": "Rubric label\n\u8bc4\u5206\u6807\u7b7e",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 129,
+      "text": "Date and channel\n\u65e5\u671f\u4e0e\u9891\u9053",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 130,
+      "text": "Evidence screenshot\n\u8bc1\u636e\u622a\u56fe",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 131,
+      "text": "Why the contribution was substantive / reciprocal\n\u8be5\u8d21\u732e\u4e3a\u4f55\u5177\u6709\u5b9e\u8d28\u6027 / \u4e92\u60e0\u6027",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 133,
+      "text": "[TO ADD]\n[\u5f85\u8865\u5145]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 134,
+      "text": "[INSERT ENGLISH SCREENSHOT]\n[\u63d2\u5165\u82f1\u6587\u622a\u56fe]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 135,
+      "text": "[TO ADD]\n[\u5f85\u8865\u5145]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 137,
+      "text": "[TO ADD]\n[\u5f85\u8865\u5145]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 138,
+      "text": "[INSERT ENGLISH SCREENSHOT]\n[\u63d2\u5165\u82f1\u6587\u622a\u56fe]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 139,
+      "text": "[TO ADD]\n[\u5f85\u8865\u5145]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 141,
+      "text": "[TO ADD]\n[\u5f85\u8865\u5145]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 142,
+      "text": "[INSERT ENGLISH SCREENSHOT]\n[\u63d2\u5165\u82f1\u6587\u622a\u56fe]",
+      "style": "Table Text"
+    },
+    {
+      "para_index": 143,
+      "text": "[TO ADD]\n[\u5f85\u8865\u5145]",
+      "style": "Table Text"
+    }
+  ],
+  "examples": {
+    "direct_run_formatting": [
+      {
+        "para_index": 1,
+        "run_text": "DDES9903 - Assessment 2 \u62a5\u544a\u8349\u7a3f",
+        "style": "Title"
+      },
+      {
+        "para_index": 2,
+        "run_text": "\u8bb0\u5fc6\u6574\u7406\u5e08",
+        "style": "Subtitle"
+      },
+      {
+        "para_index": 4,
+        "run_text": "\u6458\u8981",
+        "style": "Heading 1"
+      },
+      {
+        "para_index": 6,
+        "run_text": "\u300a\u8bb0\u5fc6\u6574\u7406\u5e08\u300b\u662f\u4e00\u6bb5\u5173\u4e8e\u4fee\u590d\u7126\u8651\u68a6\u5883\u8005\u6f5c\u610f\u8bc6\u7684\u77ed\u7bc7\u6c89\u6d78\u5f0f\u4e92\u52a8\u6545\u4e8b\u3002\u73a9\u5bb6\u626e\u6f14\u4e00\u540d\u521a\u5165\u804c\u7684\u8bb0\u5fc6\u6574\u7406\u5e08\uff0c\u6267\u884c\u81ea\u5df1\u7684\u7b2c\u4e00\u9879\u4efb\u52a1\u3002\u5728\u529e\u516c\u5ba4\u91cc\uff0c\u673a\u5668\u4eba\u52a9\u624b\u4ecb\u7ecd\u5de5\u4f5c\uff0c\u5e76\u901a\u8fc7\u6c34",
+        "style": "Normal"
+      },
+      {
+        "para_index": 7,
+        "run_text": "\u53d9\u4e8b\u72b6\u6001\u7f51\u7edc",
+        "style": "Heading 1"
+      }
+    ],
+    "direct_paragraph_formatting": [
+      {
+        "para_index": 5,
+        "text": "",
+        "style": "Normal"
+      },
+      {
+        "para_index": 11,
+        "text": "",
+        "style": "Normal"
+      },
+      {
+        "para_index": 63,
+        "text": "",
+        "style": "Normal"
+      },
+      {
+        "para_index": 65,
+        "text": "Antle, A. N., Corness, G., & Droumeva, M. (2009). What the body knows: Exploring the benefits of embodied metaphors in h",
+        "style": "Normal"
+      },
+      {
+        "para_index": 66,
+        "text": "Cunliffe, A. L., & Coupland, C. (2012). From hero to villain to hero: Making experience sensible through embodied narrat",
+        "style": "Normal"
+      }
+    ]
+  },
+  "notes": [
+    "Direct formatting is not always wrong, but it often causes inconsistent output when templates change.",
+    "Heading-like paragraphs not using Heading styles can break TOC and accessibility."
+  ]
+}

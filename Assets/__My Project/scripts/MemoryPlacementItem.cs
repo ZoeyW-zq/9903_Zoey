@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MemoryPlacementItem : MonoBehaviour
 {
-    [Tooltip("Optional name used in logs and the future report.")]
+    [Tooltip("Stable identifier used by the final report.")]
     public string memoryId;
 
     private Transform savedRoomParent;

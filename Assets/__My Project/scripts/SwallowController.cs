@@ -16,11 +16,11 @@ public class SwallowController : MonoBehaviour
     [SerializeField] private AudioSource afterTeleportAudio;
 
     [Header("Timing")]
-    [SerializeField] private float fadeOutDuration = 2f;
+    [SerializeField, Min(0f)] private float fadeOutDuration = 2f;
     [Tooltip("How long the screen stays fully black after the swallow dialogue starts.")]
-    [SerializeField] private float blackHoldDuration = 2f;
-    [SerializeField] private float fadeInDuration = 0.5f;
-    [SerializeField] private float fallDuration = 4f;
+    [SerializeField, Min(0f)] private float blackHoldDuration = 2f;
+    [SerializeField, Min(0f)] private float fadeInDuration = 0.5f;
+    [SerializeField, Min(0f)] private float fallDuration = 4f;
 
     [Header("Transition Color")]
     [SerializeField] private Color swallowFadeColor = Color.black;
@@ -36,26 +36,26 @@ public class SwallowController : MonoBehaviour
         if (transitionRunning)
             return;
 
+        if (!HasRequiredReferences())
+        {
+            Debug.LogError("SwallowController: missing required transition references.", this);
+            return;
+        }
+
+        transitionRunning = true;
         StartCoroutine(RunSwallowTransition());
     }
 
     private IEnumerator RunSwallowTransition()
     {
-        transitionRunning = true;
-
-        if (screenFadeController != null)
-            screenFadeController.SetColor(swallowFadeColor);
+        screenFadeController.SetColor(swallowFadeColor);
 
         if (assistantController != null)
             assistantController.PlaySwallowTransition();
 
         yield return screenFadeController.FadeTo(1f, fadeOutDuration);
 
-        //yield return new WaitForSeconds(0.5f);
-
-        if (gameStateController != null)
-            gameStateController.ReleaseClownPlayerControl();
-
+        gameStateController.ReleaseClownPlayerControl();
 
         if (afterTeleportAudio != null)
             afterTeleportAudio.Play();
@@ -63,7 +63,6 @@ public class SwallowController : MonoBehaviour
         if (blackHoldDuration > 0f)
             yield return new WaitForSeconds(blackHoldDuration);
 
-        // Teleport while fully faded out, then let the player fall into the next space.
         xrOrigin.position = pipeStartPoint.position;
         xrOrigin.rotation = pipeStartPoint.rotation;
 
@@ -110,7 +109,15 @@ public class SwallowController : MonoBehaviour
         xrOrigin.position = endPosition;
         xrOrigin.rotation = endRotation;
 
-        if (gameStateController != null)
-            gameStateController.SetPlayerMovementLocked(false);
+        gameStateController.SetPlayerMovementLocked(false);
+    }
+
+    private bool HasRequiredReferences()
+    {
+        return gameStateController != null
+            && screenFadeController != null
+            && xrOrigin != null
+            && pipeStartPoint != null
+            && stomachLandingPoint != null;
     }
 }

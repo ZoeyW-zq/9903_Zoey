@@ -1,6 +1,6 @@
 # Project Context for Future Codex Sessions
 
-Last updated: 2026-08-15
+Last updated: 2026-08-16
 
 This document is intended as the first file to read in future Codex sessions for this Unity project. It records the current understanding of the project, the gameplay flow, the key scripts, and the design decisions made so far.
 
@@ -10,19 +10,19 @@ This is a Unity VR narrative/interactive experience built on top of the EZPZ Int
 
 The current custom game appears to be a memory/brain-themed VR experience. The player starts in an office-like space, interacts with a crystal ball, transitions into the Hippocampus area, places or reviews memory-related content, and eventually enters a Nightmare/Giant Clown crisis sequence. The Nightmare sequence includes a giant clown approaching, manipulating the roof, grabbing the player, moving the player toward the clown's mouth, then transitioning into a swallow/fall sequence and finally into a Mirror Chamber.
 
-The current development focus (as of 2026-08-15) is implementing the planned narrative stages incrementally, with current work focused on the WebGL scene:
+The current development focus (as of 2026-08-16) is end-to-end WebGL validation and presentation polish. The main narrative spine is now implemented through the final report:
 
-- **Stage 1 (Office)**: Branching dialogue with fixed-text buttons, a gated client-report reading step, crystal ball entry, and office → Hippocampus transition — **implemented; new Finish Reading and screen-content Inspector bindings still need to be assigned in WebGL**.
-- **Stage 2 (Memory Room)**: Three surface-memory objects, per-object assistant dialogue, and three placement zones (Focus / Context / Background) are connected in `scene_WebGL.unity`. Placing the second object triggers the missing-painful-memories cue; placing all three automatically triggers the Giant Crisis without waiting for Confirm — **implemented; WebGL Play Mode validation remains**.
-- **Stage 3 (Giant Interior)**: Mirror conversations and deep-memory reframing — **four mirror controllers and completion events are connected in the WebGL scene; each successful mirror increments the DungeonRoot counter, and the all-four completion method returns the player, assistant, and freed objects to HippoRoot. The new resolution dialogue audio is bound; WebGL Play Mode validation and explicit return-point placement remain**.
-- **Stage 4 (Final Redistribution)**: Seven-object attention placement — **not yet started**.
-- **Stage 5 (Office Report)**: Compositional report generation — **not yet started**.
+- **Stage 1 (Office)**: Branching dialogue, Start Work, gated report reading, crystal-ball instructions, and Office → Hippocampus transition are implemented and bound in `scene_WebGL.unity`. Start Work lines finish before the computer screen and Finish Reading button appear; the crystal ball appears only after Finish Reading is selected. Office uses Skybox environment lighting, while every non-Office scene root uses Gradient environment lighting.
+- **Stage 2 (Initial Memory Room)**: Three surface memories and the Focus / Context / Background zones are connected. The second placed object triggers the missing-painful-memories cue; the third placed object may interrupt that cue and automatically starts the Giant Crisis. Confirm has no effect during this preliminary stage.
+- **Stage 3 (Giant Interior)**: Four two-round mirror conversations, one-second-gap idle/failure audio loops, mirror completion events, the first released-memory response, the all-four counter, and the return to the Memory Room are connected. Return points, Nightmare Volume fade-out, Giant Clown hiding, restored-object Holdable activation/gravity, and the replacement Skybox are bound.
+- **Stage 4 (Final Redistribution)**: Implemented using the same `MemoryPlacementController`. The original three positions are preserved across root deactivation, all seven object references are configured, incomplete Confirm feedback remains active, and successful Confirm plays the assistant response before returning to the Office.
+- **Stage 5 (Office Report and Ending)**: The Office return transition, return/report dialogue, page-1 `View Report` button, dynamic ItemCycler report page, placement summary, 21 concise object-level outcome fragments, and Close Session ending are implemented. Each playthrough displays one of three outcomes per object; Close Session plays neutral closing lines and then ends on a black screen.
 
-The Nightmare/Giant Clown crisis sequence (roof grab, player grab, swallow transition) was the previous development focus and is implemented but may need tuning.
+The Nightmare/Giant Clown crisis sequence (roof grab, player grab, swallow transition) is implemented but still needs full-flow timing and visual tuning. The remaining priority is WebGL Play Mode testing from Office through the report, plus final Canvas readability and presentation polish.
 
-## Planned Final Narrative Design (Not Yet Implemented)
+## Narrative Design and Current Implementation
 
-This section records the approved direction for the final assignment version. It is a design specification, not a description of the current Unity implementation. The technical sections later in this document still describe the currently implemented linear flow.
+This section records the approved direction for the final assignment version. The core five-stage flow is now implemented in `scene_WebGL.unity`; details explicitly marked TBD or described as optional polish are still design targets rather than completed behavior.
 
 ### Core Theme and Rules
 
@@ -46,7 +46,7 @@ The two positive recent memories establish an alternative perspective:
 
 > Some experiences deserve attention simply because they are beautiful or personally meaningful. Self-worth does not need to come from external approval.
 
-### Planned Full Game Flow
+### Full Game Flow
 
 #### Stage 1: Office
 
@@ -61,15 +61,15 @@ The two positive recent memories establish an alternative perspective:
    - All three choices appear if the player has not heard the job explanation.
    - Only office exploration and starting work appear if the explanation has already been heard.
 6. The player may repeat office exploration any number of times.
-7. Choosing to start causes the crystal ball to appear.
-8. The office computer then loads the assigned client's information:
+7. Choosing to start plays the Start Work lines while the computer content and crystal ball remain hidden.
+8. When the Start Work lines finish, the office computer loads the assigned client's information and the Finish Reading button appears:
    - Client name and case ID.
    - `Session 01 / Initial Memory Organization` and first-visit status.
    - `Sleeping / Connection Available` and the current sleep phase, such as `REM Sleep`.
    - Heart rate, respiration, temperature, and overall physical stability.
    - A concise initial assessment and client statement.
-9. The player reviews and confirms the client report. The crystal ball remains unavailable until this confirmation so the information cannot be skipped accidentally.
-10. The assistant asks the player to place a hand on the crystal ball.
+9. The player reviews the report and selects Finish Reading. Only then does the crystal ball appear and the assistant play the crystal-ball instruction lines.
+10. The player activates the crystal ball.
 11. The existing white fade and teleport transition move the player and assistant to the Memory Room.
 
 The Office choice flow supports these routes and any repeated exploration variants:
@@ -80,12 +80,11 @@ The Office choice flow supports these routes and any repeated exploration varian
 - Explore -> job explanation -> start.
 - Explore -> job explanation -> explore -> start.
 
-Suggested state flags:
+Current state flags:
 
 - `HasHeardJobExplanation`
-- `HasExploredOffice`
 - `IsReadyToStart`
-- `HasConfirmedClientReport`
+- Internal `isExploring` and `waitingForReadingConfirmation` flags cover temporary Office states; no persistent `HasExploredOffice` flag is needed.
 
 The Office choices let the player control onboarding pace. The primary narrative agency occurs later through attention placement.
 
@@ -99,16 +98,16 @@ The Office choices let the player control onboarding pace. The primary narrative
    - `Context`: available in the client's active life context without dominating attention.
    - `Background`: still present and accessible, but outside current attention.
 5. The player may inspect the three objects in any order. Picking up an object plays its memory clip.
-6. After viewing a memory, the player places the object in one of the three categories. Objects may be moved again before confirmation.
+6. After viewing a memory, the player places the object in one of the three categories. Existing placements may be revised until the third distinct object is placed and the crisis begins.
 7. No visible score, mood value, correct-answer color, or failure label appears.
 8. After the second object is placed, the assistant notices that something is missing:
 
    > "Strange... these all seem to be memories that only recently surfaced. Where are the more painful memories that have been receiving so much attention?"
 
 9. A low sound, brief light fluctuation, or subtle room vibration hints that the missing memories have collected elsewhere.
-10. After all three objects are placed, the player may revise the layout and confirm the preliminary organization.
-11. Confirmation disturbs the deeper painful memories that have collected in the client's subconscious.
-12. The Giant Clown crisis begins. The giant grabs and swallows the player and assistant.
+10. Placing the third object can interrupt the missing-memory cue; the interrupted cue is treated as complete so progression cannot stall.
+11. As soon as all three objects are placed, the deeper painful memories are disturbed and the Giant Crisis starts automatically. Preliminary Confirm is intentionally ignored.
+12. The Giant Clown grabs and swallows the player and assistant.
 
 The crisis occurs on every path so the production needs only one main story spine. It is not a punishment for an incorrect preliminary layout. The final report is calculated only from the final seven-object placement later in the experience.
 
@@ -145,27 +144,22 @@ Dialogue failures have immediate local consequences only. They are not included 
 4. The player places every object in `Focus`, `Context`, or `Background`.
 5. No real memory can be deleted.
 6. The player can revise the layout until confirming the final distribution.
-7. Upon confirmation, the assistant locks onto the office coordinates and teleports the player back via the crystal ball.
+7. Upon confirmation, the assistant response plays and the black fade transition returns the player to the Office.
 8. The confirmed positions are stored for the office report.
 
 #### Stage 5: Office Report and Ending
 
-> ⚠️ **Assistant dialogue for this stage is TBD (待定).** The client message and assistant closing lines depend on the final attention distribution outcome. Positive, mixed, and negative-leaning outcomes need different tones and content. The dialogue file (Assistant_Voice_Lines_Design.md) marks Sections 20-21 as pending the outcome system design.
+> The Office Return and Report lines and a neutral two-line Close Session ending are implemented and have audio clips assigned. The closing lines note that the client is still asleep and may notice a change after waking; they deliberately leave the exact result open. A separate personal client message remains optional/TBD.
 
-1. The player and assistant return to the Office via crystal ball teleport. The crystal ball stops glowing and the subconscious connection closes.
-2. The computer displays `Processing Session Data`, followed by `Session Report Ready`.
-3. The player selects `View Report` to see the final results.
+1. After final placement confirmation and the assistant's confirmation response, the player and assistant fade back to the Office. The subconscious connection closes.
+2. The computer returns to page 1 with a `View Report` button visible; after the fade-in, the assistant plays the Office Return and Report lines.
+3. The player selects `View Report` to open the dynamically registered final report page.
 4. The report reads only the seven confirmed final positions. Each object has a `Background`, `Context`, or `Focus` outcome, producing `3^7 = 2187` possible attention layouts.
-5. The implementation does not require 2187 separately authored reports. It selects one of three outcome fragments for each of the seven objects, for a total of 21 authored object-level fragments, then combines them with an overall synthesis.
-6. The report displays:
-   - Client and session information.
-   - The final attention position of all seven memories.
-   - One position-specific finding for each memory.
-   - A qualitative overall analysis and suggested direction.
-   - A personal client message (TBD — pending outcome variants).
-7. The player selects `Play Client Message` to hear or read the client's feedback (TBD).
-8. The assistant delivers closing remarks (TBD — needs variants for different outcome profiles).
-9. The player closes the report and the experience ends.
+5. The implementation does not require 2187 separately authored reports. It selects one of three concise outcome fragments for each of the seven objects, for a total of 21 authored object-level fragments.
+6. The implemented report displays the processed count, Focus / Context / Background totals, each memory's final attention label, and one position-specific finding per memory.
+7. A qualitative overall synthesis and personal client message remain optional/TBD and are not part of the current report implementation.
+8. The former Back button is relabeled `Close Session`. Selecting it immediately disables the button and plays the assistant's neutral closing lines while movement remains available.
+9. When those lines finish, the existing transition Canvas fades to black. Only after the fade is fully opaque is movement locked; all three scene roots are then disabled and the game remains in the terminal `SessionComplete` state. WebGL does not call `Application.Quit()`.
 
 The report uses qualitative language, not scores, stars, percentages, or explicit success/failure colors.
 
@@ -457,18 +451,27 @@ Second-round choices:
 
 The mirror becomes the red correction pen.
 
-## Planned Office Outcome Reports
+## Office Outcome Report
 
 ### Outcome Model
 
-The previous three-template ending calculation is obsolete. The approved design uses compositional object-level feedback.
+The previous three-template ending calculation is obsolete. The implemented report uses compositional object-level feedback.
 
 - The final report reads only the seven confirmed Memory Room positions.
 - Each object has a `Background`, `Context`, and `Focus` feedback fragment.
 - Seven objects multiplied by three positions require 21 authored fragments.
 - The seven ternary positions produce `3^7 = 2187` possible final layouts.
-- The report selects seven fragments and combines them with an overall synthesis and personal client message.
+- The report selects seven concise fragments and combines them with the final Focus / Context / Background counts.
 - Dialogue failures in the Giant Interior and the preliminary three-object layout do not affect this report.
+
+Implementation status (2026-08-16):
+
+- `FinalReportController` contains all 21 concise English fragments and selects exactly one fragment for each final memory placement.
+- The current WebGL scene has seven distinct final required items with matching IDs: `bottle`, `sunsetPhoto`, `legoBricks`, `pen`, `clock`, `phone`, and `medal`.
+- `OutcomeText` is one TMP block rather than three variable-length columns, preventing a single attention category from overflowing its own narrow column.
+- The report uses colored attention labels but deliberately does not assign success/failure colors or scores.
+- The long-form table below remains the narrative source. Runtime text is a condensed version designed to fit the in-world computer screen.
+- The 2026-08-16 cleanup removed unused Office/placement state APIs, the unused WebGL Crystal Ball fade-reset coroutine, duplicate mirror-conversation ending coroutines, and the no-op multi-slot Volume coroutine layer. Inspector-bound fields and UnityEvent entry points were preserved.
 
 These labels describe current attention rather than memory storage:
 
@@ -511,12 +514,16 @@ Important scripts:
 
 - `GameStateController.cs`
   - Owns the main game state machine.
-  - Starts the office intro (now routed through `OfficeDialogueController`), crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, Mirror Chamber intro, and Back To Office return.
+  - Starts the office intro (routed through `OfficeDialogueController`), crystal ball wait state, Hippocampus transition, Giant Crisis, Swallow Transition, Mirror Chamber intro, final memory placement, and Back To Office return.
   - Also owns coarse scene-root activation for performance on headset builds.
   - Controls Office, Hippocampus, and Nightmare Global Volume weights through state changes.
+  - Switches Environment Lighting Source with the active scene root: Office uses `AmbientMode.Skybox`; Hippo, Dungeon, and no-active-root states use `AmbientMode.Trilight` (the Inspector's Gradient option). The Office Skybox material is cached on startup and restored after the Memory Room replacement Skybox has been used.
   - Owns the shared player movement lock entry point used by the clown grab and swallow/fall flow.
   - Fades the assigned Hippocampus Particle System emission rate to 0 when Giant Crisis begins.
   - Plays the assigned heartbeat AudioSource just before the clown crisis sequence starts.
+  - Handles the first released-memory response and the all-four return sequence.
+  - On return to the Memory Room, hides the Giant Clown, changes the Skybox, fades Nightmare Volume weight to 0, restores the four deep memories at explicit return points, enables their Holdable components, and restores gravity.
+  - After final Confirm, waits for the assistant confirmation response, fades back to Office, restores the Office Volume, prepares the final report, and plays the Office Return and Report lines.
 
 - `OfficeDialogueController.cs`
   - Controls the office-stage branching dialogue and choice system.
@@ -548,8 +555,10 @@ Important scripts:
 - `AssistantController.cs`
   - Controls assistant dialogue lines and stages.
   - **Implemented dialogue arrays**: Hippocampus intro, per-object memory reveal (water bottle / sunset photo / LEGO bricks, each with a one-shot guard), missing painful memories, Nightmare warning, Swallow Transition, Mirror Chamber intro, `memoryReleasedLines`, `allMemoriesReleasedLines`, `returnToMemorySpaceLines`, final confirmation response, and office return/report review.
-  - `swallowTransitionLines` is still empty in `scene_WebGL.unity`; `PlaySwallowTransition()` currently produces no line until subtitle/audio data is assigned.
-  - **Stage 5 TBD**: client message and closing lines pending outcome variant design.
+  - The four greeting clips preload their audio data to prevent WebGL first-use decoding gaps between opening lines. `greeting1.mp3` itself contains approximately 0.34 seconds of trailing silence; no extra greeting delay is added by the dialogue coroutine.
+  - `swallowTransitionLines` is populated in `scene_WebGL.unity` with the "OH NO NO NO" subtitle and an assigned audio clip.
+  - `sessionClosingLines` contains two neutral fallback-text lines; audio clips must be assigned in the Inspector. `PlaySessionClosing()` invokes the supplied callback after both lines complete.
+  - **Optional Stage 5 work**: a separate personal client message or outcome-specific synthesis is still TBD.
   - The old `breakGlassLines` and `glassBrokenPraiseLines` arrays are deprecated — the player no longer manually breaks a glass wall. Each mirror auto-shatters when its conversation resolves successfully.
 
 - `ClownController.cs`
@@ -567,7 +576,8 @@ Important scripts:
 
 - `MemoryPlacementItem.cs`
   - Marks the root of a memory object that can be placed in an attention zone.
-  - Exposes an optional `memoryId` for identification and future report work.
+  - Exposes `memoryId` for report lookup.
+  - Saves parent/local transform and Rigidbody state before the original Memory Room root is disabled, then restores the surface memory to the same assigned position on return.
 
 - `MemoryPlacementZone.cs`
   - Represents a `Focus`, `Context`, or `Background` trigger zone.
@@ -575,20 +585,35 @@ Important scripts:
   - Tracks collider counts per item so a memory with multiple colliders is not counted more than once inside the same zone.
 
 - `MemoryPlacementController.cs`
-  - Owns the list of memory items required for the current placement stage.
+  - Owns separate initial (three-object) and final (seven-object) required-item lists.
   - Tracks each required item's current zone by object reference rather than using the old EZPZ `NumberHolder` / `NumberCheckUtillity` counter approach.
   - Plays the missing-painful-memories Assistant cue once two required objects are in valid zones.
   - Automatically calls `ClownController.TriggerCrisis()` once all three initial objects are in valid zones; preliminary Confirm is no longer required.
   - Picking up the third object may interrupt the missing-memory cue; interruption counts as completing that cue so automatic crisis progression cannot stall.
-  - This instance is a one-shot initial-room controller. Stage 4 should use a separate final-redistribution controller because this controller stays confirmed after the first three objects and contains automatic Giant Crisis behavior.
+  - Saves the three initial zone assignments and object transforms for the return to the Memory Room.
+  - `BeginFinalPlacement()` changes the same controller to its final phase, restores the initial three assignments, and waits for all seven objects.
+  - During the final phase, an incomplete Confirm only shows `incompleteMessage`; completion is accepted once all seven unique objects have a valid zone.
+  - Successful final Confirm calls `GameStateController.HandleFinalPlacementConfirmed()`.
+  - Exposes `FinalRequiredItems` and `TryGetFinalPlacementZone()` for report generation.
+
+- `FinalReportController.cs`
+  - Lives on the Office `PC` and is connected to its existing `ItemCycler`.
+  - Keeps the page-1 `View Report` button hidden until the final return to Office.
+  - Dynamically appends `FinalReportPage` to `ItemCycler.items`; the page should not be added manually to the original list.
+  - `PrepareReportReady()` enables the screen, builds the report, shows the button, and returns the computer to page index 0.
+  - `ShowReport()` selects the already-built final report page. Final placement is immutable after confirmation, so rebuilding on every click is unnecessary.
+  - The former Back reference migrates to `closeSessionButton`. Clicking it disables repeat input and invokes the close-session callback supplied by `GameStateController`.
+  - Generates a processed-count/distribution summary and seven object outcomes from the final placement dictionary.
+  - Contains 21 concise English fragments: Background, Context, and Focus variants for each of the seven memory IDs.
+  - Uses one `OutcomeText` TMP block with rich-text colored attention labels.
 
 - **`MemoryDialogueController.cs`** (NEW — 2026-08-09)
   - Implements the two-round mirror conversation system for Stage 3 (Giant Interior / Deep Memory Crisis).
   - Data-driven: all dialogue text and audio clips are configured through serialized fields in the Inspector.
-  - While an unresolved deep-memory controller is active, its assigned `openingClip` loops as the memory's ambient internal voice. Beginning a conversation stops the loop and plays the opening line once as part of the dialogue. After any failed Round 1 or Round 2 response finishes, closing the dialogue restores the opening loop. Successful completion and GameObject deactivation stop it permanently.
+  - While an unresolved deep-memory controller is active, its assigned `openingClip` repeats as the memory's ambient internal voice with a configurable `openingLoopInterval` (currently one second) between plays. Selecting `Start Conversation` leaves that loop playing while the first choices are visible. The loop stops only when the player selects a choice and its next-round or failure audio begins. After any failed Round 1 or Round 2 response finishes, closing the dialogue restores the same interval-based loop. Successful completion and GameObject deactivation stop it permanently.
   - Conversation flow:
     1. Player enters the mirror's trigger area — a `Start Conversation` button appears.
-    2. `BeginConversation()` plays an opening line and shows three Round 1 choices.
+    2. `BeginConversation()` displays the opening text and shows three Round 1 choices while the opening audio loop continues.
     3. Round 1: three choices —
        - Two constructive responses that enter Round 2 (`goesToRound2 = true`, `nextBranchIndex` selects which Round 2 branch).
        - One harmful shortcut (`goesToRound2 = false`) that plays a rejection response, briefly intensifies the environment, then returns to idle.
@@ -676,23 +701,55 @@ New 3D models imported for the deep-memory objects (Stage 3) and the surface-mem
 
 Current `scene_WebGL.unity` setup:
 
-- The water bottle, sunset photograph, and LEGO bricks each have a `MemoryPlacementItem` and are assigned to `MemoryPlacementController.requiredItems`.
+- The water bottle, sunset photograph, and LEGO bricks are assigned to `initialRequiredItems`.
+- `finalRequiredItems` contains exactly seven distinct `MemoryPlacementItem` references in this order: water bottle, sunset photograph, LEGO bricks, red correction pen, old alarm clock, old phone, and second-place medal.
 - The three attention areas each have `MemoryPlacementZone` connected to the same controller:
   - `Focus` uses `MemoryPlacementZoneType.Focus`.
   - `Context` uses `MemoryPlacementZoneType.Context`.
   - `Background` uses `MemoryPlacementZoneType.Background`.
-- The existing EZPZ Confirm button remains in the scene for later final-redistribution work, but it is not required to start the initial Giant Crisis.
+- The existing EZPZ Confirm button calls `MemoryPlacementController.ConfirmPlacement()`.
+- During the initial phase that method immediately returns, so pressing Confirm has no effect.
 - The initial crisis is driven by placement-zone occupancy: two unique objects trigger the missing-memory cue and all three trigger the crisis.
-- The Confirm button is still bound to the initial three-object `MemoryPlacementController`; it must be rebound or routed to a Stage 4 controller before final redistribution is implemented.
+- During the final phase, the same Confirm binding checks all seven objects. Incomplete placement displays the existing English `incompleteMessage`; complete placement starts the final assistant response and Office transition.
 - `ClownController.TriggerCrisis()` guards against duplicate activation and changes the game state to `GiantCrisis`.
+- `MemoryPlacementZone` tracks collider counts per object, so multi-collider memories do not exit a zone until their final collider leaves.
+- A disabled Holdable is ignored by the modified EZPZ `RaycastInteractor`; the four deep memories cannot be picked up inside the Giant while their Holdable components are disabled.
+- On return, the four deep memories are placed at four assigned return points, set non-kinematic with gravity enabled, and have Holdable enabled.
+- The three surface-memory transforms are captured before `HippoRoot` is disabled, reparented under the configured memory-room root, and restored at their player-assigned positions.
 
-This setup is connected in the scene, but the full interaction must still be verified in WebGL Play Mode: enter and leave each zone, move an item between zones, confirm the second placement starts the missing-memory cue, pick up the third distinct object while that cue is playing, and confirm that the crisis begins exactly once after the third placement.
+This setup is connected in the scene, but the full interaction must still be verified in WebGL Play Mode: enter and leave each zone, move an item between zones, confirm the second placement starts the missing-memory cue, pick up/place the third distinct object while that cue is playing, confirm the crisis begins exactly once, verify all seven restored items can be reassigned, and test both incomplete and complete final Confirm.
 
 Deferred Stage 2 detail:
 
 - After the second surface-memory object is placed, the assistant should notice that the painful memories are missing.
 - A supporting light fluctuation, low sound, or subtle room vibration could still reinforce that those memories have collected elsewhere.
 - The missing-memory dialogue cue is implemented; environmental reinforcement remains optional polish.
+
+## Final Redistribution and Office Report
+
+Current implemented sequence:
+
+1. The DungeonRoot counter reaches four and invokes `GameStateController.HandleAllMemoriesResolved()`.
+2. The Nightmare Global Volume begins fading toward weight 0 while the assistant plays the all-memories-released sequence.
+3. The screen fades out; the Giant Clown is hidden; `HippoRoot` is activated; the return Skybox and Hippocampus Volume are applied.
+4. Player and assistant return to their Memory Room spawn points. The four deep memories move to the four assigned return points and become holdable with gravity.
+5. `FinalMemoryPlacement` calls `MemoryPlacementController.BeginFinalPlacement(this)`. The three surface memories return to their saved transforms and all seven objects can be redistributed.
+6. Final Confirm is blocked with the configured English feedback until all seven items are in valid zones.
+7. Successful Confirm plays `confirmationResponseLines`; its completion changes state to `BackToOffice`.
+8. The screen fades out, `OfficeRoot` activates, Office Volume returns to weight 1, and player/assistant move to assigned Office return points.
+9. `FinalReportController.PrepareReportReady()` enables the PC screen, generates the report, reveals the page-1 `View Report` button, and leaves the ItemCycler on page 1.
+10. After fade-in, the assistant plays `officeReturnAndReportLines`.
+11. Selecting `View Report` opens `FinalReportPage`; the relabeled `Close Session` button begins the terminal ending sequence.
+
+Current report scene bindings:
+
+- `FinalReportController` is on `PC` and is explicitly referenced by `GameStateController`.
+- `reportEntryPageIndex` is 0.
+- `FinalReportPage`, `View Report`, `Close Session`, `DistributionSummary`, and `OutcomeText` references are assigned. The serialized button reference migrates from the former Back field via `FormerlySerializedAs`.
+- The `View Report` Button's persistent `On Click` list is empty; `FinalReportController.Awake()` adds its runtime callback, avoiding a duplicate `ItemCycler.NextItem` jump.
+- The three attention-label colors are serialized and assigned.
+- `FinalReportPage` is registered dynamically at runtime rather than stored in the initial `ItemCycler.items` array.
+- `OutcomeText` replaced the old Focus/Context/Background/Initial Changes blocks. The obsolete text objects have been removed from the current scene.
 
 ## Game State Flow
 
@@ -714,16 +771,13 @@ Current high-level state order in `GameStateController`:
    - Crystal ball disabled.
    - Assistant plays Hippocampus intro.
 
-5. `AwaitMemoryPlacement`
-   - Memory placement/review stage.
-
-6. `GiantCrisis`
+5. `GiantCrisis`
    - Calls `ClownController.StartCrisisSequence()`.
 
-7. `SwallowTransition`
+6. `SwallowTransition`
    - Calls `SwallowController.StartSwallowTransition()`.
 
-8. `MirrorChamber`
+7. `MirrorChamber`
    - Player and assistant arrive inside the Giant Clown interior.
    - Assistant moved to mirror chamber spawn point.
    - Assistant plays Mirror Chamber intro.
@@ -734,12 +788,26 @@ Current high-level state order in `GameStateController`:
    - After all four mirrors are resolved, the painful echoes no longer sustain the Giant Clown. The giant space dissolves automatically.
    - Player, assistant, and the four freed memory objects return to the Memory Room (HippoRoot).
 
+8. `FinalMemoryPlacement`
+   - Activates `HippoRoot` after the return from the Mirror Chamber.
+   - Calls `MemoryPlacementController.BeginFinalPlacement(this)`.
+   - Restores the original three objects at their saved placements and tracks all seven memories.
+   - Waits for a valid seven-object Confirm.
+
 9. `BackToOffice`
-   - Intended to be triggered after the final seven-object attention redistribution is confirmed in Stage 4.
+   - Triggered after the assistant's final confirmation response completes.
    - Fades the screen to black over 1 second.
    - Activates `OfficeRoot`.
    - Moves player and assistant robot to manually assigned office return spawn transforms while the screen is black.
+   - Restores Office Global Volume and prepares the compositional report.
    - Fades the screen back to transparent over 1 second.
+   - Plays the Office Return and Report assistant lines.
+
+10. `SessionComplete`
+   - Entered only after `Close Session` is selected and both assistant closing lines finish.
+   - Clears the subtitle, fades the persistent transition Canvas to opaque black, and disables OfficeRoot, HippoRoot, and DungeonRoot.
+   - The button is disabled immediately to prevent duplicate requests. Player movement remains available through the closing lines and fade, then locks after the Canvas reaches opaque black.
+   - This is a terminal in-app state; WebGL does not attempt to close the browser tab.
 
 ## Scene Root Activation
 
@@ -757,10 +825,10 @@ To reduce headset runtime cost, the main scene is organized into three coarse ro
 `GameStateController` has Inspector references for these three roots and activates only one root at a time:
 
 - `OfficeDialogue` and `AwaitCrystalBall` activate `OfficeRoot`.
-- `TransitionToHippocampus`, `Hippocampus`, `AwaitMemoryPlacement`, and `GiantCrisis` activate `HippoRoot`.
+- `TransitionToHippocampus`, `Hippocampus`, and `GiantCrisis` activate `HippoRoot`.
 - `SwallowTransition` currently does not switch roots directly. This lets the black fade / swallow hand-to-mouth overlap begin while the previous root remains active.
 - `MirrorChamber` activates `DungeonRoot`.
-- When the giant dissolves after all mirrors resolve, the player returns to the Memory Room — `HippoRoot` is re-activated.
+- When the giant dissolves after all mirrors resolve, the player returns to the Memory Room and enters `FinalMemoryPlacement` — `HippoRoot` is re-activated.
 - `BackToOffice` activates `OfficeRoot` after the screen has faded to black (triggered after Stage 4 final confirmation).
 
 Persistent gameplay objects such as the XR Origin/player, `GameStateController`, screen fade, assistant robot, and global event/input objects should stay outside these three roots so they remain active throughout the experience.
@@ -988,7 +1056,7 @@ Current major Inspector-facing fields:
 
 ## Scene Binding Notes
 
-From current inspection of `scene.unity`, `ClownController` is bound roughly as follows:
+From current inspection of `scene_WebGL.unity`, `ClownController` is bound roughly as follows:
 
 - `rightArmRig` points to `RightHandRig`.
 - `handIKTarget` points to the `RightHandRig` transform used by the Two Bone IK target.
@@ -1012,8 +1080,12 @@ Important IK note:
 
 - Memory placement completeness is based on the identity of required memory objects, not a floating-point counter.
 - The EZPZ Confirm Button remains clickable before completion so it can provide explicit incomplete-placement feedback.
-- Completing placement does not automatically start the crisis. The player must press Confirm.
-- The preliminary three-object placement controller is intentionally reusable for seven objects, but final report storage/query behavior will be added only when Stage 4 and Stage 5 are implemented.
+- Initial and final placement deliberately use different Confirm behavior: initial Confirm does nothing and all three surface objects automatically start the crisis; final Confirm requires all seven objects and shows explicit incomplete feedback.
+- One phased `MemoryPlacementController` handles both the preliminary three-object layout and final seven-object redistribution. It preserves initial assignments/transforms and exposes the final placement data to the report.
+- The final report is compositional: seven independent ternary placements select seven of 21 authored fragments. It reports attention allocation without a success score or single correct ending.
+- Each object has three distinct possible report outcomes, but only the outcome matching its confirmed final zone is shown in a playthrough.
+- The PC remains on page 1 after returning to Office. `View Report` appears only after report preparation and directly opens the dynamically registered final report page.
+- The report's former Back button is now `Close Session`. It plays one neutral ending for every distribution, then fades to black and enters `SessionComplete`; it does not return to page 1.
 - The player's VR camera should not be forcibly rotated during grab/mouth movement.
 - Player follows the hand by position only, via `xrOrigin.position`; while grabbed, the tracked head is kept aligned to `grabAnchor` without parenting or forced rotation.
 - Roof and player share the same `grabAnchor` concept to keep the hand/roof/player relationship consistent.
@@ -1024,7 +1096,7 @@ Important IK note:
 - Footsteps and rumble are sequential: footsteps finish first, rumble starts afterward.
 - `SwallowTransition` starts before the hand-to-mouth movement is complete, allowing the fade to black to overlap with the final mouth movement for a smoother visual transition.
 - Memory content display is now handled via pre-configured Image/RawImage/VideoPlayer components on the Canvas, toggled by Holdable UnityEvents. The old `MemoryContentDisplay` script has been removed.
-- The `BreakGlass` game state and `HandleFinalChamberGlassShattered()` in `GameStateController` are **deprecated** (2026-08-10). The player no longer manually breaks a glass wall. Instead:
+- The `BreakGlass` game state is removed and `HandleFinalChamberGlassShattered()` in `GameStateController` is **deprecated** (2026-08-10). The empty method must remain because the imported `StylizedBreakableGlass` script still calls it directly for source compatibility. The player no longer manually breaks a glass wall. Instead:
   - Each mirror auto-shatters when its `MemoryDialogueController` conversation resolves successfully (via the `onComplete` UnityEvent).
   - After all four mirrors are resolved, the giant space dissolves automatically.
   - The player, assistant, and four freed memory objects return to the Memory Room (HippoRoot).
@@ -1035,9 +1107,17 @@ Important IK note:
 
 - Verify in WebGL Play Mode that each required memory is detected when entering and leaving every placement zone, especially if the object has multiple colliders.
 - Verify that moving a memory directly from one zone to another leaves it assigned only to the new zone.
+- The three placement Trigger Colliders must not overlap. If an object overlaps two zones, the current dictionary uses whichever `OnTriggerEnter` ran last, which may not match the apparent visual placement.
 - Verify that the second uniquely placed object triggers the missing-memory dialogue exactly once.
 - Verify that the third uniquely placed object starts `GiantCrisis` exactly once without a Confirm interaction.
-- The final-distribution confirmation and office-report dialogue arrays are populated, but their Stage 4/5 transition wiring is not implemented yet.
+- Verify that each surface memory remains at its assigned position after leaving and returning to `HippoRoot`.
+- Verify that the four restored deep memories appear at the correct return points, use gravity, and cannot be ray-picked in the Giant before their Holdable components are enabled on return.
+- Verify that incomplete final Confirm shows the existing English feedback and complete final Confirm plays the response exactly once before returning to Office.
+- Test report generation with all seven items in Focus, all in Context, and all in Background. These are the longest single-category stress cases for `OutcomeText` layout and confirm that all 21 branches are reachable.
+- Verify that the `View Report` button is hidden during the first Office visit and appears on page 1 only after the final return. Its saved persistent `On Click` list is currently empty as required.
+- Verify `OutcomeText` readability at the target WebGL resolution. It uses one rich-text block and may need final font-size/spacing adjustment on the in-world computer screen.
+- Assign audio clips to both `AssistantController.sessionClosingLines`, change the existing button label to `Close Session`, and verify the transition Canvas remains visible after all scene roots are disabled.
+- Verify Close Session cannot be triggered twice, the report stays visible while the assistant speaks, subtitles clear before the fade, and the final frame remains fully black with no hidden Office interaction.
 - If `footstepsAudio` is looping, the crisis coroutine will wait forever before rumble/animation starts.
 - If `handIKTarget` or `playerHead` is missing, the grab stage now stops and logs an error instead of continuing.
 - If `grabAnchor` is placed poorly on the hand skeleton, the player/roof may appear offset even if script logic is correct.
@@ -1070,12 +1150,13 @@ The four `MemoryDialogueController` instances are connected in the WebGL scene. 
 
 ### Stage 3 Next Steps
 
-- Add and position four explicit `memoryRoomReturnPoints` under `HippoRoot`, then bind them in Medal / Clock / Phone / Pen order. The current array is empty and uses temporary fallback positions.
-- Add the missing `swallowTransitionLines` subtitle and bind its audio clip when available.
 - Test the full flow: enter area → start conversation → round 1 → harmful exit vs. round 2 → success exit vs. harmful exit.
 - Ensure all four mirrors can be completed in any order.
-- Verify the completion event dissolves the Giant Clown space and returns the player, assistant, and four freed objects to the Memory Room.
-- Decide how per-memory `PlayMemoryReleased()` reactions should be coordinated. They are not currently called by the four mirror completion events, and directly adding the event to every mirror would make the fourth reaction immediately compete with the all-four sequence.
+- Verify each failed conversation plays its failure response and then resumes the opening audio loop; starting a conversation should leave the opening loop running until the player makes a choice, as currently designed.
+- Verify the first resolved mirror triggers `HandleFirstMemoryReleased()` exactly once even though all four mirror completion events call it.
+- Verify the DungeonRoot counter reaches four once, calls `HandleAllMemoriesResolved()`, fades Nightmare Volume to 0, and returns the player, assistant, and four freed objects to the Memory Room.
+- The four explicit `memoryRoomReturnPoints` are now bound in Medal / Clock / Phone / Pen order. Confirm their physical placement visually.
+- Verify the assigned `swallowTransitionLines` subtitle/audio timing during the full black-screen transition.
 
 ## Verification Pattern
 
@@ -1085,12 +1166,7 @@ For script-only changes, use:
 dotnet build Assembly-CSharp.csproj --no-restore
 ```
 
-The 2026-08-09 memory-placement script build passed with 0 errors. The 2026-08-09 MemoryDialogueController + MemoryDialogueChoiceRelay build also passed with 0 errors. The project currently still reports existing warnings:
-
-- Duplicate `using` directives in `AssistantController.cs`.
-- Obsolete `FindObjectsSortMode` usage in EZPZ Interaction Toolkit scripts.
-
-These warnings are pre-existing and not directly related to the Nightmare sequence work.
+The 2026-08-16 Editor build after the flow cleanup passed with 0 errors. A clean/incremental Runtime build may still report existing warnings from obsolete EZPZ `FindObjectsSortMode` calls; these are inside the imported toolkit rather than the custom flow scripts.
 
 ## Future Update Rule
 

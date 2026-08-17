@@ -53,7 +53,7 @@ public class OfficeDialogueControllerTests
     }
 
     [Test]
-    public void CrystalBallEntryBeginsInstructionDialogue()
+    public void FinishReadingBeginsCrystalBallInstructionDialogue()
     {
         GameObject assistantObject = new GameObject("Assistant Test");
         GameObject gameStateObject = new GameObject("Game State Test");
@@ -65,18 +65,14 @@ public class OfficeDialogueControllerTests
 
         SetPrivateField(office, "assistantController", assistant);
         SetPrivateField(office, "gameStateController", gameState);
-        SetPrivateField(office, "startWorkLines", new[]
-        {
-            new AssistantController.DialogueLine { fallbackSubtitleDuration = 0.05f }
-        });
+        SetPrivateField(office, "startWorkLines", Array.Empty<AssistantController.DialogueLine>());
         SetPrivateField(office, "crystalBallInstructionLines", new[]
         {
             new AssistantController.DialogueLine { fallbackSubtitleDuration = 2f }
         });
 
-        typeof(OfficeDialogueController)
-            .GetMethod("StartCrystalBallEntry", BindingFlags.Instance | BindingFlags.NonPublic)
-            .Invoke(office, null);
+        office.SelectStartWork();
+        office.FinishReading();
 
         Assert.That(gameState.State, Is.EqualTo(GameStateController.GameState.AwaitCrystalBall));
         Assert.That(typeof(AssistantController)

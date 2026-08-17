@@ -16,25 +16,25 @@ public class MemoryDialogueController : MonoBehaviour
     [Serializable]
     private class Round1ChoiceData
     {
-        public bool goesToRound2;
+        public bool goesToRound2 = false;
 
         [Range(0, 1)]
-        public int nextBranchIndex;
+        public int nextBranchIndex = 0;
 
         [TextArea(2, 4)]
-        public string responseText;
+        public string responseText = string.Empty;
 
-        public AudioClip responseClip;
+        public AudioClip responseClip = null;
     }
 
     [Serializable]
     private class Round2BranchData
     {
-        public GameObject choicesRoot;
+        public GameObject choicesRoot = null;
 
         [TextArea(2, 4)]
-        public string promptText;
-        public AudioClip promptClip;
+        public string promptText = string.Empty;
+        public AudioClip promptClip = null;
         public Round2ChoiceData[] choices = new Round2ChoiceData[2];
     }
 
@@ -42,9 +42,9 @@ public class MemoryDialogueController : MonoBehaviour
     private class Round2ChoiceData
     {
         [TextArea(2, 4)]
-        public string responseText;
-        public AudioClip responseClip;
-        public bool completesMemory;
+        public string responseText = string.Empty;
+        public AudioClip responseClip = null;
+        public bool completesMemory = false;
     }
 
     [Header("UI")]
@@ -55,7 +55,9 @@ public class MemoryDialogueController : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioSource dialogueAudioSource;
-    [SerializeField] private float durationWithoutAudio = 3f;
+    [SerializeField] private WebGLEchoAudio webGLEchoAudio;
+    [SerializeField, Min(0f)] private float durationWithoutAudio = 3f;
+    [SerializeField, Min(0f)] private float openingLoopInterval = 1f;
 
     [Header("Opening")]
     [TextArea(2, 4)]
@@ -69,6 +71,7 @@ public class MemoryDialogueController : MonoBehaviour
     [SerializeField] private Round2BranchData[] round2Branches = new Round2BranchData[2];
 
     [Header("Completion")]
+    [SerializeField] private AudioClip completionSfxClip;
     [SerializeField] private UnityEvent onComplete;
 
     private bool playerInArea;
@@ -77,6 +80,7 @@ public class MemoryDialogueController : MonoBehaviour
     private ConversationStage stage = ConversationStage.Idle;
     private int currentBranchIndex = -1;
     private Coroutine flowRoutine;
+    private Coroutine openingLoopRoutine;
 
     private void Awake()
     {
@@ -153,7 +157,7 @@ public class MemoryDialogueController : MonoBehaviour
         {
             HideChoiceRoots();
             ShowLine(choice.responseText, choice.responseClip);
-            CloseConversationAfterDelay(choice.responseClip);
+            EndConversationAfterDelay(choice.responseClip, false);
             return;
         }
 
@@ -179,11 +183,11 @@ public class MemoryDialogueController : MonoBehaviour
 
         if (choice.completesMemory)
         {
-            CompleteConversationAfterDelay(choice.responseClip);
+            EndConversationAfterDelay(choice.responseClip, true);
             return;
         }
 
-        CloseConversationAfterDelay(choice.responseClip);
+        EndConversationAfterDelay(choice.responseClip, false);
     }
 
     private void AdvanceToRound2()
@@ -200,28 +204,20 @@ public class MemoryDialogueController : MonoBehaviour
         ShowRound2Choices();
     }
 
-    private void CompleteConversationAfterDelay(AudioClip sourceClip)
+    private void EndConversationAfterDelay(AudioClip sourceClip, bool completeMemory)
     {
-        StartFlowRoutine(CompleteConversationRoutine(sourceClip));
+        StartFlowRoutine(EndConversationRoutine(sourceClip, completeMemory));
     }
 
-    private IEnumerator CompleteConversationRoutine(AudioClip sourceClip)
+    private IEnumerator EndConversationRoutine(AudioClip sourceClip, bool completeMemory)
     {
         yield return new WaitForSeconds(GetDelay(sourceClip));
         flowRoutine = null;
-        CompleteConversation();
-    }
 
-    private void CloseConversationAfterDelay(AudioClip sourceClip)
-    {
-        StartFlowRoutine(CloseConversationRoutine(sourceClip));
-    }
-
-    private IEnumerator CloseConversationRoutine(AudioClip sourceClip)
-    {
-        yield return new WaitForSeconds(GetDelay(sourceClip));
-        flowRoutine = null;
-        CloseConversation();
+        if (completeMemory)
+            CompleteConversation();
+        else
+            CloseConversation();
     }
 
     private void CompleteConversation()
@@ -230,8 +226,21 @@ public class MemoryDialogueController : MonoBehaviour
             return;
 
         completed = true;
+        PlayCompletionSfx();
         onComplete?.Invoke();
         CloseConversation();
+    }
+
+    private void PlayCompletionSfx()
+    {
+        if (completionSfxClip == null)
+            return;
+
+        Vector3 position = dialogueAudioSource != null
+            ? dialogueAudioSource.transform.position
+            : transform.position;
+
+        AudioSource.PlayClipAtPoint(completionSfxClip, position);
     }
 
     private void CloseConversation()
@@ -312,12 +321,8 @@ public class MemoryDialogueController : MonoBehaviour
         if (dialogueAudioSource == null)
             return;
 
-        dialogueAudioSource.Stop();
-        dialogueAudioSource.loop = false;
-        dialogueAudioSource.clip = clip;
-
-        if (clip != null)
-            dialogueAudioSource.Play();
+        StopOpeningLoop();
+        PlayClip(clip);
     }
 
     private void ShowText(string text)
@@ -328,10 +333,16 @@ public class MemoryDialogueController : MonoBehaviour
 
     private void StopAudio()
     {
+        StopOpeningLoop();
+
         if (dialogueAudioSource == null)
             return;
 
-        dialogueAudioSource.Stop();
+        if (webGLEchoAudio != null)
+            webGLEchoAudio.Stop();
+        else
+            dialogueAudioSource.Stop();
+
         dialogueAudioSource.loop = false;
         dialogueAudioSource.clip = null;
     }
@@ -344,6 +355,14 @@ public class MemoryDialogueController : MonoBehaviour
         dialogueAudioSource.playOnAwake = false;
         dialogueAudioSource.loop = false;
         dialogueAudioSource.spatialBlend = 1f;
+
+        if (webGLEchoAudio == null)
+            webGLEchoAudio = GetComponent<WebGLEchoAudio>();
+
+        if (webGLEchoAudio == null)
+            webGLEchoAudio = gameObject.AddComponent<WebGLEchoAudio>();
+
+        webGLEchoAudio.Initialize(dialogueAudioSource);
     }
 
     private void PlayOpeningLoop()
@@ -354,11 +373,38 @@ public class MemoryDialogueController : MonoBehaviour
             return;
         }
 
-        dialogueAudioSource.Stop();
-        dialogueAudioSource.playOnAwake = false;
-        dialogueAudioSource.loop = true;
+        StopOpeningLoop();
+        if (webGLEchoAudio != null)
+            webGLEchoAudio.Stop();
+        else
+            dialogueAudioSource.Stop();
+
         dialogueAudioSource.clip = openingClip;
-        dialogueAudioSource.Play();
+        openingLoopRoutine = StartCoroutine(OpeningLoopRoutine());
+    }
+
+    private IEnumerator OpeningLoopRoutine()
+    {
+        while (isActiveAndEnabled && !completed && dialogueAudioSource != null && openingClip != null)
+        {
+            PlayClip(openingClip);
+
+            yield return new WaitForSeconds(openingClip.length);
+
+            if (openingLoopInterval > 0f)
+                yield return new WaitForSeconds(openingLoopInterval);
+        }
+
+        openingLoopRoutine = null;
+    }
+
+    private void StopOpeningLoop()
+    {
+        if (openingLoopRoutine == null)
+            return;
+
+        StopCoroutine(openingLoopRoutine);
+        openingLoopRoutine = null;
     }
 
     private void RefreshStartButton()
@@ -377,10 +423,34 @@ public class MemoryDialogueController : MonoBehaviour
 
     private float GetDelay(AudioClip clip)
     {
-        if (clip != null && clip.length > 0f)
-            return clip.length;
+        float echoTail = webGLEchoAudio != null && webGLEchoAudio.IsFallbackActive
+            ? webGLEchoAudio.TailDuration
+            : 0f;
 
-        return durationWithoutAudio;
+        if (clip != null && clip.length > 0f)
+            return clip.length + echoTail;
+
+        return durationWithoutAudio + echoTail;
+    }
+
+    private void PlayClip(AudioClip clip)
+    {
+        if (dialogueAudioSource == null)
+            return;
+
+        dialogueAudioSource.loop = false;
+
+        if (webGLEchoAudio != null)
+        {
+            webGLEchoAudio.Play(clip);
+            return;
+        }
+
+        dialogueAudioSource.Stop();
+        dialogueAudioSource.clip = clip;
+
+        if (clip != null)
+            dialogueAudioSource.Play();
     }
 
     private void StartFlowRoutine(IEnumerator routine)

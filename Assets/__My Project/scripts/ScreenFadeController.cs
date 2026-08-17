@@ -6,8 +6,6 @@ public class ScreenFadeController : MonoBehaviour
 {
     [SerializeField] private Image fadeImage;
 
-    public float Alpha => fadeImage != null ? fadeImage.color.a : 0f;
-
     private void Awake()
     {
         SetAlpha(0f);

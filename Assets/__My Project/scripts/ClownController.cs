@@ -80,6 +80,12 @@ public class ClownController : MonoBehaviour
         if (crisisTriggered)
             return;
 
+        if (gameStateController == null)
+        {
+            Debug.LogError("ClownController: GameStateController is not assigned.", this);
+            return;
+        }
+
         crisisTriggered = true;
         gameStateController.SetState(GameStateController.GameState.GiantCrisis);
     }
@@ -141,9 +147,10 @@ public class ClownController : MonoBehaviour
         yield return MoveHandTo(mouthPoint, moveToMouthDuration, true);
         yield return WaitForHandNear(mouthPoint, mouthArrivalDistance, mouthArrivalTimeout);
         DetachPlayerFromHand();
+        crisisRoutine = null;
     }
 
-    private void PlayAudio(AudioSource audioSource)
+    private static void PlayAudio(AudioSource audioSource)
     {
         if (audioSource == null)
             return;
@@ -173,8 +180,7 @@ public class ClownController : MonoBehaviour
 
     private IEnumerator PlayGrabAudioSequenceRoutine()
     {
-        if (groanAudio != null)
-            yield return PlayAudioAndWait(groanAudio);
+        yield return PlayAudioAndWait(groanAudio);
 
         PlayAudio(postGroanAudio);
 

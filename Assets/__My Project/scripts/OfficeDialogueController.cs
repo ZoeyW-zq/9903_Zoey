@@ -23,7 +23,6 @@ public class OfficeDialogueController : MonoBehaviour
     [SerializeField] private AssistantController.DialogueLine[] crystalBallInstructionLines;
 
     public bool HasHeardJobExplanation { get; private set; }
-    public bool HasExploredOffice { get; private set; }
     public bool IsReadyToStart { get; private set; }
     public bool IsJobExplanationAvailable => !isBusy && !isExploring && !IsReadyToStart
         && !HasHeardJobExplanation;
@@ -52,7 +51,6 @@ public class OfficeDialogueController : MonoBehaviour
     public void BeginOfficeDialogue()
     {
         HasHeardJobExplanation = false;
-        HasExploredOffice = false;
         IsReadyToStart = false;
         isExploring = false;
         waitingForReadingConfirmation = false;
@@ -86,7 +84,6 @@ public class OfficeDialogueController : MonoBehaviour
             return;
 
         isExploring = false;
-        HasExploredOffice = true;
         BeginDialogue(explorationReturnLines, FinishDialogue);
     }
 
@@ -96,9 +93,7 @@ public class OfficeDialogueController : MonoBehaviour
             return;
 
         IsReadyToStart = true;
-        isBusy = true;
-        HideAllChoiceButtons();
-        Play(startWorkLines, OnStartWorkDialogueComplete);
+        BeginDialogue(startWorkLines, OnStartWorkDialogueComplete);
     }
 
     private void OnStartWorkDialogueComplete()
@@ -157,7 +152,6 @@ public class OfficeDialogueController : MonoBehaviour
         }
 
         Debug.LogWarning("OfficeDialogueController: AssistantController is not assigned.", this);
-        onComplete?.Invoke();
     }
 
     private void RefreshChoices()
@@ -170,9 +164,9 @@ public class OfficeDialogueController : MonoBehaviour
 
         bool choicesAvailable = !isBusy && !isExploring;
 
-        SetButtonVisible(jobExplanationButton, choicesAvailable && IsJobExplanationAvailable);
-        SetButtonVisible(exploreOfficeButton, choicesAvailable);
-        SetButtonVisible(startWorkButton, choicesAvailable);
+        SetButtonVisible(jobExplanationButton, IsJobExplanationAvailable);
+        SetButtonVisible(exploreOfficeButton, IsExploreOfficeAvailable);
+        SetButtonVisible(startWorkButton, IsStartWorkAvailable);
         SetButtonVisible(finishReadingButton, false);
 
         if (choiceCanvas != null)

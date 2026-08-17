@@ -57,7 +57,6 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
             {
                 triggered = true;
                 timer = holdTime;
-                Debug.Log("Crystal Ball entry triggered.");
 
                 if (screenFadeController != null)
                 {
