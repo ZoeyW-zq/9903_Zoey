@@ -1,0 +1,943 @@
+{
+  "path": "E:\\GitHub\\9903_Zoey\\output\\docx\\DDES9903_A2_Report_Bilingual_Revised_Under_3000_Words.docx",
+  "paragraph_count": 92,
+  "table_count": 4,
+  "inline_shape_count": 11,
+  "section_count": 3,
+  "totals": {
+    "all": 2477,
+    "before_references": 1779,
+    "references": 698
+  },
+  "table_words_unclassified": 218,
+  "section_totals": {
+    "Front matter": 8,
+    "Summary": 125,
+    "Narrative State Network": 95,
+    "Player Agency": 308,
+    "Narrative Coherence": 259,
+    "Use of Space": 234,
+    "Use of Sensory Triggers (or Multimodal Elements)": 272,
+    "Use of Semiotic Elements": 197,
+    "Use of Embodied Actions and/or Enacted Elements": 242,
+    "Collaborative Practice": 39,
+    "Academic References": 248,
+    "Asset Citations": 282,
+    "AI Acknowledgements": 168
+  },
+  "records": [
+    {
+      "index": 0,
+      "style": "Title",
+      "section": "Front matter",
+      "word_count": 5,
+      "english": "DDES9903 - Assessment 2 Report Draft",
+      "full_text": "DDES9903 - Assessment 2 Report Draft / DDES9903 - Assessment 2 报告草稿"
+    },
+    {
+      "index": 1,
+      "style": "Subtitle",
+      "section": "Front matter",
+      "word_count": 3,
+      "english": "The Memory Organizer",
+      "full_text": "The Memory Organizer / 记忆整理师"
+    },
+    {
+      "index": 3,
+      "style": "Heading 1",
+      "section": "Summary",
+      "word_count": 1,
+      "english": "Summary",
+      "full_text": "Summary / 摘要"
+    },
+    {
+      "index": 5,
+      "style": "Normal",
+      "section": "Summary",
+      "word_count": 124,
+      "english": "The Memory Organizer is a short VR and WebGL story about how anxiety changes attention. The player starts in an office, enters a memory room, and places three recent memories in Focus, Context, or Background. A Giant Clown then breaks into the room, captures the player, and swallows them. Inside its body, four containers hold painful memories. The player approaches them in any order and answers two-round conversations. Constructive responses break a container and release its object; harmful responses end the attempt and allow a retry. After all four objects are free, the player returns to the memory room and redistributes all seven memories. The confirmed layout selects one outcome for each object in the office report, followed by a neutral Close Session ending.",
+      "full_text": "The Memory Organizer is a short VR and WebGL story about how anxiety changes attention. The player starts in an office, enters a memory room, and places three recent memories in Focus, Context, or Background. A Giant Clown then breaks into the room, captures the player, and swallows them. Inside its body, four containers hold painful memories. The player approaches them in any order and answers two-round conversations. Constructive responses break a container and release its object; harmful responses end the attempt and allow a retry. After all four objects are free, the player returns to the memory room and redistributes all seven memories. The confirmed layout selects one outcome for each object in the office report, followed by a neutral Close Session ending.\n《记忆整理师》是一段关于焦虑如何改变注意力的短篇 VR 与 WebGL 故事。玩家从办公室出发，进入记忆空间，并把三段近期记忆放入“焦点”“语境”或“背景”。随后，巨型小丑闯入房间，抓住并吞下玩家。它的体内有四个封存痛苦记忆的容器。玩家可以按任意顺序接近容器，并完成两轮对话。建设性回应会打破容器并释放物件；有害回应会结束本次尝试，但允许重试。四个物件全部释放后，玩家回到记忆空间，重新分配七段记忆。确认后的布局会为办公室报告中的每个物件选择一条结果，最后以中性的“Close Session”结束。"
+    },
+    {
+      "index": 6,
+      "style": "Heading 1",
+      "section": "Narrative State Network",
+      "word_count": 3,
+      "english": "Narrative State Network",
+      "full_text": "Narrative State Network / 叙事状态网络"
+    },
+    {
+      "index": 8,
+      "style": "Figure Caption",
+      "section": "Narrative State Network",
+      "word_count": 14,
+      "english": "Figure 1. Narrative State Network with the Freytag phase assigned to each major state.",
+      "full_text": "Figure 1. Narrative State Network with the Freytag phase assigned to each major state.\n图 1：按 Freytag 戏剧阶段标注的叙事流程图。"
+    },
+    {
+      "index": 9,
+      "style": "Normal",
+      "section": "Narrative State Network",
+      "word_count": 78,
+      "english": "Figure 1 maps the implemented story onto Freytag's structure. OfficeDialogue and the first placement build context and tension. GiantCrisis and SwallowTransition form the climax because safety and movement are taken away. The body-interior conversations are the falling action: the player works through four beliefs after the physical threat has peaked. FinalMemoryPlacement resolves the conflict, and the office report is the denouement. The path is mostly linear, but mirror order, dialogue attempts, and the final layout vary within it.",
+      "full_text": "Figure 1 maps the implemented story onto Freytag's structure. OfficeDialogue and the first placement build context and tension. GiantCrisis and SwallowTransition form the climax because safety and movement are taken away. The body-interior conversations are the falling action: the player works through four beliefs after the physical threat has peaked. FinalMemoryPlacement resolves the conflict, and the office report is the denouement. The path is mostly linear, but mirror order, dialogue attempts, and the final layout vary within it.\n图 1 把已实现的故事映射到 Freytag 结构。OfficeDialogue 与第一次放置建立背景并累积张力。GiantCrisis 和 SwallowTransition 构成高潮，因为安全感和移动能力在此被夺走。身体内部的对话属于下降行动：物理威胁达到顶点后，玩家开始处理四个核心信念。FinalMemoryPlacement 解决冲突，办公室报告则构成结局。整体路径以线性为主，但镜子顺序、对话尝试和最终布局可以变化。"
+    },
+    {
+      "index": 11,
+      "style": "Heading 1",
+      "section": "Player Agency",
+      "word_count": 2,
+      "english": "Player Agency",
+      "full_text": "Player Agency / 玩家能动性"
+    },
+    {
+      "index": 12,
+      "style": "Normal",
+      "section": "Player Agency",
+      "word_count": 57,
+      "english": "Agency is layered rather than constant. In the office, the player can hear the job explanation, explore repeatedly, or begin work. These choices set the pace but lead to the same assignment. The Giant's arrival and swallow are fixed because they are the central conflict, so the project does not claim to offer an unrestricted branching world.",
+      "full_text": "Agency is layered rather than constant. In the office, the player can hear the job explanation, explore repeatedly, or begin work. These choices set the pace but lead to the same assignment. The Giant's arrival and swallow are fixed because they are the central conflict, so the project does not claim to offer an unrestricted branching world.\n玩家能动性分层出现，而不是始终保持相同强度。在办公室中，玩家可以听取工作说明、反复探索或开始任务。这些选择控制节奏，但都会进入同一委托。巨型小丑的出现和吞咽是固定事件，因为它们构成核心冲突。因此，项目并不声称提供一个不受限制的分支世界。"
+    },
+    {
+      "index": 13,
+      "style": "Normal",
+      "section": "Player Agency",
+      "word_count": 58,
+      "english": "Inside the Giant, the player chooses the order of four containers. Each conversation has two rounds. Two first-round responses continue to different second-round prompts; a harmful response at either round plays an alternate reply and closes the attempt. The unresolved container can then be tried again. This creates local variation without producing broken or permanently blocked story states.",
+      "full_text": "Inside the Giant, the player chooses the order of four containers. Each conversation has two rounds. Two first-round responses continue to different second-round prompts; a harmful response at either round plays an alternate reply and closes the attempt. The unresolved container can then be tried again. This creates local variation without producing broken or permanently blocked story states.\n在巨型小丑体内，玩家可以决定四个容器的处理顺序。每段对话有两轮。第一轮中的两个回应会进入不同的第二轮问题；任一轮中的有害回应都会播放另一条答复并结束本次尝试。尚未解决的容器随后可以重试。这种设计产生局部变化，同时避免故事状态损坏或永久卡住。"
+    },
+    {
+      "index": 14,
+      "style": "Normal",
+      "section": "Player Agency",
+      "word_count": 53,
+      "english": "Feedback is direct and non-numeric. A harmful response leaves the container intact and restarts its idle voice. A constructive second-round response triggers the completion event, breaks the container, and releases the original object. The player can read progress from sound, dialogue, and the physical state of the chamber without scores or permanent punishment.",
+      "full_text": "Feedback is direct and non-numeric. A harmful response leaves the container intact and restarts its idle voice. A constructive second-round response triggers the completion event, breaks the container, and releases the original object. The player can read progress from sound, dialogue, and the physical state of the chamber without scores or permanent punishment.\n反馈直接且不使用数值。有害回应会让容器保持完整，并重新开始其待机语音。建设性的第二轮回应会触发完成事件，打破容器并释放原始物件。玩家可以通过声音、对话和空间中的物理状态判断进度，而不需要分数或永久惩罚。"
+    },
+    {
+      "index": 15,
+      "style": "Normal",
+      "section": "Player Agency",
+      "word_count": 69,
+      "english": "The strongest agency comes from the final layout. The player can move seven memories among Focus, Context, and Background and revise every position before confirmation. Seven independent choices produce 3^7, or 2,187, layouts. The implementation does not write 2,187 full endings; it selects one of three object-specific outcomes for each memory, using 21 authored fragments in total. These results change the report, not the main plot.",
+      "full_text": "The strongest agency comes from the final layout. The player can move seven memories among Focus, Context, and Background and revise every position before confirmation. Seven independent choices produce 3^7, or 2,187, layouts. The implementation does not write 2,187 full endings; it selects one of three object-specific outcomes for each memory, using 21 authored fragments in total. These results change the report, not the main plot.\n最强的能动性来自最终布局。玩家可以在“焦点”“语境”和“背景”之间移动七段记忆，并在确认前修改每个位置。七个独立选择会产生 3^7，即 2,187 种布局。实现中没有编写 2,187 个完整结局，而是为每段记忆从三条物件专属结果中选择一条，总共只需 21 条已写好的片段。这些结果会改变报告，但不会改变主线剧情。"
+    },
+    {
+      "index": 16,
+      "style": "Normal",
+      "section": "Player Agency",
+      "word_count": 57,
+      "english": "Control follows the same hierarchy. Movement is locked during the scripted grab, while head tracking or mouse look remains available. Movement returns inside the Giant for choosing containers, then expands into free revision of the seven-object layout. The sequence moves from short loss of control to local choice and finally to a decision with visible downstream results.",
+      "full_text": "Control follows the same hierarchy. Movement is locked during the scripted grab, while head tracking or mouse look remains available. Movement returns inside the Giant for choosing containers, then expands into free revision of the seven-object layout. The sequence moves from short loss of control to local choice and finally to a decision with visible downstream results.\n控制方式也遵循同一层级。脚本化抓取期间，位移被锁定，但头部追踪或鼠标观察仍然可用。进入巨型小丑体内后，玩家恢复移动并选择容器；随后又能自由修改七物件布局。这个过程从短暂失去控制，过渡到局部选择，最终到达会产生可见后续结果的决定。"
+    },
+    {
+      "index": 19,
+      "style": "Figure Caption",
+      "section": "Player Agency",
+      "word_count": 12,
+      "english": "Figure 2. The 21 one-sentence outcomes implemented in the final report UI.",
+      "full_text": "Figure 2. The 21 one-sentence outcomes implemented in the final report UI. / 图 2：最终报告 UI 中实际实现的 21 条单句结局。"
+    },
+    {
+      "index": 21,
+      "style": "Heading 1",
+      "section": "Narrative Coherence",
+      "word_count": 2,
+      "english": "Narrative Coherence",
+      "full_text": "Narrative Coherence / 叙事连贯性"
+    },
+    {
+      "index": 22,
+      "style": "Normal",
+      "section": "Narrative Coherence",
+      "word_count": 74,
+      "english": "Coherence depends on one rule: a Memory Organizer can redistribute attention but cannot delete, rewrite, or invent memories. Each deep object expresses part of the client's anxiety: the medal links worth to first place; the clock turns rest into guilt; the phone links rejection to fear of asking for help; and the red pen turns one mistake into a judgment of ability. These connected beliefs explain why the three recent memories alone are incomplete.",
+      "full_text": "Coherence depends on one rule: a Memory Organizer can redistribute attention but cannot delete, rewrite, or invent memories. Each deep object expresses part of the client's anxiety: the medal links worth to first place; the clock turns rest into guilt; the phone links rejection to fear of asking for help; and the red pen turns one mistake into a judgment of ability. These connected beliefs explain why the three recent memories alone are incomplete.\n叙事连贯性依赖一条规则：记忆整理师可以重新分配注意力，但不能删除、改写或创造记忆。每个深层物件都表达来访者焦虑的一部分：奖牌把价值与第一名相连；闹钟把休息变成内疚；手机把被拒绝与害怕求助相连；红笔则把一次错误变成对能力的判断。这些彼此相关的信念解释了为什么仅有三段近期记忆并不完整。"
+    },
+    {
+      "index": 23,
+      "style": "Normal",
+      "section": "Narrative Coherence",
+      "word_count": 60,
+      "english": "The Freytag phases also follow clear cause and effect. Three recent placements reveal that painful memories are missing, which triggers the Giant crisis. The swallow moves the player from threat into reflection. Four constructive conversations release the memories, and the final redistribution applies that new understanding. The office report closes the story by showing the consequence of the confirmed layout.",
+      "full_text": "The Freytag phases also follow clear cause and effect. Three recent placements reveal that painful memories are missing, which triggers the Giant crisis. The swallow moves the player from threat into reflection. Four constructive conversations release the memories, and the final redistribution applies that new understanding. The office report closes the story by showing the consequence of the confirmed layout.\nFreytag 各阶段也遵循清楚的因果关系。三段近期记忆的放置揭示痛苦记忆仍然缺失，从而触发巨型小丑危机。吞咽让玩家从外部威胁进入内部反思。四段建设性对话释放记忆，最终重新分配则应用新的理解。办公室报告通过展示确认布局的后果来结束故事。"
+    },
+    {
+      "index": 24,
+      "style": "Normal",
+      "section": "Narrative Coherence",
+      "word_count": 64,
+      "english": "State gates prevent events from appearing out of order. The crisis waits for three distinct recent objects and the missing-memory cue. A container completes only once, after a constructive second-round response; a harmful response keeps it available. After four completions, the player and released objects return to the memory room. Final confirmation requires all seven objects, and the report reads only these stored positions.",
+      "full_text": "State gates prevent events from appearing out of order. The crisis waits for three distinct recent objects and the missing-memory cue. A container completes only once, after a constructive second-round response; a harmful response keeps it available. After four completions, the player and released objects return to the memory room. Final confirmation requires all seven objects, and the report reads only these stored positions.\n状态门控防止事件顺序错乱。危机会等待三个不同的近期物件和缺失记忆提示完成。容器只会在建设性的第二轮回应后完成一次；有害回应会让它保持可用。四个容器完成后，玩家与释放的物件回到记忆空间。最终确认要求七个物件全部放置，报告也只读取这些已保存的位置。"
+    },
+    {
+      "index": 25,
+      "style": "Normal",
+      "section": "Narrative Coherence",
+      "word_count": 59,
+      "english": "Shared systems keep this structure practical. The four conversations use one data-driven MemoryDialogueController with different text, audio, branches, and completion settings. Initial and final placement use phases of the same MemoryPlacementController. FinalReportController reads seven stored zones and selects seven of 21 outcome fragments. This supports 2,187 coherent layouts without claiming that the main narrative has 2,187 branches.",
+      "full_text": "Shared systems keep this structure practical. The four conversations use one data-driven MemoryDialogueController with different text, audio, branches, and completion settings. Initial and final placement use phases of the same MemoryPlacementController. FinalReportController reads seven stored zones and selects seven of 21 outcome fragments. This supports 2,187 coherent layouts without claiming that the main narrative has 2,187 branches.\n共享系统让该结构保持可实现。四段对话使用同一个数据驱动的 MemoryDialogueController，只配置不同的文本、音频、分支和完成条件。初次与最终放置使用同一个 MemoryPlacementController 的不同阶段。FinalReportController 读取七个已保存区域，并从 21 条结果中选择七条。这样可以支持 2,187 种连贯布局，而不声称主线剧情拥有 2,187 个分支。"
+    },
+    {
+      "index": 26,
+      "style": "Heading 1",
+      "section": "Use of Space",
+      "word_count": 3,
+      "english": "Use of Space",
+      "full_text": "Use of Space / 空间的运用"
+    },
+    {
+      "index": 27,
+      "style": "Normal",
+      "section": "Use of Space",
+      "word_count": 63,
+      "english": "Each space has a specific narrative purpose. The warm office frames memory work as professional care. The crystal ball marks the threshold to the client's subconscious. The hippocampus-inspired room turns attention into three physical zones around a central table. The Giant destroys this safety and moves the player into a compact body-interior chamber. That chamber is designed for focused encounters, not open-world exploration.",
+      "full_text": "Each space has a specific narrative purpose. The warm office frames memory work as professional care. The crystal ball marks the threshold to the client's subconscious. The hippocampus-inspired room turns attention into three physical zones around a central table. The Giant destroys this safety and moves the player into a compact body-interior chamber. That chamber is designed for focused encounters, not open-world exploration.\n每个空间都有明确的叙事作用。温暖的办公室把记忆工作呈现为专业照护。水晶球标记进入来访者潜意识的门槛。以海马体为灵感的房间把注意力转化为中央桌周围的三个物理区域。巨型小丑破坏这种安全感，并把玩家带入紧凑的身体内部空间。该空间服务于集中互动，而不是开放世界探索。"
+    },
+    {
+      "index": 29,
+      "style": "Figure Caption",
+      "section": "Use of Space",
+      "word_count": 10,
+      "english": "Figure 3. Prototype view of the warm office care space.",
+      "full_text": "Figure 3. Prototype view of the warm office care space. / 图 3：温暖办公室关怀空间的原型画面。"
+    },
+    {
+      "index": 30,
+      "style": "Normal",
+      "section": "Use of Space",
+      "word_count": 57,
+      "english": "The memory room supports repeated picking up, listening, comparing, and placing. Focus, Context, and Background make an abstract judgment visible as location. When the player returns, the four released objects appear beside the three recent memories. Reusing the room changes its meaning: a place for an incomplete first arrangement becomes the site of the final seven-object decision.",
+      "full_text": "The memory room supports repeated picking up, listening, comparing, and placing. Focus, Context, and Background make an abstract judgment visible as location. When the player returns, the four released objects appear beside the three recent memories. Reusing the room changes its meaning: a place for an incomplete first arrangement becomes the site of the final seven-object decision.\n记忆空间支持反复拿起、聆听、比较和放置。“焦点”“语境”和“背景”把抽象判断变成可见的位置。玩家返回时，四个释放物件会与三段近期记忆一起出现。空间的重复使用改变了它的意义：原本承载不完整首次布局的地方，最终成为七物件决策的场所。"
+    },
+    {
+      "index": 32,
+      "style": "Figure Caption",
+      "section": "Use of Space",
+      "word_count": 12,
+      "english": "Figure 4. Prototype view of the hippocampus-inspired memory room and central table.",
+      "full_text": "Figure 4. Prototype view of the hippocampus-inspired memory room and central table. / 图 4：海马体记忆空间及中央桌子的原型画面。"
+    },
+    {
+      "index": 33,
+      "style": "Normal",
+      "section": "Use of Space",
+      "word_count": 73,
+      "english": "The body-interior chamber works as a small hub with four clear destinations. Movement returns after the fall, and Start Conversation appears only within the relevant interaction area. The player chooses the visit order, but each position remains tied to one memory. After the fourth completion, the chamber breaks down and the state controller returns the player to the memory room. Final Play Mode checks are still needed for trigger overlap and return-point alignment.",
+      "full_text": "The body-interior chamber works as a small hub with four clear destinations. Movement returns after the fall, and Start Conversation appears only within the relevant interaction area. The player chooses the visit order, but each position remains tied to one memory. After the fourth completion, the chamber breaks down and the state controller returns the player to the memory room. Final Play Mode checks are still needed for trigger overlap and return-point alignment.\n身体内部空间是一个包含四个明确目的地的小型枢纽。坠落结束后，玩家恢复移动；只有进入对应交互区域时才会出现 Start Conversation。玩家可以选择访问顺序，但每个位置始终对应一段记忆。第四个容器完成后，空间开始崩解，状态控制器把玩家送回记忆空间。目前仍需在 Play Mode 中最终检查触发器重叠和返回点对齐。"
+    },
+    {
+      "index": 35,
+      "style": "Figure Caption",
+      "section": "Use of Space",
+      "word_count": 16,
+      "english": "Figure 5. Prototype views of the Giant's exterior and the enclosed memory space inside its body.",
+      "full_text": "Figure 5. Prototype views of the Giant's exterior and the enclosed memory space inside its body. / 图 5：巨人外部及其体内封闭记忆空间的原型画面。"
+    },
+    {
+      "index": 36,
+      "style": "Heading 1",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 7,
+      "english": "Use of Sensory Triggers (or Multimodal Elements)",
+      "full_text": "Use of Sensory Triggers (or Multimodal Elements) / 感官触发与多模态元素的运用"
+    },
+    {
+      "index": 37,
+      "style": "Normal",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 50,
+      "english": "Lighting, post-processing, dialogue, and sound distinguish the four main stages. The assistant links them with a continuous voice: it briefs the player, warns of the Giant, reacts during the black-screen swallow, and reports progress inside the body. This spoken guidance keeps state changes readable without depending only on interface text.",
+      "full_text": "Lighting, post-processing, dialogue, and sound distinguish the four main stages. The assistant links them with a continuous voice: it briefs the player, warns of the Giant, reacts during the black-screen swallow, and reports progress inside the body. This spoken guidance keeps state changes readable without depending only on interface text.\n灯光、后期处理、对话和声音区分四个主要阶段。助手用连续的声音连接它们：进行任务说明、警告巨型小丑出现、在黑屏吞咽期间作出反应，并报告身体内部的进度。这种口头引导让状态变化清晰可读，而不只依赖界面文字。"
+    },
+    {
+      "index": 38,
+      "style": "Normal",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 66,
+      "english": "The crisis audio follows a causal order. The warning leads to footsteps; after they finish, roof rumble and Giant animation begin. Groans, heartbeat, and Nightmare processing build pressure during the grab. Near the mouth, a black fade hides the teleport while swallow sounds and the assistant's panicked line continue. The controlled fall completes the transition. Audio therefore joins several technical scene changes into one understandable event.",
+      "full_text": "The crisis audio follows a causal order. The warning leads to footsteps; after they finish, roof rumble and Giant animation begin. Groans, heartbeat, and Nightmare processing build pressure during the grab. Near the mouth, a black fade hides the teleport while swallow sounds and the assistant's panicked line continue. The controlled fall completes the transition. Audio therefore joins several technical scene changes into one understandable event.\n危机音频遵循因果顺序。警告之后出现脚步声；脚步结束后，屋顶震动和巨型小丑动画开始。抓取期间的低吼、心跳和Nightmare 后期处理共同增加压力。接近嘴部时，黑色淡出隐藏传送，而吞咽声和助手的惊慌台词继续播放。受控坠落完成转场。因此，音频把多个技术场景变化连接成一个容易理解的事件。"
+    },
+    {
+      "index": 40,
+      "style": "Figure Caption",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 10,
+      "english": "Figure 6. Touching the crystal ball begins the office-to-memory transition.",
+      "full_text": "Figure 6. Touching the crystal ball begins the office-to-memory transition. / 图 6：触碰水晶球开始从办公室进入记忆空间的转场。"
+    },
+    {
+      "index": 41,
+      "style": "Normal",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 57,
+      "english": "Reverb and echo make the compact body chamber sound much larger. Each unresolved memory repeats an idle line with a short gap, so its belief feels persistent. Dialogue gives different replies to constructive and harmful choices, while the breaking sound marks completion. As containers are resolved, their loops stop and the chamber becomes less crowded with voices.",
+      "full_text": "Reverb and echo make the compact body chamber sound much larger. Each unresolved memory repeats an idle line with a short gap, so its belief feels persistent. Dialogue gives different replies to constructive and harmful choices, while the breaking sound marks completion. As containers are resolved, their loops stop and the chamber becomes less crowded with voices.\n混响和回声让紧凑的身体内部空间听起来更大。每段未解决记忆会隔一小段时间重复待机台词，使其信念显得持续存在。对话会对建设性和有害选择给出不同回应，而破碎声标记完成。随着容器被解决，对应循环停止，空间中的声音也逐渐减少。"
+    },
+    {
+      "index": 43,
+      "style": "Figure Caption",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 11,
+      "english": "Figure 7. Lighting, bloom, and particles distinguish the subconscious memory stage.",
+      "full_text": "Figure 7. Lighting, bloom, and particles distinguish the subconscious memory stage. / 图 7：灯光、泛光和粒子区分潜意识记忆阶段。"
+    },
+    {
+      "index": 44,
+      "style": "Normal",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 58,
+      "english": "The soundscapes also separate dramatic functions. The crisis uses sharp movement and body sounds; the later chamber uses a long, reflective acoustic tail. Container breaks and assistant responses mark progress, and the final spatial failure prepares the return. The systems are implemented, but full WebGL and XR playthrough timing, subtitle sync, and report readability still need final validation.",
+      "full_text": "The soundscapes also separate dramatic functions. The crisis uses sharp movement and body sounds; the later chamber uses a long, reflective acoustic tail. Container breaks and assistant responses mark progress, and the final spatial failure prepares the return. The systems are implemented, but full WebGL and XR playthrough timing, subtitle sync, and report readability still need final validation.\n不同声景也承担不同的戏剧功能。危机使用强烈的移动声和身体声；之后的空间则使用较长、具有反思感的声音尾部。容器破碎与助手回应标记进度，最终空间失效为返回做准备。这些系统已经实现，但完整 WebGL 与 XR 流程的时序、字幕同步和报告可读性仍需最终验证。"
+    },
+    {
+      "index": 46,
+      "style": "Figure Caption",
+      "section": "Use of Sensory Triggers (or Multimodal Elements)",
+      "word_count": 13,
+      "english": "Figure 8. The nightmare volume and Giant scale make the crisis physically threatening.",
+      "full_text": "Figure 8. The nightmare volume and Giant scale make the crisis physically threatening. / 图 8：噩梦视觉和巨人尺度让危机具有身体威胁感。"
+    },
+    {
+      "index": 47,
+      "style": "Heading 1",
+      "section": "Use of Semiotic Elements",
+      "word_count": 4,
+      "english": "Use of Semiotic Elements",
+      "full_text": "Use of Semiotic Elements / 符号元素的运用"
+    },
+    {
+      "index": 48,
+      "style": "Normal",
+      "section": "Use of Semiotic Elements",
+      "word_count": 65,
+      "english": "Ordinary objects make hidden beliefs tangible. The medal represents rank, the alarm clock guilt about rest, the old phone fear of asking for help, and the red pen shame about mistakes. Sealing them in containers shows how the client has kept these memories locked away. Their later return to the memory room supports the rule that the past remains present even after its meaning changes.",
+      "full_text": "Ordinary objects make hidden beliefs tangible. The medal represents rank, the alarm clock guilt about rest, the old phone fear of asking for help, and the red pen shame about mistakes. Sealing them in containers shows how the client has kept these memories locked away. Their later return to the memory room supports the rule that the past remains present even after its meaning changes.\n日常物件让隐藏信念变得可触摸。奖牌代表排名，闹钟代表对休息的内疚，旧手机代表害怕求助，红笔代表对错误的羞耻。把它们封在容器中，表现来访者如何压住这些记忆。物件后来回到记忆空间，也支持项目的规则：即使意义改变，过去仍然存在。"
+    },
+    {
+      "index": 49,
+      "style": "Normal",
+      "section": "Use of Semiotic Elements",
+      "word_count": 58,
+      "english": "A container breaks only after a constructive interpretation. The break does not mean that the event disappears or that a belief is instantly cured. It marks a change from a fixed interpretation to a more flexible one. The memory object survives and can be handled again, so release comes from changing its frame rather than erasing the experience.",
+      "full_text": "A container breaks only after a constructive interpretation. The break does not mean that the event disappears or that a belief is instantly cured. It marks a change from a fixed interpretation to a more flexible one. The memory object survives and can be handled again, so release comes from changing its frame rather than erasing the experience.\n容器只会在记忆获得建设性解释后破碎。破碎并不表示事件消失，也不表示某个信念被立刻治愈。它标记的是从固定解释转向更灵活理解的变化。记忆物件仍然存在并可以再次拿取，因此释放来自解释框架的改变，而不是抹去经历。"
+    },
+    {
+      "index": 50,
+      "style": "Normal",
+      "section": "Use of Semiotic Elements",
+      "word_count": 58,
+      "english": "Other signs extend this idea. The swallow, black screen, and fall mark entry into the Giant's inner space; cavern-like sound enlarges that psychological space. Focus, Context, and Background are not labels for good, neutral, and bad. They show how much present attention a memory receives. The final report translates those positions into specific possible effects on the client.",
+      "full_text": "Other signs extend this idea. The swallow, black screen, and fall mark entry into the Giant's inner space; cavern-like sound enlarges that psychological space. Focus, Context, and Background are not labels for good, neutral, and bad. They show how much present attention a memory receives. The final report translates those positions into specific possible effects on the client.\n其他符号延伸了这一概念。吞咽、黑屏和坠落标记进入巨型小丑的内部空间；洞穴般的声音则放大这个心理空间。“焦点”“语境”和“背景”不是好、中、坏的标签，而是表示一段记忆目前获得多少注意力。最终报告把这些位置转化为对来访者可能产生的具体影响。"
+    },
+    {
+      "index": 52,
+      "style": "Figure Caption",
+      "section": "Use of Semiotic Elements",
+      "word_count": 12,
+      "english": "Figure 9. The falling image clarifies the transition into the Giant's body.",
+      "full_text": "Figure 9. The falling image clarifies the transition into the Giant's body. / 图 9：坠落图像说明玩家正在进入巨人身体内部。"
+    },
+    {
+      "index": 53,
+      "style": "Heading 1",
+      "section": "Use of Embodied Actions and/or Enacted Elements",
+      "word_count": 8,
+      "english": "Use of Embodied Actions and/or Enacted Elements",
+      "full_text": "Use of Embodied Actions and/or Enacted Elements / 具身动作与展演元素的运用"
+    },
+    {
+      "index": 54,
+      "style": "Normal",
+      "section": "Use of Embodied Actions and/or Enacted Elements",
+      "word_count": 64,
+      "english": "The player learns the system through action. They activate the crystal ball, pick up memories, listen while handling them, and place them in attention zones. Inside the Giant, they walk to a container and choose dialogue responses; the container breaks automatically after a constructive resolution, so the design avoids presenting reflection as physical attack. Final redistribution returns to object handling with the widest freedom.",
+      "full_text": "The player learns the system through action. They activate the crystal ball, pick up memories, listen while handling them, and place them in attention zones. Inside the Giant, they walk to a container and choose dialogue responses; the container breaks automatically after a constructive resolution, so the design avoids presenting reflection as physical attack. Final redistribution returns to object handling with the widest freedom.\n玩家通过行动理解系统。他们启动水晶球、拿起记忆、在操作物件时聆听，并把物件放入注意力区域。在巨型小丑体内，玩家走向容器并选择对话回应；建设性解决后容器自动破碎，因此设计没有把反思表现成物理攻击。最终重新分配回到物件操作，并提供最大的自由度。"
+    },
+    {
+      "index": 55,
+      "style": "Normal",
+      "section": "Use of Embodied Actions and/or Enacted Elements",
+      "word_count": 68,
+      "english": "The capture creates a temporary, embodied loss of control without switching to an external camera. The Giant removes the roof, reaches into the room, and carries the player toward its mouth. Locomotion and jumping stop, but head direction or mouse look remains active. During the black fade, audio continues while the player moves to the fall start point; ControlledFall then reaches the body chamber before movement is restored.",
+      "full_text": "The capture creates a temporary, embodied loss of control without switching to an external camera. The Giant removes the roof, reaches into the room, and carries the player toward its mouth. Locomotion and jumping stop, but head direction or mouse look remains active. During the black fade, audio continues while the player moves to the fall start point; ControlledFall then reaches the body chamber before movement is restored.\n抓取在不切换到外部镜头的情况下，制造暂时且具身的失控体验。巨型小丑移开屋顶，把手伸入房间，并把玩家带向嘴部。位移和跳跃停止，但头部方向或鼠标观察仍然可用。黑色淡出期间，音频继续播放，玩家被移到坠落起点；随后 ControlledFall 把玩家送到身体内部空间，再恢复移动。"
+    },
+    {
+      "index": 56,
+      "style": "Normal",
+      "section": "Use of Embodied Actions and/or Enacted Elements",
+      "word_count": 61,
+      "english": "Other characters and objects also enact the story. The assistant warns the player, reacts to the swallow, responds to released memories, and starts the return after all four are complete. Containers stay closed while unresolved and break on their completion events. Back in the memory room, the four objects regain holdability and gravity at set return points, enabling the final placement.",
+      "full_text": "Other characters and objects also enact the story. The assistant warns the player, reacts to the swallow, responds to released memories, and starts the return after all four are complete. Containers stay closed while unresolved and break on their completion events. Back in the memory room, the four objects regain holdability and gravity at set return points, enabling the final placement.\n其他角色与物件也在表演故事。助手警告玩家、对吞咽作出反应、回应已释放的记忆，并在四段记忆全部完成后开始返回。未解决时，容器保持关闭；完成事件触发后，容器破碎。回到记忆空间时，四个物件在设定的返回点恢复可拿取状态和重力，从而支持最终放置。"
+    },
+    {
+      "index": 58,
+      "style": "Figure Caption",
+      "section": "Use of Embodied Actions and/or Enacted Elements",
+      "word_count": 15,
+      "english": "Figure 10. The Giant's close-up turns anxiety and loss of control into an embodied climax.",
+      "full_text": "Figure 10. The Giant's close-up turns anxiety and loss of control into an embodied climax. / 图 10：巨人特写把焦虑和失去控制转化为具身高潮。"
+    },
+    {
+      "index": 59,
+      "style": "Normal",
+      "section": "Use of Embodied Actions and/or Enacted Elements",
+      "word_count": 26,
+      "english": "[TO ADD: XR headset test evidence, device name, comfort observations, frame-rate result, and one labelled screenshot. Without this evidence, do not claim that c7 is satisfied.]",
+      "full_text": "[TO ADD: XR headset test evidence, device name, comfort observations, frame-rate result, and one labelled screenshot. Without this evidence, do not claim that c7 is satisfied.]\n[补充：XR 头显测试证据、设备名称、舒适度观察、帧率结果和一张带标签截图。缺少这些证据时，不要声称已满足 c7。]"
+    },
+    {
+      "index": 60,
+      "style": "Heading 1",
+      "section": "Collaborative Practice",
+      "word_count": 2,
+      "english": "Collaborative Practice",
+      "full_text": "Collaborative Practice / 协作实践"
+    },
+    {
+      "index": 61,
+      "style": "Normal",
+      "section": "Collaborative Practice",
+      "word_count": 37,
+      "english": "[SECTION RESERVED FOR THE STUDENT. Insert English screenshots from official class channels for Weeks 6-10. Caption every item with the exact rubric label (d1-d12), date, channel, what you contributed, and what changed as a result.]",
+      "full_text": "[SECTION RESERVED FOR THE STUDENT. Insert English screenshots from official class channels for Weeks 6-10. Caption every item with the exact rubric label (d1-d12), date, channel, what you contributed, and what changed as a result.]\n[此部分留给学生整理。插入第 6-10 周官方课程频道中的英文截图。每项证据都应标注准确的评分标签（d1-d12）、日期、频道、你贡献了什么，以及该贡献带来了什么变化。]"
+    },
+    {
+      "index": 63,
+      "style": "Heading 1",
+      "section": "Academic References",
+      "word_count": 2,
+      "english": "Academic References",
+      "full_text": "Academic References / 学术参考文献"
+    },
+    {
+      "index": 64,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 39,
+      "english": "Antle, A. N., Corness, G., & Droumeva, M. (2009). What the body knows: Exploring the benefits of embodied metaphors in hybrid physical digital environments. Interacting with Computers, 21(1-2), 66-75. https://doi.org/10.1016/j.intcom.2008.10.005",
+      "full_text": "Antle, A. N., Corness, G., & Droumeva, M. (2009). What the body knows: Exploring the benefits of embodied metaphors in hybrid physical digital environments. Interacting with Computers, 21(1-2), 66-75. https://doi.org/10.1016/j.intcom.2008.10.005"
+    },
+    {
+      "index": 65,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 30,
+      "english": "Cunliffe, A. L., & Coupland, C. (2012). From hero to villain to hero: Making experience sensible through embodied narrative sensemaking. Human Relations, 65(1), 63-88. https://doi.org/10.1177/0018726711424321",
+      "full_text": "Cunliffe, A. L., & Coupland, C. (2012). From hero to villain to hero: Making experience sensible through embodied narrative sensemaking. Human Relations, 65(1), 63-88. https://doi.org/10.1177/0018726711424321"
+    },
+    {
+      "index": 66,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 20,
+      "english": "Freytag, G. (1894). Freytag's Technique of the Drama (E. J. MacEwan, Trans.). Scott, Foresman and Company. (Original work published 1863).",
+      "full_text": "Freytag, G. (1894). Freytag's Technique of the Drama (E. J. MacEwan, Trans.). Scott, Foresman and Company. (Original work published 1863)."
+    },
+    {
+      "index": 67,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 45,
+      "english": "Gödde, M., Gabler, F., Siegmund, D., & Braun, A. (2018). Cinematic narration in VR: Rethinking film conventions for 360 degrees. In Virtual, Augmented and Mixed Reality: Applications in Health, Cultural Heritage, and Industry (pp. 184-201). Springer. https://doi.org/10.1007/978-3-319-91584-5_15",
+      "full_text": "Gödde, M., Gabler, F., Siegmund, D., & Braun, A. (2018). Cinematic narration in VR: Rethinking film conventions for 360 degrees. In Virtual, Augmented and Mixed Reality: Applications in Health, Cultural Heritage, and Industry (pp. 184-201). Springer. https://doi.org/10.1007/978-3-319-91584-5_15"
+    },
+    {
+      "index": 68,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 29,
+      "english": "Jenkins, H. (2004). Game design as narrative architecture. In N. Wardrip-Fruin and P. Harrigan (Eds.), First Person: New Media as Story, Performance, and Game (pp. 118-130). MIT Press.",
+      "full_text": "Jenkins, H. (2004). Game design as narrative architecture. In N. Wardrip-Fruin and P. Harrigan (Eds.), First Person: New Media as Story, Performance, and Game (pp. 118-130). MIT Press."
+    },
+    {
+      "index": 69,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 16,
+      "english": "Murray, J. H. (1997). Hamlet on the Holodeck: The Future of Narrative in Cyberspace. MIT Press.",
+      "full_text": "Murray, J. H. (1997). Hamlet on the Holodeck: The Future of Narrative in Cyberspace. MIT Press."
+    },
+    {
+      "index": 70,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 12,
+      "english": "Ryan, M.-L. (n.d.). Space, place and story. Course reading PDF.",
+      "full_text": "Ryan, M.-L. (n.d.). Space, place and story. Course reading PDF."
+    },
+    {
+      "index": 71,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 33,
+      "english": "Slater, M. (2009). Place illusion and plausibility can lead to realistic behaviour in immersive virtual environments. Philosophical Transactions of the Royal Society B, 364(1535), 3549-3557. https://doi.org/10.1098/rstb.2009.0138",
+      "full_text": "Slater, M. (2009). Place illusion and plausibility can lead to realistic behaviour in immersive virtual environments. Philosophical Transactions of the Royal Society B, 364(1535), 3549-3557. https://doi.org/10.1098/rstb.2009.0138"
+    },
+    {
+      "index": 72,
+      "style": "Normal",
+      "section": "Academic References",
+      "word_count": 22,
+      "english": "[CHECK REQUIRED: align citation style with course requirements and add the specific Week 2-4 and Week 8 course materials actually used.]",
+      "full_text": "[CHECK REQUIRED: align citation style with course requirements and add the specific Week 2-4 and Week 8 course materials actually used.]\n[需要核对：按照课程要求统一引用格式，并补充实际使用的第 2-4 周和第 8 周课程材料。]"
+    },
+    {
+      "index": 73,
+      "style": "Heading 1",
+      "section": "Asset Citations",
+      "word_count": 2,
+      "english": "Asset Citations",
+      "full_text": "Asset Citations / 资产引用"
+    },
+    {
+      "index": 74,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 37,
+      "english": "The following sources are visible in the repository documentation. The final submission should include only assets that remain in the submitted build, plus the exact source and licence for every imported model, image, sound, font, and animation.",
+      "full_text": "The following sources are visible in the repository documentation. The final submission should include only assets that remain in the submitted build, plus the exact source and licence for every imported model, image, sound, font, and animation.\n以下来源可以在仓库文档中确认。最终提交只应保留实际出现在构建中的资产，并为每个导入的模型、图像、声音、字体和动画提供准确来源与许可。"
+    },
+    {
+      "index": 75,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 38,
+      "english": "Audio from Freesound: https://freesound.org/s/753178/ ; https://freesound.org/s/249156/ ; https://freesound.org/s/473525/ ; https://freesound.org/s/643766/ ; https://freesound.org/s/216923/ ; https://freesound.org/s/390549/ ; https://freesound.org/s/377206/",
+      "full_text": "Audio from Freesound: https://freesound.org/s/753178/ ; https://freesound.org/s/249156/ ; https://freesound.org/s/473525/ ; https://freesound.org/s/643766/ ; https://freesound.org/s/216923/ ; https://freesound.org/s/390549/ ; https://freesound.org/s/377206/"
+    },
+    {
+      "index": 76,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 11,
+      "english": "Clown character: Mixamo, https://www.mixamo.com/#/?page=2&type=Character",
+      "full_text": "Clown character: Mixamo, https://www.mixamo.com/#/?page=2&type=Character"
+    },
+    {
+      "index": 77,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 13,
+      "english": "Picking up animation: Mixamo, https://www.mixamo.com/#/?page=1&type=Motion%2CMotionPack",
+      "full_text": "Picking up animation: Mixamo, https://www.mixamo.com/#/?page=1&type=Motion%2CMotionPack"
+    },
+    {
+      "index": 78,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 15,
+      "english": "Unity Asset Store: Stylized Cracking Breakable Glass, https://assetstore.unity.com/packages/vfx/stylized-cracking-breakable-glass-366374",
+      "full_text": "Unity Asset Store: Stylized Cracking Breakable Glass, https://assetstore.unity.com/packages/vfx/stylized-cracking-breakable-glass-366374"
+    },
+    {
+      "index": 79,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 18,
+      "english": "Unity Asset Store: Free Stylized Sci-Fi Scout Bot, https://assetstore.unity.com/packages/3d/characters/robots/free-stylized-sci-fi-scout-bot-371626",
+      "full_text": "Unity Asset Store: Free Stylized Sci-Fi Scout Bot, https://assetstore.unity.com/packages/3d/characters/robots/free-stylized-sci-fi-scout-bot-371626"
+    },
+    {
+      "index": 80,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 23,
+      "english": "Unity Asset Store: Lite Dungeon Pack Low Poly 3D Art by Gridness, https://assetstore.unity.com/packages/3d/environments/dungeons/lite-dungeon-pack-low-poly-3d-art-by-gridness-242692",
+      "full_text": "Unity Asset Store: Lite Dungeon Pack Low Poly 3D Art by Gridness, https://assetstore.unity.com/packages/3d/environments/dungeons/lite-dungeon-pack-low-poly-3d-art-by-gridness-242692"
+    },
+    {
+      "index": 81,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 21,
+      "english": "Unity Asset Store: Raft on the Desert Free Low Poly Pack, https://assetstore.unity.com/packages/3d/environments/landscapes/raft-on-the-desert-free-low-poly-pack-141948",
+      "full_text": "Unity Asset Store: Raft on the Desert Free Low Poly Pack, https://assetstore.unity.com/packages/3d/environments/landscapes/raft-on-the-desert-free-low-poly-pack-141948"
+    },
+    {
+      "index": 82,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 20,
+      "english": "Unity Asset Store: Low Poly Dungeon Lite Fantasy Modular Kit, https://assetstore.unity.com/packages/3d/environments/dungeons/low-poly-dungeon-lite-fantasy-modular-kit-224313",
+      "full_text": "Unity Asset Store: Low Poly Dungeon Lite Fantasy Modular Kit, https://assetstore.unity.com/packages/3d/environments/dungeons/low-poly-dungeon-lite-fantasy-modular-kit-224313"
+    },
+    {
+      "index": 83,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 16,
+      "english": "Unity Asset Store: Skybox Series Free, https://assetstore.unity.com/packages/2d/textures-materials/sky/skybox-series-free-103633",
+      "full_text": "Unity Asset Store: Skybox Series Free, https://assetstore.unity.com/packages/2d/textures-materials/sky/skybox-series-free-103633"
+    },
+    {
+      "index": 84,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 24,
+      "english": "EZPZ Interaction Toolkit by Matt Cabanag: https://github.com/mattcabanag ; Unity XR Interaction Toolkit and standard Unity packages were used through the project manifest.",
+      "full_text": "EZPZ Interaction Toolkit by Matt Cabanag: https://github.com/mattcabanag ; Unity XR Interaction Toolkit and standard Unity packages were used through the project manifest."
+    },
+    {
+      "index": 85,
+      "style": "Normal",
+      "section": "Asset Citations",
+      "word_count": 44,
+      "english": "[TO VERIFY AND CITE: medal, clock, cell phone, BrickToy assets, all memory images, and any new assistant, memory, ambience, heartbeat, rumble, footsteps, monster, or swallow audio files added after A1. Remove any citation for an asset that is not used in the submitted build.]",
+      "full_text": "[TO VERIFY AND CITE: medal, clock, cell phone, BrickToy assets, all memory images, and any new assistant, memory, ambience, heartbeat, rumble, footsteps, monster, or swallow audio files added after A1. Remove any citation for an asset that is not used in the submitted build.]\n[需要核对并引用：奖牌、闹钟、手机、BrickToy 资产、全部记忆图像，以及 A1 之后新增的助手、记忆、环境、心跳、隆隆声、脚步、怪物或吞咽音频。删除最终构建中未使用资产的引用。]"
+    },
+    {
+      "index": 86,
+      "style": "Heading 1",
+      "section": "AI Acknowledgements",
+      "word_count": 2,
+      "english": "AI Acknowledgements",
+      "full_text": "AI Acknowledgements / AI 使用说明"
+    },
+    {
+      "index": 87,
+      "style": "Normal",
+      "section": "AI Acknowledgements",
+      "word_count": 46,
+      "english": "Google AI Studio Nano Banana 2 Lite was used for image generation. Prompts requested horizontal Disney/Pixar-style 3D cartoon images of a tired young office worker at night with a thermos and medicine, then the same person sleeping in bed at night while maintaining character consistency.",
+      "full_text": "Google AI Studio Nano Banana 2 Lite was used for image generation. Prompts requested horizontal Disney/Pixar-style 3D cartoon images of a tired young office worker at night with a thermos and medicine, then the same person sleeping in bed at night while maintaining character consistency.\nGoogle AI Studio Nano Banana 2 Lite 被用于图像生成。提示词要求生成横向的 Disney/Pixar 风格 3D 卡通图像：一名疲惫的年轻办公室职员在夜间与保温杯和药物一起工作，随后是同一个人在夜间床上睡觉，并保持角色一致性。"
+    },
+    {
+      "index": 88,
+      "style": "Normal",
+      "section": "AI Acknowledgements",
+      "word_count": 50,
+      "english": "Deevid.ai was used for video generation. The prompt requested a Pixar-inspired single continuous shot of the young office worker at a night desk, noticing medicine, swallowing pills, drinking warm water, and returning to the computer, with consistent character design, simple office background, static camera, natural movement, and cinematic lighting.",
+      "full_text": "Deevid.ai was used for video generation. The prompt requested a Pixar-inspired single continuous shot of the young office worker at a night desk, noticing medicine, swallowing pills, drinking warm water, and returning to the computer, with consistent character design, simple office background, static camera, natural movement, and cinematic lighting.\nDeevid.ai 被用于视频生成。提示词要求制作一个受 Pixar 启发的连续镜头：年轻办公室职员坐在夜间办公桌前，注意到药物、吞下药片、喝温水并返回电脑；角色设计保持一致，办公室背景简单，相机固定，动作自然，并使用电影化灯光。"
+    },
+    {
+      "index": 89,
+      "style": "Normal",
+      "section": "AI Acknowledgements",
+      "word_count": 27,
+      "english": "ElevenLabs was used to generate the robot assistant voice audio from the written dialogue script, so the assistant narration could remain clear and consistent across scene transitions.",
+      "full_text": "ElevenLabs was used to generate the robot assistant voice audio from the written dialogue script, so the assistant narration could remain clear and consistent across scene transitions.\nElevenLabs 被用于根据书面对话脚本生成机器人助手的语音，使助手叙述在不同场景转场中保持清晰和一致。"
+    },
+    {
+      "index": 90,
+      "style": "Normal",
+      "section": "AI Acknowledgements",
+      "word_count": 43,
+      "english": "OpenAI Codex was used for code assistance and report support. Prompts asked for implementation help based on current scripts and process analysis, debugging suggestions, rubric comparison, structure revision, and concise wording. Final design decisions, editing, asset selection, and submission responsibility remain my own.",
+      "full_text": "OpenAI Codex was used for code assistance and report support. Prompts asked for implementation help based on current scripts and process analysis, debugging suggestions, rubric comparison, structure revision, and concise wording. Final design decisions, editing, asset selection, and submission responsibility remain my own.\nOpenAI Codex 被用于代码辅助和报告支持。提示词要求它根据当前脚本和流程分析提供实现帮助、调试建议、评分标准对照、结构修改和精简措辞。最终设计决定、编辑、资产选择和提交责任仍由我本人承担。"
+    }
+  ],
+  "table_records": [
+    {
+      "index": 0,
+      "rows": [
+        [
+          {
+            "text": "DRAFT STATUS: Complete the highlighted placeholders, confirm the five-minute playthrough target, verify all asset sources, and replace this note before submission.\n草稿状态：完成所有高亮占位符，确认五分钟游玩目标，核对全部资产来源，并在提交前删除本提示。",
+            "english": "DRAFT STATUS: Complete the highlighted placeholders, confirm the five-minute playthrough target, verify all asset sources, and replace this note before submission.",
+            "word_count": 21
+          }
+        ]
+      ]
+    },
+    {
+      "index": 1,
+      "rows": [
+        [
+          {
+            "text": "Submission field\n提交字段",
+            "english": "Submission field",
+            "word_count": 2
+          },
+          {
+            "text": "Draft value\n草稿值",
+            "english": "Draft value",
+            "word_count": 2
+          }
+        ],
+        [
+          {
+            "text": "WebGL link\nWebGL 链接",
+            "english": "WebGL link",
+            "word_count": 2
+          },
+          {
+            "text": "https://zoeyyy77.itch.io/sleeporganizer\n可公开游玩的 WebGL 链接",
+            "english": "https://zoeyyy77.itch.io/sleeporganizer",
+            "word_count": 5
+          }
+        ],
+        [
+          {
+            "text": "GitHub repository\nGitHub 仓库",
+            "english": "GitHub repository",
+            "word_count": 2
+          },
+          {
+            "text": "https://github.com/ZoeyW-zq/9903_Zoey\nGitHub 仓库链接",
+            "english": "https://github.com/ZoeyW-zq/9903_Zoey",
+            "word_count": 5
+          }
+        ],
+        [
+          {
+            "text": "First scene\n首个场景",
+            "english": "First scene",
+            "word_count": 2
+          },
+          {
+            "text": "scene_WebGL\nscene_WebGL",
+            "english": "scene_WebGL",
+            "word_count": 2
+          }
+        ],
+        [
+          {
+            "text": "Student name / zID\n学生姓名 / zID",
+            "english": "Student name / zID",
+            "word_count": 3
+          },
+          {
+            "text": "Zoey Wu z5658626\nZoey Wu z5658626",
+            "english": "Zoey Wu z5658626",
+            "word_count": 3
+          }
+        ]
+      ]
+    },
+    {
+      "index": 2,
+      "rows": [
+        [
+          {
+            "text": "Freytag function\nFreytag 功能",
+            "english": "Freytag function",
+            "word_count": 2
+          },
+          {
+            "text": "Narrative state\n叙事状态",
+            "english": "Narrative state",
+            "word_count": 2
+          },
+          {
+            "text": "Agency carried by the state\n该状态承载的能动性",
+            "english": "Agency carried by the state",
+            "word_count": 5
+          }
+        ],
+        [
+          {
+            "text": "Exposition\n开端",
+            "english": "Exposition",
+            "word_count": 1
+          },
+          {
+            "text": "OfficeDialogue\nOfficeDialogue",
+            "english": "OfficeDialogue",
+            "word_count": 1
+          },
+          {
+            "text": "Learn the role, explore, or begin work; these choices establish rhythm but reconverge.\n了解角色、探索或开始工作；这些选择改变节奏，但最终汇合。",
+            "english": "Learn the role, explore, or begin work; these choices establish rhythm but reconverge.",
+            "word_count": 13
+          }
+        ],
+        [
+          {
+            "text": "Exposition to tension building\n开端至张力累积",
+            "english": "Exposition to tension building",
+            "word_count": 4
+          },
+          {
+            "text": "AwaitCrystalBall / TransitionToHippocampus\nAwaitCrystalBall / TransitionToHippocampus",
+            "english": "AwaitCrystalBall / TransitionToHippocampus",
+            "word_count": 2
+          },
+          {
+            "text": "Finish the briefing and cross the threshold into the client's subconscious.\n完成简报并跨越门槛，进入来访者的潜意识。",
+            "english": "Finish the briefing and cross the threshold into the client's subconscious.",
+            "word_count": 11
+          }
+        ],
+        [
+          {
+            "text": "Tension building\n张力累积",
+            "english": "Tension building",
+            "word_count": 2
+          },
+          {
+            "text": "AwaitMemoryPlacement\nAwaitMemoryPlacement",
+            "english": "AwaitMemoryPlacement",
+            "word_count": 1
+          },
+          {
+            "text": "Inspect and provisionally place three recent memories before the crisis interrupts.\n查看并暂时放置三段近期记忆，之后危机将其打断。",
+            "english": "Inspect and provisionally place three recent memories before the crisis interrupts.",
+            "word_count": 11
+          }
+        ],
+        [
+          {
+            "text": "Climax\n高潮",
+            "english": "Climax",
+            "word_count": 1
+          },
+          {
+            "text": "GiantCrisis / SwallowTransition\nGiantCrisis / SwallowTransition",
+            "english": "GiantCrisis / SwallowTransition",
+            "word_count": 2
+          },
+          {
+            "text": "The Giant breaks the safe space, captures the player, and swallows them; looking remains available while movement is withheld.\n巨人破坏安全空间、抓住并吞下玩家；位移被暂停，但仍可观察。",
+            "english": "The Giant breaks the safe space, captures the player, and swallows them; looking remains available while movement is withheld.",
+            "word_count": 19
+          }
+        ],
+        [
+          {
+            "text": "Falling action\n下降行动",
+            "english": "Falling action",
+            "word_count": 2
+          },
+          {
+            "text": "Body-interior chamber / Four containers\n身体内部空间 / 四个容器",
+            "english": "Body-interior chamber / Four containers",
+            "word_count": 4
+          },
+          {
+            "text": "Choose container order and dialogue responses; constructive interpretations break containers and release memories.\n选择容器顺序与对话回应；建设性新理解会使容器破碎并释放记忆。",
+            "english": "Choose container order and dialogue responses; constructive interpretations break containers and release memories.",
+            "word_count": 13
+          }
+        ],
+        [
+          {
+            "text": "Resolution\n解决",
+            "english": "Resolution",
+            "word_count": 1
+          },
+          {
+            "text": "FinalMemoryPlacement\nFinalMemoryPlacement",
+            "english": "FinalMemoryPlacement",
+            "word_count": 1
+          },
+          {
+            "text": "Freely redistribute all seven memories; confirmed attention choices create real psychological outcomes.\n自由重新分配七段记忆；确认后的注意力选择产生真实心理后果。",
+            "english": "Freely redistribute all seven memories; confirmed attention choices create real psychological outcomes.",
+            "word_count": 12
+          }
+        ],
+        [
+          {
+            "text": "Denouement\n结局",
+            "english": "Denouement",
+            "word_count": 1
+          },
+          {
+            "text": "BackToOffice / ViewReport / SessionComplete\nBackToOffice / ViewReport / SessionComplete",
+            "english": "BackToOffice / ViewReport / SessionComplete",
+            "word_count": 3
+          },
+          {
+            "text": "Read the compositional report, then use Close Session for the neutral spoken ending and final fade to black.\n阅读组合式报告，再以 Close Session 触发中性口述结尾并最终淡为黑屏。",
+            "english": "Read the compositional report, then use Close Session for the neutral spoken ending and final fade to black.",
+            "word_count": 18
+          }
+        ]
+      ]
+    },
+    {
+      "index": 3,
+      "rows": [
+        [
+          {
+            "text": "Rubric label\n评分标签",
+            "english": "Rubric label",
+            "word_count": 2
+          },
+          {
+            "text": "Date and channel\n日期与频道",
+            "english": "Date and channel",
+            "word_count": 3
+          },
+          {
+            "text": "Evidence screenshot\n证据截图",
+            "english": "Evidence screenshot",
+            "word_count": 2
+          },
+          {
+            "text": "Why the contribution was substantive / reciprocal\n该贡献为何具有实质性 / 互惠性",
+            "english": "Why the contribution was substantive / reciprocal",
+            "word_count": 6
+          }
+        ],
+        [
+          {
+            "text": "[d__]\n[d__]",
+            "english": "[d__]",
+            "word_count": 1
+          },
+          {
+            "text": "[TO ADD]\n[待补充]",
+            "english": "[TO ADD]",
+            "word_count": 2
+          },
+          {
+            "text": "[INSERT ENGLISH SCREENSHOT]\n[插入英文截图]",
+            "english": "[INSERT ENGLISH SCREENSHOT]",
+            "word_count": 3
+          },
+          {
+            "text": "[TO ADD]\n[待补充]",
+            "english": "[TO ADD]",
+            "word_count": 2
+          }
+        ],
+        [
+          {
+            "text": "[d__]\n[d__]",
+            "english": "[d__]",
+            "word_count": 1
+          },
+          {
+            "text": "[TO ADD]\n[待补充]",
+            "english": "[TO ADD]",
+            "word_count": 2
+          },
+          {
+            "text": "[INSERT ENGLISH SCREENSHOT]\n[插入英文截图]",
+            "english": "[INSERT ENGLISH SCREENSHOT]",
+            "word_count": 3
+          },
+          {
+            "text": "[TO ADD]\n[待补充]",
+            "english": "[TO ADD]",
+            "word_count": 2
+          }
+        ],
+        [
+          {
+            "text": "[d__]\n[d__]",
+            "english": "[d__]",
+            "word_count": 1
+          },
+          {
+            "text": "[TO ADD]\n[待补充]",
+            "english": "[TO ADD]",
+            "word_count": 2
+          },
+          {
+            "text": "[INSERT ENGLISH SCREENSHOT]\n[插入英文截图]",
+            "english": "[INSERT ENGLISH SCREENSHOT]",
+            "word_count": 3
+          },
+          {
+            "text": "[TO ADD]\n[待补充]",
+            "english": "[TO ADD]",
+            "word_count": 2
+          }
+        ]
+      ]
+    }
+  ]
+}
