@@ -82,6 +82,9 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
 
         if (value)
         {
+            if (!gameObject.activeSelf)
+                gameObject.SetActive(true);
+
             triggered = false;
             StopFadeReset();
 
@@ -91,9 +94,18 @@ public class CrystalBall : MonoBehaviour, ICrystalBallEntry
                 screenFadeController.SetAlpha(0f);
             }
         }
-        else if (!triggered)
+        else
         {
-            ResetFadeToTransparent();
+            StopFadeReset();
+
+            if (!triggered && screenFadeController != null)
+            {
+                SetEntryFadeColor();
+                screenFadeController.SetAlpha(0f);
+            }
+
+            if (gameObject.activeSelf)
+                gameObject.SetActive(false);
         }
     }
 

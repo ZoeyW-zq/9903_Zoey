@@ -4,6 +4,12 @@ using UnityEngine.UI;
 
 public class OfficeDialogueController : MonoBehaviour
 {
+    public enum DialogueMode
+    {
+        Recorded,
+        ExternalConvai
+    }
+
     [Header("References")]
     [SerializeField] private AssistantController assistantController;
     [SerializeField] private GameStateController gameStateController;
@@ -13,6 +19,9 @@ public class OfficeDialogueController : MonoBehaviour
     [SerializeField] private Button startWorkButton;
     [SerializeField] private Button finishReadingButton;
     [SerializeField] private GameObject computerScreenContent;
+
+    [Header("Mode")]
+    [SerializeField] private DialogueMode dialogueMode = DialogueMode.Recorded;
 
     [Header("Dialogue")]
     [SerializeField] private AssistantController.DialogueLine[] greetingLines;
@@ -24,6 +33,9 @@ public class OfficeDialogueController : MonoBehaviour
 
     public bool HasHeardJobExplanation { get; private set; }
     public bool IsReadyToStart { get; private set; }
+    public bool IsExploring => isExploring;
+    public bool IsWaitingForReadingConfirmation => waitingForReadingConfirmation;
+    public bool UsesExternalDialogue => dialogueMode == DialogueMode.ExternalConvai;
     public bool IsJobExplanationAvailable => !isBusy && !isExploring && !IsReadyToStart
         && !HasHeardJobExplanation;
     public bool IsExploreOfficeAvailable => !isBusy && !isExploring && !IsReadyToStart;
@@ -31,7 +43,11 @@ public class OfficeDialogueController : MonoBehaviour
 
     private bool isBusy;
     private bool isExploring;
+    private bool hasLeftExplorationReturnArea;
     private bool waitingForReadingConfirmation;
+
+    public event Action ExternalDialogueBegan;
+    public event Action ExternalExplorationReturned;
 
     private void Awake()
     {
@@ -53,10 +69,18 @@ public class OfficeDialogueController : MonoBehaviour
         HasHeardJobExplanation = false;
         IsReadyToStart = false;
         isExploring = false;
+        hasLeftExplorationReturnArea = false;
         waitingForReadingConfirmation = false;
-        isBusy = true;
+        isBusy = !UsesExternalDialogue;
         SetComputerScreenVisible(false);
         HideAllChoiceButtons();
+
+        if (UsesExternalDialogue)
+        {
+            ExternalDialogueBegan?.Invoke();
+            return;
+        }
+
         Play(greetingLines, FinishDialogue);
     }
 
@@ -66,6 +90,13 @@ public class OfficeDialogueController : MonoBehaviour
             return;
 
         HasHeardJobExplanation = true;
+
+        if (UsesExternalDialogue)
+        {
+            HideAllChoiceButtons();
+            return;
+        }
+
         BeginDialogue(jobExplanationLines, FinishDialogue);
     }
 
@@ -75,16 +106,39 @@ public class OfficeDialogueController : MonoBehaviour
             return;
 
         isExploring = true;
+        hasLeftExplorationReturnArea = false;
+
+        if (UsesExternalDialogue)
+        {
+            HideAllChoiceButtons();
+            return;
+        }
+
         BeginDialogue(explorationDepartureLines, FinishExplorationDeparture);
     }
 
     public void ReturnFromExploration()
     {
-        if (!isExploring || isBusy)
+        if (!isExploring || isBusy || !hasLeftExplorationReturnArea)
             return;
 
         isExploring = false;
+        hasLeftExplorationReturnArea = false;
+
+        if (UsesExternalDialogue)
+        {
+            HideAllChoiceButtons();
+            ExternalExplorationReturned?.Invoke();
+            return;
+        }
+
         BeginDialogue(explorationReturnLines, FinishDialogue);
+    }
+
+    public void MarkExplorationReturnAreaExited()
+    {
+        if (isExploring)
+            hasLeftExplorationReturnArea = true;
     }
 
     public void SelectStartWork()
@@ -93,14 +147,44 @@ public class OfficeDialogueController : MonoBehaviour
             return;
 
         IsReadyToStart = true;
+
+        if (UsesExternalDialogue)
+        {
+            isBusy = true;
+            HideAllChoiceButtons();
+            return;
+        }
+
         BeginDialogue(startWorkLines, OnStartWorkDialogueComplete);
+    }
+
+    public void CompleteExternalStartWork()
+    {
+        if (!UsesExternalDialogue || !IsReadyToStart || waitingForReadingConfirmation)
+            return;
+
+        ShowReportForReading();
     }
 
     private void OnStartWorkDialogueComplete()
     {
+        ShowReportForReading();
+    }
+
+    private void ShowReportForReading()
+    {
         isBusy = false;
         waitingForReadingConfirmation = true;
         SetComputerScreenVisible(true);
+
+        if (UsesExternalDialogue)
+        {
+            SetButtonVisible(finishReadingButton, false);
+            if (choiceCanvas != null)
+                choiceCanvas.SetActive(false);
+            return;
+        }
+
         SetButtonVisible(finishReadingButton, true);
 
         if (choiceCanvas != null)
@@ -118,6 +202,12 @@ public class OfficeDialogueController : MonoBehaviour
 
         if (gameStateController != null)
             gameStateController.SetState(GameStateController.GameState.AwaitCrystalBall);
+
+        if (UsesExternalDialogue)
+        {
+            isBusy = false;
+            return;
+        }
 
         Play(crystalBallInstructionLines, null);
     }
@@ -145,6 +235,9 @@ public class OfficeDialogueController : MonoBehaviour
 
     private void Play(AssistantController.DialogueLine[] lines, Action onComplete)
     {
+        if (UsesExternalDialogue)
+            return;
+
         if (assistantController != null)
         {
             assistantController.PlayDialogue(lines, onComplete);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -39,6 +40,7 @@ public class MemoryPlacementController : MonoBehaviour
     private GameStateController finalFlowController;
 
     public IReadOnlyList<MemoryPlacementItem> FinalRequiredItems => finalRequiredItems;
+    public event Action MissingPainfulMemoriesDetected;
 
     private void Awake()
     {
@@ -178,8 +180,14 @@ public class MemoryPlacementController : MonoBehaviour
         if (!missingMemoryCueStarted && placedCount >= cueCount)
         {
             missingMemoryCueStarted = true;
+            bool externalCueHandler = MissingPainfulMemoriesDetected != null;
+            MissingPainfulMemoriesDetected?.Invoke();
 
-            if (assistantController != null)
+            if (externalCueHandler)
+            {
+                // The external dialogue bridge releases the placement flow after speech ends.
+            }
+            else if (assistantController != null)
             {
                 assistantController.PlayMissingPainfulMemories(OnMissingMemoryCueComplete);
             }
@@ -196,6 +204,14 @@ public class MemoryPlacementController : MonoBehaviour
             HideFeedback();
             TryTriggerPendingCrisis();
         }
+    }
+
+    public void CompleteMissingPainfulMemoriesCue()
+    {
+        if (!missingMemoryCueStarted || missingMemoryCueComplete)
+            return;
+
+        OnMissingMemoryCueComplete();
     }
 
     private int GetPlacedItemCount(List<MemoryPlacementItem> requiredItems)

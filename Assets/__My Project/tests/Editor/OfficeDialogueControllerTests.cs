@@ -106,6 +106,7 @@ public class OfficeDialogueControllerTests
         OfficeDialogueController office = CreateOfficeController(out assistant);
 
         office.SelectExploreOffice();
+        office.MarkExplorationReturnAreaExited();
         office.ReturnFromExploration();
 
         Assert.That(office.IsJobExplanationAvailable, Is.False);
@@ -113,6 +114,95 @@ public class OfficeDialogueControllerTests
         Assert.That(office.IsStartWorkAvailable, Is.True);
 
         DestroyOfficeController(assistant, office);
+    }
+
+    [Test]
+    public void ExternalModeInitializesWithoutRecordedAssistant()
+    {
+        GameObject officeObject = new GameObject("External Office Test");
+        OfficeDialogueController office = officeObject.AddComponent<OfficeDialogueController>();
+        SetPrivateField(office, "dialogueMode", OfficeDialogueController.DialogueMode.ExternalConvai);
+
+        bool began = false;
+        office.ExternalDialogueBegan += () => began = true;
+        office.BeginOfficeDialogue();
+
+        Assert.That(began, Is.True);
+        Assert.That(office.IsJobExplanationAvailable, Is.True);
+        Assert.That(office.IsExploreOfficeAvailable, Is.True);
+        Assert.That(office.IsStartWorkAvailable, Is.True);
+
+        UnityEngine.Object.DestroyImmediate(officeObject);
+    }
+
+    [Test]
+    public void ExternalExplorationReturnRaisesBridgeEvent()
+    {
+        GameObject officeObject = new GameObject("External Office Test");
+        OfficeDialogueController office = officeObject.AddComponent<OfficeDialogueController>();
+        SetPrivateField(office, "dialogueMode", OfficeDialogueController.DialogueMode.ExternalConvai);
+        office.BeginOfficeDialogue();
+        office.SelectExploreOffice();
+
+        bool returned = false;
+        office.ExternalExplorationReturned += () => returned = true;
+        office.MarkExplorationReturnAreaExited();
+        office.ReturnFromExploration();
+
+        Assert.That(returned, Is.True);
+        Assert.That(office.IsExploring, Is.False);
+
+        UnityEngine.Object.DestroyImmediate(officeObject);
+    }
+
+    [Test]
+    public void ExplorationCannotReturnBeforePlayerLeavesTheReturnArea()
+    {
+        GameObject officeObject = new GameObject("External Office Test");
+        OfficeDialogueController office = officeObject.AddComponent<OfficeDialogueController>();
+        SetPrivateField(office, "dialogueMode", OfficeDialogueController.DialogueMode.ExternalConvai);
+        office.BeginOfficeDialogue();
+        office.SelectExploreOffice();
+
+        bool returned = false;
+        office.ExternalExplorationReturned += () => returned = true;
+        office.ReturnFromExploration();
+
+        Assert.That(returned, Is.False);
+        Assert.That(office.IsExploring, Is.True);
+
+        office.MarkExplorationReturnAreaExited();
+        office.ReturnFromExploration();
+
+        Assert.That(returned, Is.True);
+        Assert.That(office.IsExploring, Is.False);
+
+        UnityEngine.Object.DestroyImmediate(officeObject);
+    }
+
+    [Test]
+    public void ExternalStartWorkWaitsForTurnCompletionBeforeShowingReport()
+    {
+        GameObject officeObject = new GameObject("External Office Test");
+        GameObject report = new GameObject("Report");
+        report.SetActive(false);
+        OfficeDialogueController office = officeObject.AddComponent<OfficeDialogueController>();
+        SetPrivateField(office, "dialogueMode", OfficeDialogueController.DialogueMode.ExternalConvai);
+        SetPrivateField(office, "computerScreenContent", report);
+        office.BeginOfficeDialogue();
+
+        office.SelectStartWork();
+
+        Assert.That(office.IsWaitingForReadingConfirmation, Is.False);
+        Assert.That(report.activeSelf, Is.False);
+
+        office.CompleteExternalStartWork();
+
+        Assert.That(office.IsWaitingForReadingConfirmation, Is.True);
+        Assert.That(report.activeSelf, Is.True);
+
+        UnityEngine.Object.DestroyImmediate(report);
+        UnityEngine.Object.DestroyImmediate(officeObject);
     }
 
     private static void SetPrivateField(object target, string fieldName, object value)

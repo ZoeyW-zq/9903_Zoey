@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.convai.convai-sdk-for-unity": {
+      "version": "4.5.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "2.0.0",
+        "com.unity.modules.xr": "1.0.0",
+        "com.unity.collections": "2.6.8",
+        "com.unity.inputsystem": "1.19.0",
+        "com.unity.ai.navigation": "2.0.0",
+        "com.unity.nuget.newtonsoft-json": "3.2.2"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,
@@ -123,6 +137,13 @@
     },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.nuget.newtonsoft-json": {
+      "version": "3.2.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 public class MemoryPlacementItem : MonoBehaviour
 {
@@ -11,11 +12,14 @@ public class MemoryPlacementItem : MonoBehaviour
     private Vector3 savedLocalScale;
     private bool savedUseGravity;
     private bool savedIsKinematic;
+    private bool savedHoldableEnabled;
+    private bool savedXrGrabEnabled;
     private bool hasSavedPlacement;
 
     public void SaveForRoomReturn(Transform roomParent)
     {
         Holdable holdable = GetComponent<Holdable>();
+        savedHoldableEnabled = holdable != null && holdable.enabled;
         if (holdable != null
             && (holdable.myRayManipulator != null
                 || holdable.myMagnetSnapper != null
@@ -23,6 +27,11 @@ public class MemoryPlacementItem : MonoBehaviour
         {
             holdable.ForceDrop();
         }
+
+        XRGrabInteractable xrGrab = GetComponent<XRGrabInteractable>();
+        savedXrGrabEnabled = xrGrab != null && xrGrab.enabled;
+        if (xrGrab != null && xrGrab.enabled)
+            xrGrab.enabled = false;
 
         savedRoomParent = roomParent != null ? roomParent : transform.parent;
         if (savedRoomParent != null)
@@ -67,5 +76,28 @@ public class MemoryPlacementItem : MonoBehaviour
             body.useGravity = savedUseGravity;
             body.isKinematic = savedIsKinematic;
         }
+
+        SetGrabbable(savedHoldableEnabled || savedXrGrabEnabled);
+    }
+
+    public void SetGrabbable(bool grabbable)
+    {
+        Holdable holdable = GetComponent<Holdable>();
+        if (holdable != null)
+        {
+            if (!grabbable
+                && (holdable.myRayManipulator != null
+                    || holdable.myMagnetSnapper != null
+                    || holdable.moving))
+            {
+                holdable.ForceDrop();
+            }
+
+            holdable.enabled = grabbable;
+        }
+
+        XRGrabInteractable xrGrab = GetComponent<XRGrabInteractable>();
+        if (xrGrab != null)
+            xrGrab.enabled = grabbable;
     }
 }

@@ -78,6 +78,13 @@ public class GameStateController : MonoBehaviour
     [SerializeField, Min(0f)] private float closeSessionFadeDuration = 1f;
 
     public GameState State => state;
+    public MemoryPlacementController MemoryPlacementController => memoryPlacementController;
+    public event System.Action<GameState, GameState> StateChanged;
+    public event System.Action AllMemoriesResolved;
+    public event System.Action FinalPlacementConfirmed;
+    public event System.Action ReturnedToOffice;
+    public event System.Action SessionCloseRequested;
+    public event System.Action<int> MirrorMemoryResolved;
 
     private GameState state = GameState.None;
     private Coroutine nightmareVolumeRoutine;
@@ -86,7 +93,9 @@ public class GameStateController : MonoBehaviour
     private Material officeSkybox;
     private float hippocampusParticleNormalEmissionRate;
     private bool firstMemoryReleasedResponsePlayed;
+    private int mirrorMemoriesResolved;
     private bool memoryRoomReturnStarted;
+    private bool usesExternalAllMemoriesDialogue;
     private bool finalConfirmationTransitionStarted;
     private bool closeSessionRequested;
     private Coroutine closeSessionRoutine;
@@ -115,12 +124,14 @@ public class GameStateController : MonoBehaviour
         if (state == newState)
             return;
 
+        GameState previousState = state;
         ExitState(state);
 
         state = newState;
         Debug.Log("Game State changed to: " + state);
 
         EnterState(state);
+        StateChanged?.Invoke(previousState, state);
     }
 
     public void HandleAllMemoriesResolved()
@@ -130,12 +141,23 @@ public class GameStateController : MonoBehaviour
 
         memoryRoomReturnStarted = true;
         StartResolvedMemoriesNightmareFadeOut();
-        StartCoroutine(ReturnToMemoryRoomRoutine());
+
+        usesExternalAllMemoriesDialogue = AllMemoriesResolved != null;
+        AllMemoriesResolved?.Invoke();
+
+        if (!usesExternalAllMemoriesDialogue)
+            ContinueAfterAllMemoriesResolved();
     }
 
     public void HandleFirstMemoryReleased()
     {
-        if (state != GameState.MirrorChamber || firstMemoryReleasedResponsePlayed)
+        if (state != GameState.MirrorChamber)
+            return;
+
+        mirrorMemoriesResolved = Mathf.Min(4, mirrorMemoriesResolved + 1);
+        MirrorMemoryResolved?.Invoke(mirrorMemoriesResolved);
+
+        if (firstMemoryReleasedResponsePlayed)
             return;
 
         firstMemoryReleasedResponsePlayed = true;
@@ -151,9 +173,27 @@ public class GameStateController : MonoBehaviour
 
         finalConfirmationTransitionStarted = true;
 
+        bool externalDialogueHandler = FinalPlacementConfirmed != null;
+        FinalPlacementConfirmed?.Invoke();
+
+        if (externalDialogueHandler)
+            return;
+
         if (assistantController != null)
             assistantController.PlayConfirmationResponse(ReturnToOfficeAfterConfirmation);
         else
+            ReturnToOfficeAfterConfirmation();
+    }
+
+    public void ContinueAfterAllMemoriesResolved()
+    {
+        if (state == GameState.MirrorChamber && memoryRoomReturnStarted)
+            StartCoroutine(ReturnToMemoryRoomRoutine());
+    }
+
+    public void ContinueAfterFinalPlacementConfirmed()
+    {
+        if (state == GameState.FinalMemoryPlacement && finalConfirmationTransitionStarted)
             ReturnToOfficeAfterConfirmation();
     }
 
@@ -164,9 +204,21 @@ public class GameStateController : MonoBehaviour
 
         closeSessionRequested = true;
 
+        bool externalDialogueHandler = SessionCloseRequested != null;
+        SessionCloseRequested?.Invoke();
+
+        if (externalDialogueHandler)
+            return;
+
         if (assistantController != null)
             assistantController.PlaySessionClosing(EnterSessionComplete);
         else
+            EnterSessionComplete();
+    }
+
+    public void ContinueAfterSessionClosing()
+    {
+        if (state == GameState.BackToOffice && closeSessionRequested)
             EnterSessionComplete();
     }
 
@@ -217,7 +269,8 @@ public class GameStateController : MonoBehaviour
                 SwitchToHippocampusVolume();
                 RestoreHippocampusParticles();
                 SetCrystalBallEnabled(false);
-                assistantController.PlayHippocampusIntro();
+                if (assistantController != null)
+                    assistantController.PlayHippocampusIntro();
                 break;
 
             case GameState.FinalMemoryPlacement:
@@ -243,7 +296,8 @@ public class GameStateController : MonoBehaviour
 
                 SetActiveSceneRoot(SceneRoot.Dungeon);
                 MoveToSpawn(assistantRobot, assistantMirrorChamberSpawnPoint);
-                assistantController.PlayMirrorChamberIntro();
+                if (assistantController != null)
+                    assistantController.PlayMirrorChamberIntro();
                 break;
 
             case GameState.BackToOffice:
@@ -554,9 +608,9 @@ public class GameStateController : MonoBehaviour
 
     private IEnumerator ReturnToMemoryRoomRoutine()
     {
-        bool releaseDialogueComplete = assistantController == null;
+        bool releaseDialogueComplete = usesExternalAllMemoriesDialogue || assistantController == null;
 
-        if (assistantController != null)
+        if (!usesExternalAllMemoriesDialogue && assistantController != null)
         {
             assistantController.PlayAllMemoriesReleasedSequence(() => releaseDialogueComplete = true);
 
@@ -584,8 +638,8 @@ public class GameStateController : MonoBehaviour
         if (screenFadeController != null)
             yield return screenFadeController.FadeTo(0f, memoryRoomReturnFadeInDuration);
 
-        bool returnDialogueComplete = assistantController == null;
-        if (assistantController != null)
+        bool returnDialogueComplete = usesExternalAllMemoriesDialogue || assistantController == null;
+        if (!usesExternalAllMemoriesDialogue && assistantController != null)
         {
             assistantController.PlayReturnToMemorySpaceSequence(() => returnDialogueComplete = true);
 
@@ -662,9 +716,9 @@ public class GameStateController : MonoBehaviour
                 body.useGravity = true;
             }
 
-            Holdable holdable = memoryObject.GetComponent<Holdable>();
-            if (holdable != null)
-                holdable.enabled = true;
+            MemoryPlacementItem placementItem = memoryObject.GetComponent<MemoryPlacementItem>();
+            if (placementItem != null)
+                placementItem.SetGrabbable(true);
         }
     }
 
@@ -687,7 +741,10 @@ public class GameStateController : MonoBehaviour
             MovePlayerAndAssistantToOffice();
             PrepareFinalReport();
 
-            if (assistantController != null)
+            bool externalDialogueHandler = ReturnedToOffice != null;
+            ReturnedToOffice?.Invoke();
+
+            if (!externalDialogueHandler && assistantController != null)
                 assistantController.PlayOfficeReturnAndReport();
 
             yield break;
@@ -703,7 +760,10 @@ public class GameStateController : MonoBehaviour
 
         yield return screenFadeController.FadeTo(0f, backToOfficeFadeInDuration);
 
-        if (assistantController != null)
+        bool usesExternalOfficeReturnDialogue = ReturnedToOffice != null;
+        ReturnedToOffice?.Invoke();
+
+        if (!usesExternalOfficeReturnDialogue && assistantController != null)
             assistantController.PlayOfficeReturnAndReport();
     }
 
