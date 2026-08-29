@@ -104,6 +104,8 @@ public class GameStateController : MonoBehaviour
     {
         officeSkybox = RenderSettings.skybox;
 
+        SetResolvedMemoryObjectsGrabbable(false);
+
         if (memoryPlacementController == null && hippoRoot != null)
             memoryPlacementController = hippoRoot.GetComponentInChildren<MemoryPlacementController>(true);
 
@@ -291,6 +293,8 @@ public class GameStateController : MonoBehaviour
                 break;
 
             case GameState.MirrorChamber:
+                SetResolvedMemoryObjectsGrabbable(false);
+
                 if (memoryPlacementController != null)
                     memoryPlacementController.SaveInitialItemTransformsForRoomExit();
 
@@ -719,6 +723,22 @@ public class GameStateController : MonoBehaviour
             MemoryPlacementItem placementItem = memoryObject.GetComponent<MemoryPlacementItem>();
             if (placementItem != null)
                 placementItem.SetGrabbable(true);
+        }
+    }
+
+    private void SetResolvedMemoryObjectsGrabbable(bool grabbable)
+    {
+        if (resolvedMemoryObjects == null)
+            return;
+
+        foreach (Transform memoryObject in resolvedMemoryObjects)
+        {
+            if (memoryObject == null)
+                continue;
+
+            MemoryPlacementItem placementItem = memoryObject.GetComponent<MemoryPlacementItem>();
+            if (placementItem != null)
+                placementItem.SetGrabbable(grabbable);
         }
     }
 

@@ -33205,8 +33205,6 @@ GameObject:
   - component: {fileID: 1209064772}
   - component: {fileID: 1209064764}
   - component: {fileID: 1209064773}
-  - component: {fileID: 1209064775}
-  - component: {fileID: 1209064774}
   m_Layer: 0
   m_Name: AssistantRobot
   m_TagString: Untagged
@@ -33339,12 +33337,12 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 124
+  Priority: 127
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 25
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -33361,8 +33359,8 @@ AudioSource:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 0
+      time: 0.92974854
+      value: 0.2353363
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -33377,7 +33375,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.514
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -33633,81 +33631,6 @@ MonoBehaviour:
   decisionFallbackDelay: 2.5
   startWorkTurnTimeout: 20
   transitionSpeechTimeout: 25
---- !u!65 &1209064774
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209064763}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1.6162649}
-  m_Center: {x: -4.3466075e-10, y: 0, z: 0.30813247}
---- !u!114 &1209064775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1209064763}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3968ac4536fd94f7588c9270982754a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Convai.Modules.Narrative::Convai.Modules.Narrative.ConvaiNarrativeDesignTrigger
-  _characterComponent: {fileID: 1209064769}
-  _autoFindCharacter: 1
-  _selectedTriggerIndex: 0
-  _triggerId: ed005782-a1c6-11f1-828d-42010a7be02f
-  _triggerName: probe_start
-  _triggerMessage: 
-  _activationMode: 0
-  _proximityRadius: 3
-  _timeDelay: 0
-  _triggerOnce: 1
-  _playerLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  _playerTag: Player
-  _autoFindPlayer: 1
-  _queueUntilReady: 1
-  _maxWaitTime: 30
-  _resetOnSceneLoad: 1
-  _enableDiagnostics: 0
-  _validateOnStart: 1
-  _onTriggerActivated:
-    m_PersistentCalls:
-      m_Calls: []
-  _onPlayerEnterZone:
-    m_PersistentCalls:
-      m_Calls: []
-  _onPlayerExitZone:
-    m_PersistentCalls:
-      m_Calls: []
-  _onTriggerFailed:
-    m_PersistentCalls:
-      m_Calls: []
-  _onTriggerQueued:
-    m_PersistentCalls:
-      m_Calls: []
-  _availableTriggers:
-  - _triggerId: ed005782-a1c6-11f1-828d-42010a7be02f
-    _triggerName: probe_start
-    _triggerMessage: Run the minimal diagnostic transition from probe_idle to probe_active
-      now.
-    _destinationSection: ec099a96-a1c6-11f1-9a62-42010a7be02f
-    _characterId: 33eac386-a1c6-11f1-a23e-42010a7be02f
 --- !u!1001 &1211906663
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43873,7 +43796,7 @@ Transform:
   m_GameObject: {fileID: 1728560715}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 2.24, y: 1.01, z: 0}
+  m_LocalPosition: {x: 2.24, y: 0.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
